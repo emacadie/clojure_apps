@@ -8,8 +8,10 @@ pom.xml
 # guestbook
 ./guestbook/lib/
 ./guestbook/classes/
-./guestbook/targets/
+./guestbook/target/
 ./guestbook/.lein-deps-sum
+
+./guestbook/resources/public/site.db.h2.db
 
 # Ignore the backup files
 *~
