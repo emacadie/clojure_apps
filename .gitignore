@@ -4,3 +4,10 @@ pom.xml
 /classes/
 /targets/
 .lein-deps-sum
+
+# guestbook
+./guestbook/lib/
+./guestbook/classes/
+./guestbook/targets/
+./guestbook/.lein-deps-sum
+#- EOF
