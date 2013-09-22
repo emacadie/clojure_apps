@@ -10,4 +10,8 @@ pom.xml
 ./guestbook/classes/
 ./guestbook/targets/
 ./guestbook/.lein-deps-sum
+
+# Ignore the backup files
+*~
+
 #- EOF
