@@ -6,6 +6,7 @@ pom.xml
 .lein-deps-sum
 
 # guestbook
+./guestbook/guestbook.log
 ./guestbook/lib/
 ./guestbook/classes/
 ./guestbook/target/

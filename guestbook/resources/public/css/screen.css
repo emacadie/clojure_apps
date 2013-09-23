@@ -45,3 +45,14 @@ body {
 .container .footer-text {
     margin: 20px 0;
 }
+
+
+form {
+    width: 200px;
+    clear: both;
+}
+form input {
+    width: 50%;
+    clear: both;
+}
+
