@@ -1,0 +1,43 @@
+App from https://devcenter.heroku.com/articles/clojure-web-application
+
+Create db the old-fashioned way:
+sudo -u postgres psql postgres
+
+create user shouter_dev with password 'dev-word-to-pass001';
+create database shouter_db_dev with owner shouter_dev;
+grant all privileges on database shouter_db_dev to shouter_dev;
+
+From cli:
+This does not work:
+psql -h localhost -U shouter_dev -d shouter_db_dev
+This does:
+psql -h localhost  -d shouter_db_dev
+http://clojure-doc.org/articles/ecosystem/java_jdbc/home.html
+
+CLI, run: lein deps
+
+lein repl
+(require '[clojure.java.jdbc :as sql])
+(def db-spec 
+  {:classname "org.postgresql.Driver"
+   :subprotocol "postgresql"
+   :subname "//127.0.0.1:5432/shouter_db_dev"
+   :user "shouter_dev"
+   :password "dev-word-to-pass01"})
+
+(with-db-connection [db-con db-spec]
+    (sql/create-table-ddl :testing [:data :text]))
+
+This works:
+(sql/db-do-commands "postgresql://localhost:5432/shouter_db_dev"
+    (sql/create-table-ddl :testing [:data :text]))
+Should it?
+
+(sql/insert! "postgresql://localhost:5432/shouter_db_dev"
+    :testing {:data "Hello World"})
+
+(sql/query "postgresql://localhost:5432/shouter_db_dev"
+    ["select * from testing"])
+
+(sql/db-do-commands "postgresql://localhost:5432/shouter_db_dev"
+    "drop table testing")

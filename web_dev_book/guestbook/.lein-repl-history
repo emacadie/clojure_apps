@@ -1,0 +1,8 @@
+(use 'guestbook.models.db)
+(create-guestbook-table)
+(exit)
+(use 'guestbook.models.db)
+(create-guestbook-table)
+(save-message "Bob" "hello")
+(read-guests)
+(exit)

@@ -1,0 +1,75 @@
+Do run lein as root. 
+Go to .lein directory to see what lein has
+
+You can create projects, or start a REPL
+Create a project:
+lein new monkeyballs
+Go into dir monkeyballs
+
+We can run our default test:
+lein test
+
+To run a repl:
+lein repl
+To use a file:
+
+Not a hot reload
+To get hot reload:
+(require 'monkeyballs.core :reload)
+
+You start in the user namespace, not with anything from your app.
+
+You could do this:
+(ns monkeyballs.core
+ (:require [monkeyballs.test]))
+Then it will all get loaded recursively
+
+Add a dependency to project.clj
+(io.aviso.ansi/red "hello")
+
+You can have a main by making a function called "-main"
+And you can add it to the project.clj
+You can make a jar that will include Clojure itself
+run 
+lein uberjar
+But you need a class file.
+Put this in the file with the main:
+(:gen-class)
+in the namespace part
+
+Commands in REPL:
+(doc clojure.string/join)
+That will give you a hint at the command line
+
+You can create aliases for main
+:aliases {"hello" ["run" "Howdy, Austin Clojure]
+           "now" ["run" (java.util.Date)]}
+           
+lein do command
+lein do hello, now
+You can run multiple commands
+lein do clean, uberjar
+
+Profiles:
+lein show-profiles
+:profiles {:1.6
+            {:dependencies [[org.clojure/clojure "1.6.0"]]}}
+a
+To use them
+lein with-profiles +1.6 repl
+run repl with 1.6 profile
+Norm has some profiles in his lein directory
+He can add a directory just for development
+{:dev {:source-paths ["dev"]}}
+
+lein install
+will create a jar and a pom and put it in your local Maven repo
+
+To make a web app with compojure template:
+lein new compojure monkeyweb
+lein deps 
+will give dependency tree
+I'm having a #Doge moment thanks to @MaximoBurrito: such lein, many plugins, much profiles, so useful, very parentheses
+
+
+
