@@ -1,11 +1,16 @@
 App from https://devcenter.heroku.com/articles/clojure-web-application
 
+http://clojure-doc.org/articles/ecosystem/java_jdbc/home.html
+http://clojure.github.io/java.jdbc/
+
 Create db the old-fashioned way:
 sudo -u postgres psql postgres
 
 create user shouter_dev with password 'dev-word-to-pass001';
 create database shouter_db_dev with owner shouter_dev;
 grant all privileges on database shouter_db_dev to shouter_dev;
+Don't forget this:
+REVOKE ALL PRIVILEGES ON DATABASE shouter_db_dev from public;
 
 From cli:
 This does not work:
@@ -25,13 +30,33 @@ lein repl
    :user "shouter_dev"
    :password "dev-word-to-pass01"})
 
-(with-db-connection [db-con db-spec]
+This just returns the command to create a table, it does not actually do it.
+(sql/with-db-connection [db-con db-spec]
     (sql/create-table-ddl :testing [:data :text]))
 
 This works:
 (sql/db-do-commands "postgresql://localhost:5432/shouter_db_dev"
-    (sql/create-table-ddl :testing [:data :text]))
-Should it?
+    (sql/create-table-ddl :testing2 [:data :text]))
+
+Should it? (It did before I removed public access)
+Now, to get rid of those tables;
+(sql/db-do-commands db-spec
+  (sql/with-db-connection [db-con db-spec]
+    (sql/drop-table-ddl :testing2 )))
+Or just:
+(sql/db-do-commands db-spec
+    (sql/drop-table-ddl :testing2 ))
+First I had to go in as main user:
+sudo -u postgres psql shouter_db_dev
+Then: alter table testing2 owner to shouter_dev;
+
+Adding tables:
+(sql/with-db-connection [db-con db-spec]
+    (sql/drop-table-ddl :testing2 ))
+(sql/db-do-commands db-spec
+    (sql/drop-table-ddl :testing9 ))
+(sql/db-do-commands db-spec
+    (sql/create-table-ddl :testing9 [:data :text]))
 
 (sql/insert! "postgresql://localhost:5432/shouter_db_dev"
     :testing {:data "Hello World"})
