@@ -1,0 +1,919 @@
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf & 
+
+ClojureCup notes: For CLJS, the standard seems to the auto-test package by Cemerick
+lein droid new clojuroid org.stuff.clojuroid :activity MyActivity  :app-name ClojureMeetsAndroid
+java -cp /home/ericm/clojure-1.3.0/clojure-1.3.0.jar clojure.main
+
+
+java -cp /home/ericm/clojure-1.3.0/clojure-1.3.0.jar:/home/ericm/tmp/clojure/clojure-contrib-1.2.0/target/clojure-contrib-1.2.0.jar clojure.main
+
+/usr/local/java/jdk1.7.0/bin/java 
+
+http://clojure.org/repl_and_main
+
+hakanne!7
+hakanne!7
+sessid : depaulwireless
+passphrase : vincentdepaul15811660
+
+In repl, see what functions are available in clojure.core namespace:
+(ns-publics 'clojure.core)
+============================
+Setting a string in REPL:
+helloworld.core=> (def joe "ll")
+#'helloworld.core/joe
+helloworld.core=> (println joe)
+ll
+nil
+helloworld.core=> (hello joe)
+"Hello ll!"
+===========================
+save some work in a file called temp.clj
+In REPL, do this: (load-file "temp.clj")
+===========================
+For lein:
+Make a file called "project.clj" in the main directory
+Put in something like this:
+(defproject helloworld "1.0.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :dependencies [[org.clojure/clojure "1.2.1"]]
+  :main helloworld.core
+)
+
+The project name is, well, the project name
+
+/home/ericm/tmp/clojure/meetups/helloworld is one that works
+
+(load-file "/home/ericm/tmp/clojure/programming.clojure/chapter001/src/chapter001/core.clj")
+
+Running a file in REPL:
+ericm@finance:~$ java -cp /home/ericm/clojure-1.3.0/clojure-1.3.0.jar clojure.main
+Clojure 1.3.0
+user=> (load-file "/home/ericm/tmp/clojure/programming.clojure/chapter001/src/chapter001/core.clj")
+#'chapter001.core/hello-with-memory
+user=> (hello-with-memory "Archer")
+CompilerException java.lang.RuntimeException: Unable to resolve symbol: hello-with-memory in this context, compiling:(NO_SOURCE_PATH:2) 
+user=> (chapter001.core/hello-with-memory "Archer")
+"Hello core, Archer"
+user=> (chapter001.core/hello-with-memory "Kirk" )
+"Hello core, Kirk"
+user=> (chapter001.core/hello-with-memory "Archer")
+"Welcome back core, Archer"
+
+(load-file "/home/ericm/tmp/clojure/programming.clojure/chapter001/src/chapter001/more.clj")
+I also added my own function which seemed to work
+----
+Koans:
+Look up clojure symbols in the koans
+:fill-in-the-blank
+put a tick in front of the parens: '(2 3 4 5)
+look up conj function, difference between vec and vector
+
+Can you do "structure and interpretation of computer programs" with Clojure?
+
+(= 25 (fn [f] (f 5)
+         (fn [n] (* n n))))
+
+((fn [n] (* 4 n)) 2)
+
+(= 25 ((fn [f] (f 5))
+         (fn [n] (* n n))))
+
+((fn [f] (f 5))
+         (fn [n] (* n n)))
+         
+(= 25 ((fn [f] (f 5)) square))
+(= 25 ((fn [f] (f 5)) square))
+((fn [f] (f 5)) square
+---- 
+installed new lein
+nREPL server started on port 57759
+REPL-y 0.1.0-beta8
+Clojure 1.3.0
+    Exit: Control+D or (exit) or (quit)
+Commands: (user/help)
+    Docs: (doc function-name-here)
+          (find-doc "part-of-name-here")
+  Source: (source function-name-here)
+          (user/sourcery function-name-here)
+ Javadoc: (javadoc java-object-or-class-here)
+Examples from clojuredocs.org: [clojuredocs or cdoc]
+          (user/clojuredocs name-here)
+          (user/clojuredocs "ns-here" "name-here")
+
+user=> (exit)
+Bye for now!
+------
+At hack night, we have 
+def
+defn
+defn- (makes it private)
+defsynth
+defcgen
+------------
+Pluralsight:
+
+Code is data. Structure and semantics.
+(+ 3 4)
+list (
+symbol +
+numbers: 3 4
+or
+invocation (
+function +
+arguments 3 4
+
+Literals:
+42 Long
+6.022e23 Double
+42N BigInt
+1.0M BigDecimal
+22/7 Ratio
+"hello" String
+\e character
+true false Booleans
+nil null
++ Fred *bob* symbols
+:alpha :beta keywords
+Symbols: show in code a lot. Symbols with astericks around them are "earmuffed", and usually that means they are mutable
+keywords: like symbols, lightweight strings, used as keys in maps
+
+Data structures:
+(4 :alpha 3.0) ; List
+[2 "hello" 99] ; Vector
+{:a 1 :b 2} ; Map
+#{alice jim bob} ; Set
+
+meta-data: maps of data attached to object
+(with-meta [1 2 3] {:example true}) ;;  returns vector
+(meta (with-meta [1 2 3] {:example true})) ;; returns meta data
+Lots of reader macros
+'foo == (quote foo)
+#'foo == (var foo)
+@foo == (deref foo)
+#(+ % 5) == (fn [x] (+ x 5))
+^{:key val} foo == (with-meta foo {:key val} )
+^:key foo (with-meta foo{:key true})
+
+leiningen
+path/purpose
+project.clj project/build config
+classes/ compile bytecode
+lib/ dependent JARs
+public/ HTML/CSS/JS files for web
+src/ Clojure source
+test/ unit tests
+
+Maven
+path/purpose
+pom.xml project/buld config
+target/classes/ compile bytecode
+lib/ dependent JARs
+src/main/clojure Clojure source
+src/test/clojure unit tests
+
+To see functions in a namespace, (ns-publics 'clojure.java.io)
+or (keys (ns-publics 'clojure.java.io))
+or (dir clojure.java.io)
+To see which namespace you are using: *ns*
+
+What is the difference between keywords and symbols?
+
+namespace: 'use' can overwrite other names, okay for REPL. IN general you should use "require"
+
+"apply" is good if you have varying, multiple args
+few data structures, but general
+data is immutable, even your data structures, key to concurrenby
+Persistent data structures are efficient 
+built from old values and modifications
+not making full copies
+new and old values available after changes
+
+Sequential data structures: List, Vector
+Associative data structures: Map, Vector
+Both types support declaritive destructuring (ability to pull apart structure into its constituent parts)
+
+Lists: Singly-linked lists: Prepend is O(1), lookup: O(1) at head, O(n) anywhere else
+() ;; empty list
+(list 1 2 3 ) ;; function
+'(1 2 3 ) ;; a list with a quote - actually interpreted as list, not function
+(conj '(2 3) 1) ;; results in (1 2 3) - list arg is quoted
+
+Vectors: indexed, randon-access, array-like. Append is O(1), lookup by index is O(1)
+[] ;; empty vector
+[1 2 3] ;; vector with 1, 2 and 3
+(vector 1 2 3) ;; ;; vector with 1, 2 and 3
+(vec '(1 2 3))
+(nth [1 2 3] 0) ;; get element 0 of vector [1 2 3], will return 1
+Lists and vectors are most common collections What about maps?
+(def lst '(2 3))
+Makes a list called lst
+You could call it by typing "lst" at REPL
+Add to it with (conj lst 1)
+Maps: Associative data structure key => value, hash table, dictionary
+insert and lookup: O(1)
+unordered
+{} ;; empty map
+{:a 1 :b 2}
+(:a {:a 1 :b 2}) ;; returns 1
+({:a 1 :b 2} :a) ;; returns 1
+(assoc {:a 1} :b 2) ;; adds :b => 2 to the map
+(dissoc {:a 1} :a) ;; gets :a out of the map
+(def jdoe {:name "John Doe", :address {:zip 12345}})
+(get-in jdoe [:address :zip])
+(assoc-in jdoe [:address :zip] 12345)
+(update-in jdoe [:address :zip] inc) ;; if zip was 12345, it will now be 12346
+I can do this: (def jdoe (update-in jdoe [:address :zip] inc)) - so where does old map go?
+
+Sets: set of distinct values. Insert is O(1), Member?: O(1), unordered
+#{} ; empty set
+#{:a :b}
+(#{:a :b} :a)
+(contains? #{:a} :a)
+(require '[clojure.set :as set])
+
+next section: Destructuring:
+pulling apart compound data structures
+declaritive way to pull apart data
+works for sequential and associative data structures
+can be nested
+user=> (def m {:a 7 :b 4})
+#'user/m
+user=> (let [{c :a d :b}m] [c d])
+[7 4]
+user=> (let [{:keys [a b]}m] [a b])
+[7 4]
+user=> (let [{:keys [a b c] :or {c 3}}m] [a b c])
+[7 4]
+user=> (def m {:a 7 :b 4 :c 55})
+#'user/m
+user=> (let [{:keys [a b c] :or {c 3}}m] [a b c])
+[7 4]
+user=> (let [{:keys [a b c] :or {c 3}}m] [a b c ])
+[7 4 55]
+
+Named arguments
+(defn game [planet & {:keys [human-players computer-players]}]
+  (println "Total players: " (+ human-players computer-players)))
+(game "Mars" :human-players 1 :computer-players 2)
+user=> (defn game [planet & {:keys [human-players computer-players]}]
+         (println "Total players: " (+ human-players computer-players)))
+#'user/game
+user=> (game "Mars" :human-players 1 :computer-players 2)
+Total players:  3
+nil
+user=> (game  :human-players 1 :computer-players 2)
+IllegalArgumentException No value supplied for key: 2  clojure.lang.PersistentHashMap.createWithCheck (PersistentHashMap.java:89)
+
+user=> (game "Venus" :human-players 1 :computer-players 2)
+Total players:  3
+nil
+user=> (game "Venus")
+NullPointerException   clojure.lang.Numbers.ops (Numbers.java:942)
+
+user=> (game "Venus" :computer-players 1 :human-players 2)
+Total players:  3
+
+(defn draw-point [& {x :x y :y}]
+  [x y])
+
+(defn draw-point [& {:keys [x y z]}]
+  [x y z])
+Default args and destructuring
+(defn draw-point [& {:keys [x y z]
+                          :or{x 0
+                              y 0
+                              z 0}}]
+  [x y z])
+
+a
+Sequential: (let [[x y] [1 2]] (+ x y))
+Associative: (let [{:keys [x y]} {:x 1 :y 2}] (+ x y))
+named args: 
+
+Sequences
+Abstractions for representing iteration
+backed by data structure or function (can be lazy or infinite)
+(seq coll)
+(first coll)
+(rest coll)
+(cons x coll) ;; prepends x on a collection
+
+(seq [1 2 3]) ;; [1 2 3] is a vector
+
+(def a-list '(1 2 3))
+
+sequences backed by functions
+sequences are lazy and can be infinite - nodes are not created until requested
+In REPL: (set! *print-length* 10) ;; this will only print 10 elements at a time. Good for infinite sequences
+So there are REPL environment variables/settings
+
+Sequence library large:
+Generators and operations
+Generators: list, vector, map, SQL Result Set, Stream, Directory, Interator, XML
+Operations: map, filter, reduce, count, some, replace
+Generators * operations == lots of power
+(seq [1 2 3])
+(range 1 100)
+(range 1 100 10)
+(iterate #(* 2 %) 2)
+(re-seq #"[ariou]" "clojure")
+(map #(* % %) [0 1 2 3 4])
+same as (map #(* % %) '(0 1 2 3 4))
+same as (map #(* % %) (range 0 5))
+
+If you find yourself iterating, look for a function
+The Clojure cheatsheet helps
+
+Flow control
+expressions return values, statements do not
+In Clojure, everything is an expression, everything returns a value
+Flow control operators are also expressions. composable: can use them anywhere, fewer intermediate variables
+Truthiness: (if true :truth :falsey)
+Objects and empty expressions are true
+nil is false, seq on empty coll is nil
+(str "2 is " (if (even? 2) "even" "odd")) ;; returns "2 is even"
+also if/do
+(if (even? 5)
+  (do (println "even)
+  true)
+  (do (println "odd")
+  false))
+(if (even? 5) (do (println "even) true) (do (println "odd") false))
+(if-let [x (even? 3)]
+(println x)
+(println "Some odd value"))
+
+cond uses series of tests, with an optional :else
+(cond 
+  test1 expression1
+  test2 expression2
+  :else else-expression
+)
+(let [x 5]
+ (cond
+   (< x 2) "x is less than 2"
+   (< x 10) "x is less than 10"
+   :else "x is less bigger than 10"))
+(let [x 5] (cond (< x 2) "x is less than 2" (< x 10) "x is less than 10"))
+
+condp: cond with shared predicate
+(defn foo [x]
+  (condp = x
+    5 "x is 5"
+    10 "x is 10"
+    "x is not 5 or 10"))
+
+a
+case: predicate is always =
+test-values must be compile-time literals
+match is O(1)
+else-expression has no test value
+(defn foo [x]
+  (case x
+    5 "x is 5"
+    10 "x is 10"
+    "x is not 5 or 10"))
+
+condp seems to be less typing/chars than cond
+(defn str-binary [n]
+  (condp = n
+    0 "x is zero"
+    1 "x is one"
+    "unknown"))
+a
+recursion and iteration
+loop and sequence abstraction
+loop is classing recursion
+sequences allow partial iteration
+(doseq [n (range 3)]
+  (println n))
+(dotimes [i 3]
+  (println i))
+(while (.accept socket)
+  (handle socket))
+for is list comprehension, not a loop
+generator function for sequence permutation
+loop defines bindings, recur re-executes loop with new bindings
+
+recur must be in "tail position" - at the end in a branch
+recur must provide values for all bound symbols by position
+recur does not consume the stack
+(defn factorial
+  ([n] (factorial 1 n))
+  ([accum n]
+    (if (zero? n)
+      accum
+      (factorial (*' accum n)(dec n)))))
+(defn factorial
+  ([n] (factorial 1 n))
+  ([accum n]
+    (if (zero? n)
+      accum
+      (recur (*' accum n)(dec n)))))
+
+Exception handling
+(try 
+  (/ 2 1)
+  (catch ArithmaticException e
+     "divide by 0")
+   (finally
+     (println "cleanup")))
+(try
+  (throw (Exception. "something went wrong"))
+  (catch Exception e (.getMessage e)))
+with-open is like try-with-resources, in case there is an exception with open resources, like files
+------------------------------------------------------------------------------------------------------
+Pluralsight Clojure concurrency
+Part 1: Introduction
+Motivation: locking is broken, muli-core is coming
+Threads is hard
+Locking is too hard
+No runtime enforcement
+Deadlock and race conditions common
+Atomic data types
+int, float, string, etc
+rationals (22/7), big integers
+keywords start with a colon, like :foo, or :com.somedomain.blah
+It indicates a particular value, useful for keys to hashmaps, can have namespaces
+
+Composite datatypes
+List: '(1, 1, 2, "three", 4.0 ) - commas optional, mixed types, should be quoted if it's not a function
+Array: [1 2 "three" 4.0] (aka vectors) ordered
+Set: #{1 2 "three" 4.0} - no duplicates
+Map: {:a 1 :b "two" :c 3.0}  - keys do not have to be keywords
+
+Interop with Java
+(import '(java.util Date Calendar))
+(new Date)
+To call methods: (. (new Date) toString)
+with args (. (new Date) toString arg1 arg2))
+(Date .) is like (. (new Date))
+(.toString (Date .))
+Static methods:
+(import '(java.lang Thread))
+(Thread/sleep 5000)
+
+Clojure approach to concurrency:
+local concurency only - no distributed concurrency
+Try Terracotta for that
+Clojure is specific about how you change things, values are immutable
+Freeze the world so we can look at it
+Take a picture of the racewalker
+all built-in datatypes are immutable
+modification operations return new, immutable instance
+Like java.lang.String
+sophisticated data sharing semantics to manage perf (aka Persistent Data Structures)
+
+Four basic refernce types:
+Var: Isolated changes within a Thread
+Atom:  Shared + Synchronous +  autonomous
+Agent: Shared + Asynchronous + autonomous
+Ref:   Shared + synchronous +  coordinated
+
+- Sharing: Can changes by seen by more than one thread
+- Synchronicity: Does it happen now or sometime later?
+- Coordination: do multiple changes happen atomically? (like database transaction)
+
+next section: Vars:
+To define a var: (def quux 17)
+quux is "bound" to value of 17
+Could be more complex
+(def bar {:a 1 :b 2})
+Clojure vars are bound on a per-thread basis
+Values are immutable, so no concurrency issues
+"Bad Spock Universe" model
+binding macro gives var new thread-local value
+if no thread-local binding, then root binding is used
+
+"root binding" is a default value
+That is the one new threads get unless they provide a new value
+(defn print-foo []
+  (println foo))
+  
+(defn print-foo 
+ ([] (print-foo "")) ;; takes no args
+  ([prefix] (println prefix foo))) ;; takes one arg
+;; binding macro
+(binding [foo 3]
+  (println foo)  )
+(import [java.lang.Thread])
+(defn with-new-thread [f]
+  (.start (Thread. f)))
+
+(with-new-thread (fn [] (print-foo "new thread")))
+I was not able to get the bindings to work
+
+Now: Atoms
+Mutable references
+Immutable values only get you so far
+Need a level of indirection over a value
+use references to freeze the world
+look at it all day long via explicit dereference
+with deref function or @ reader macro
+they are the only things that mutate - outside of Java interop - and transients
+
+Atoms:
+manage an independent value
+state changes through swap! using ordinary function (usually functions ending with BANG! involve mutation)
+change occurs synchronously on called thread
+models compare-and-set (CAS) spin swap
+function may be called more than once
+guaranteed atomic transition - must avoid side effects
+
+(atom 3)
+(def foo (atom {:blah "this"}))
+user=> (def foo (atom {:blah "this"}))
+#'user/foo
+user=> foo
+#<Atom@7f6e0c6c: {:blah "this"}>
+user=> (deref foo)
+{:blah "this"}
+user=> @foo
+{:blah "this"}
+;; give foo value "3"
+(swap! foo (fn [old] 3))
+(swap! foo inc)
+user=> (swap! foo inc)
+4
+user=> @foo
+4
+
+;; pmap is parallel map
+(pmap 
+(fn [_] (swap! foo inc) )
+(range 10000))
+
+(def bar (atom 0))
+(def call-counter (atom 0))
+(import [java.lang.Thread])
+(defn slow-inc-with-call-count [x]
+  (swap! call-counter inc)
+  (Thread/sleep 100)
+  (inc x))
+(pmap (fn [_] 
+  (swap! bar slow-inc-with-call-count))
+  (range 100))
+
+Agents
+- manage an independent value
+- changes through ordinary function executed asynchronously
+- not actors: not distributed
+- use send or send-off to dispatch
+
+(def my-agent (agent {:name "craig-andera" :favorites []} ))
+Function that will consume old value and produce new value
+(defn slow-append-favorite
+ [val new-fav]
+ (Thread/sleep 2000)
+ (assoc val 
+ :favorites (conj (:favorites val) new-fav)))
+
+(do (send my-agent slow-append-favorite
+  "food")
+  (send my-agent slow-append-favorite
+  "music")
+  (println @my-agent)
+  (Thread/sleep 2500)
+  (println @my-agent)
+  (Thread/sleep 2500)
+  (println @my-agent))
+a
+Agents and errors
+- Exceptions in agents causes agent to enter error state
+- Interactions with agents in this state cause exception
+- Errors can be examined with agent-errors
+- Errors can be cleared with clear-agent-errors
+
+(def erroring-agent (agent 3))
+(defn modify-agent-with-error
+  "Modifies an agent with error on 42"
+ [current new]
+ (if (= 42 new)
+ (throw (Exception. "Not 42"))
+ new))
+(send erroring-agent 
+  modify-agent-with-error 42)
+  (send erroring-agent 
+  modify-agent-with-error 12)
+
+
+Refs
+Key to STM system
+- allow for synchronous changes to shared state
+- refs can only be changed within a transaction
+- Software Transactional Memory (STM) system
+- retries are automatic
+- Therefore, there should be no side effects
+- They do compose with agents, allowing for deferred side effects
+
+(def foo (ref 
+  {:first "Craig" 
+   :last "Andera" 
+   :children 2}))
+(assoc @foo :blog "http:someurl.com")
+(commute foo assoc :blog "http://someurl.com")
+user=> (commute foo assoc :blog "http://someurl.com")
+IllegalStateException No transaction running  clojure.lang.LockingTransaction.getEx (LockingTransaction.java:208)
+(dosync
+  (commute foo assoc :blog "http://someurl.com")
+)
+This will update @foo
+(dosync (alter foo assoc :blog "http://someurl2.com") )
+Alter applies changes immediately, commute does it later
+
+Macros: Nothing to do with concurrency
+Functions that run at compile time against expressions in program
+Used for DSLs
+It's like adding keywords to a language
+Old way without macros
+(with-new-thread
+  (fn []
+    (do-some-stuff to some other stuff)))
+It would be great if we did not need that fn [] in there
+So here is how
+(defmacro with-new-thread [& body]
+ `(.start (Thread. (fn [] ~@body))))
+(macroexpand-1 '(with-new-thread (print-foo)))
+
+Concurrent writes:
+(def r (ref 0))
+(with-new-thread
+  (dosync 
+    (println "Tx1 initial:" @r)
+    (alter r inc)
+    (println "Tx1 final:" @r)
+    (Thread/sleep 50000)
+    (println "Tx1 done")))
+
+(with-new-thread
+  (dosync 
+  (println "Tx2 initial: " @r)
+  (Thread/sleep 10000)
+  (alter r inc)
+  (println "Tx2 final: " @r)
+  (println "tx2 done")))
+a
+transaction are good for reading as well
+(with-new-thread
+  (dotimes [_ 10]
+    (Thread/sleep 1000)
+    (dosync (alter r inc)
+    (println "Updated ref to " @r))))
+(with-new-thread
+  (dotimes [_ 7]
+    (println "ref is " @r))
+    (Thread/sleep 1000))
+    
+(dosync (ref-set r 0))   
+(with-new-thread
+  (dotimes [_ 10]
+    (Thread/sleep 1000)
+    (dosync (alter r inc)
+    (println "Updated ref to " @r))))
+(with-new-thread
+  (println "r outside is " @r)
+  (dosync
+     (dotimes [i 7]
+       (println "iter " i)
+       (println "r is " @r)
+       (Thread/sleep 1000)))
+    (println "r outside is " @r))
+a
+(def r1 (ref 0))
+(def r2 (ref 0))
+(with-new-thread 
+  (dotimes [_ 10]
+    (dosync
+      (alter r1 inc)
+      (Thread/sleep 500)
+      (alter r2  inc))
+     (println "updated ref1 to " @r1)
+     (println "updated ref2 to " @r2)))
+(with-new-thread 
+  (dotimes [_ 10]
+    (println "r1 = " @r1)
+    (println "r2 = " @r2)
+    (Thread/sleep 500)))
+
+There is a macro called io!
+Use it to prevent running in a transaction
+clojure.core/io!
+([& body])
+Macro
+  If an io! block occurs in a transaction, throws an
+  IllegalStateException, else runs body in an implicit do. If the
+  first expression in body is a literal string, will use that as the
+  exception message.
+nil
+Uniform state transition:
+- Refs
+(dosync (commute foo assoc :a "a"))
+- Agents
+(send foo assoc :a "a")
+- Atoms
+(swap! foo assoc :a "a")
+
+Uniform state transition model
+- (<change-state-ops> reference function [args*])
+- function passed current state of reference plus args
+- return value of function is next state of reference
+- clojure swaps ref only 
+- deref always gives current state
+- no user locking, no deadlocks
+- readers not blocked
+- writers not blocked by other readers
+
+Validators, watchers, futures, promises
+Validators:
+- functions that are called whenever a value might change
+- can add validators to agents, atoms, refs and vars
+- accepts one argument: intended new value
+- exception of false rejects new value
+- rejected value means exception and new value not set
+;; this code did not work
+(def thingy 17)
+(set-validator! (var thingy) #(not= %1 16))
+(binding [thingy 20] (println thingy))
+(binding [thingy 16] (println thingy))
+;; clears it
+(set-validator! (var thingy) nil)
+
+Watchers
+- functions that are called whenever value might change
+- can add watchers to agents, atoms, and refs
+- four args: a key, a ref, old value, new value
+- added with add-watch, removed with remove-watch
+(defn my-watcher [key r old new]
+  (println key r old new))
+(def foo (atom 3))
+(add-watch foo :my-key my-watcher)
+(swap! foo inc)
+(remove-watch foo :my-key)
+
+Futures
+- a simple primitive for forking work
+- implements same deref/@ semantics as atoms, etc
+- dereference blocks until work completes
+- built internally on agent framework
+(def my-future
+  (future
+    (Thread/sleep 5000)
+    (println "Doing stuff")
+    (Thread/sleep 3000)
+    17))
+@my-future
+
+Promises
+- a simple primitive for handing around values
+- implements same deref/@ semantics as atoms, etc
+- create via promise
+- value delivered exactly once via deliver function
+- can deadlock (then what is the point?)
+- but if deadlock can happen, will always happen (so you can catch it in testing)
+
+(def my-promise (promise))
+(with-new-thread 
+  (println "Waiting for promise to be delivered")
+  (println "Delivered: " @my-promise))
+(deliver my-promise 42)
+@my-promise
+(deliver my-promise 17) ; Exception
+(def promise1 (promise))
+(def promise2 (promise))
+;; deadlock possible
+(with-new-thread
+  (println "Waiting for promise 2: ")
+  (println @promise2)
+  (deliver promise1 1))
+(with-new-thread
+  (println "Waiting for promise 1: ")
+  (println @promise1)
+  (deliver promise2 2))
+
+http://www.facebook.com/l/iAQFL9t4qAQGVbJOk9zmS9uPFm_QrZel4xckVolGMVs4A1g/
+https://www.coursera.org/course/programming1
+-------------------------------
+2012-12-15_16.13.07
+Day of Datomic
+Got the github repo
+To run the main: (datomic.samples.tutorials/-main)
+Put the file array into a "variable":  (def aa  (datomic.samples.tutorials/tutorial-seq))
+To see it: @aa
+To see the fourth: (nth aa 4)
+To see previous commands: CNTRL-P
+Copy and paste the files in. It would be nice if they stated that explicitly
+(def tx-result3
+  (d/transact
+   conn
+   [[:db/add
+     (d/tempid :db.part/user)
+     :db/doc
+     "Hello all"]]))
+     
+(def q-result3 (q '[:find ?e
+                   :where [?e :db/doc "Hello all"]]
+                 dbval))     
+THis got some results:
+user=> (doc datomic.api/transact)
+
+
+------------------------
+2013-06-29
+Stu Halloway
+Clojure designed to be streamable.
+Serialized as a sequence of data structures.
+
+Ruby: Optimized for developers
+Clojure: Optimized for production
+
+2013-07-31:
+Immutant installed:
+lein immutant install 1.0.0.cr1
+
+2013-08-12:
+To make a web app:
+lein new compojure myapp
+cd myapp
+lein ring server
+
+Why use an app server?
+
+What about clusters, databases, messaging, etc
+
+Add immutant plugin to lein profile
+lein immutant install
+
+To deploy app
+lein immutant deploy
+
+To run the server
+lein immutant run
+
+localhost:8080/$APP_NAME
+
+lein immutant run --clustered
+
+lein immutant undeploy
+
+To get environment variables
+lein immutant env
+
+lein immutant list
+
+Modules:
+immutant.web
+
+immutant has an immutant.init name space
+/context-prefix/handler-path/app-path
+
+(->
+That is a threading macro (not concurrency)
+Kind of a Clojure function in reverse.
+Instead of inside out
+(-> 1
+ (+5 )
+ (+10)
+ (*20))
+This is the same as
+(* (+ (+ 1 5) 10) 20)
+
+----
+immutant.web: framework agnostic, works with non-Ring apps (like Pedestal), control over virtual hosts and context paths, can dynamically start/stop endpoints
+
+Next module:
+immutant.xa (deals with databases)
+"xa" is distributed transactions
+XA transactions can be hard to test
+All immutant services are XA
+
+next immutant.cache
+You can make the cache persistent, synchronized across nodes (uses Infinispan)
+Write with cache/put
+Infinispan does more than caching
+Easy to use
+Interface is not too Clojure-like
+
+Module:
+immutant.messaging
+It uses Hornet
+Topics and queues
+pipelines
+
+Module:
+immutant.jobs
+It uses Quartz
+Can use cron syntax
+Can be used for ad-hoc jobs
+Not easy to see what jobs are scheduled/running in Clojure
+
+Module:
+immutant.dameons
+Long-running tasks
+
+Fault-tolerant pi
+
+
+
+
+#- EOF

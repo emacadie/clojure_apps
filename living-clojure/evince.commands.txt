@@ -1,0 +1,17 @@
+evince Living_Clojure.oreilly.pdf 
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf 
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+history | grep evince
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+history | grep evince
+history | grep evince
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+history | grep evince
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+history | grep evince
+evince /home/ericm/pdfFiles/clojure/Living_Clojure.oreilly.pdf &
+phistory | grep evince
+phistory | grep evince | cat > evince.commands.txt
