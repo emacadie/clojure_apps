@@ -26,3 +26,5 @@ repl/clojure/browser/net.cljs
 repl/clojure/browser/net.js
 repl/clojure/browser/repl.cljs
 repl/clojure/browser/repl.js
+resources/public/main.js
+#- EOF
