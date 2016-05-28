@@ -3,21 +3,33 @@
 
 (defn is-even? [n]
   (if (= n 0)
-    __
-    (___ (is-even? (dec n)))))
+    true
+    (not (is-even? (dec n)))))
 
 (defn is-even-bigint? [n]
-  (loop [n   n
+  (loop [m  n
          acc true]
-    (if (= n 0)
-      __
-      (recur (dec n) (not acc)))))
+    (if (= m 0)
+      false
+      (recur (dec m) (not acc)))))
+
 
 (defn recursive-reverse [coll]
-  __)
+  (loop [oldc coll
+         newc '()]
+    (if (= (count oldc) 0)
+      newc
+      (do ; (println "oldc: " oldc ", newc: " newc)
+        (recur (rest oldc) (conj newc (first oldc)))))))
 
 (defn factorial [n]
-  __)
+  (loop [nn  n
+         tot 1]
+    ;; (println "Starting loop with nn " nn ", and tot " tot ", mult together is " (* nn tot))
+    (if (= nn 0)
+      tot
+      (recur (dec nn) (* nn tot)))))
+
 
 (meditations
   "Recursion ends with a base case"
