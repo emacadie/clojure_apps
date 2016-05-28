@@ -33,4 +33,4 @@
       [:bottom :left] [:bottom :middle] [:bottom :right]]
      (for [row [:top :middle :bottom]
            column [:left :middle :right]]
-       __)))
+       (vector row column))))
