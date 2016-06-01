@@ -8,6 +8,7 @@
                       false
                       "hello"
                       "hello"
+                      nil
                       3]}]
 
  ["02_strings" {"__" ["hello"
@@ -197,15 +198,13 @@
                  atomic-clock 20 :fin
                  ]}]
 
- ["18_macros" {"__" [~(first form)
-                  ~(nth form 2)
-                  form
-                  (drop 2 form)
-                  "Hello, Macros!"
-                  10
-                  '(+ 9 1)
-                  '(* 10 2)
-                  '(+ 10 (2 * 3))]}]
+ ["18_quote" {"__" ['(1 2 3 4 5)
+                    (1 2 3 4 5)
+                    'age
+                    quote
+                    '(+ 2 3)
+                    1 2 3
+                    1 5]}]
 
  ["19_datatypes" {"__" [(print
                       (str "You're really the "
@@ -225,8 +224,8 @@
                         1024
                         ]
                   "___" [#(.toUpperCase %)
-                         ]
-                  }]
+                         ]}]
+
  ["21_partition" {"__" [partition
                         [:a :b :c]
                         '((0 1 2) (3 4))
@@ -234,6 +233,7 @@
                         :hello
                         (6 :these :are)
                         ]}]
+
  ["22_group_by" {"__" [odd?
                        {5 ["hello" "world"] 3 ["foo" "bar"]}
                        {1 [{:name "Bob" :id 1}
@@ -243,6 +243,7 @@
                        {:naughty-list [{:name "Jimmy" :bad true}
                                        {:name "Joe" :bad true}]
                         :nice-list [{:name "Jane" :bad false}]}]}]
+
  ["23_meta" {"__" [{:league "National League"}
                    {:division "West"}
                    "This doesn't implement the IObj interface"
@@ -253,4 +254,15 @@
                    :park "AT&T Park"
                    'Giants
                    "Giants"]}]
+
+ ["24_macros" {"__" [~(first form)
+                  ~(nth form 2)
+                  form
+                  (drop 2 form)
+                  "Hello, Macros!"
+                  10
+                  '(+ 9 1)
+                  '(* 10 2)
+                  '(+ 10 (2 * 3))]}]
+
 ]
