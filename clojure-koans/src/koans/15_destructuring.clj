@@ -51,4 +51,4 @@
      ((fn [xstr ymap]
         ;; (println "xstr is " xstr "; ymap is " ymap)
         (let [ {street-address :street-address, city :city, state :state} ymap ]
-                       (str (clojure.string/join " " xstr ) ", " street-address ", " city ", " state ))) ["Test" "Testerson"] test-address)))
+          (str (clojure.string/join " " xstr ) ", " street-address ", " city ", " state ))) ["Test" "Testerson"] test-address)))
