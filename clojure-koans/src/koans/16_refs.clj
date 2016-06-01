@@ -1,6 +1,9 @@
 (ns koans.16-refs
   (:require [koan-engine.core :refer :all]))
 
+;; ref-set to just change a ref to a value
+;; alter to change a ref via a function
+
 (def the-world (ref "hello"))
 (def bizarro-world (ref {}))
 
@@ -30,7 +33,7 @@
 
   "Functions passed to alter may depend on the data in the ref"
   (= 20 (do
-          (dosync (alter the-world ___))))
+          (dosync (alter the-world #(+ %1 20)))))
 
   "Two worlds are better than one"
   (= ["Real Jerry" "Bizarro Jerry"]
@@ -39,4 +42,7 @@
           (ref-set the-world {})
           (alter the-world assoc :jerry "Real Jerry")
           (alter bizarro-world assoc :jerry "Bizarro Jerry")
-          __))))
+          (vector (first (vals @the-world)) (first (vals @bizarro-world)))))))
+;; our good friend viebel did this:
+;; (vector (map #(:jerry @%) [the-world bizarro-world]))
+;; https://github.com/viebel/clojure-koans/blob/master/src/koans/refs.clj
