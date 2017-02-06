@@ -3,7 +3,8 @@
 A Clojure library designed to ... well, that part is up to you.
 
 ## Usage
-
+To run tests: lein test
+To run main: lein run -m serpent-talk.talk "Hello pigeon"   
 FIXME
 
 ## License
