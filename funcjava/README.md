@@ -1,8 +1,8 @@
 # funcjava
 
-This is a Clojure app using boot that will have Clojure equivalents to the Java code in Venkat S' Functional Programming in Java.
+This is a Clojure app using boot that will have Clojure equivalents to the Java code in Venkat S' Functional Programming in Java.   
 I already have a Gradle-based repo that has the Java code and equivalent Groovy code. I found a Gradle plugin that let you use Clojure in a Gradle app,
-but I wasn't able to do as much as with lein or boot or Gradle for Java and Groovy (like only run some of the tests).
+but I wasn't able to do as much as with lein or boot or Gradle for Java and Groovy (like only run some of the tests).   
 
 
 ## Installation
@@ -35,7 +35,7 @@ FIXME: listing of options this app accepts.
 
 ## Examples
 
-...
+boot test --namespaces info.shelfunit.funcjava.chap01-test   
 
 ### Bugs
 
