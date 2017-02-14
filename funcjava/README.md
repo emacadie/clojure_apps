@@ -5,6 +5,8 @@ I already have a Gradle-based repo that has the Java code and equivalent Groovy 
 but I wasn't able to do as much as with lein or boot or Gradle for Java and Groovy (like only run some of the tests).   
 
 
+For Chapter two: I will not do anything for the iteration section. There does not seem to be a way to simply iterate in Clojure (even though there is a function called "iterate"). It seems like in Clojure, you don't just go through a sequence/collection/list, but you do something with each item in the list (more that just print to console).    
+
 ## Installation
 
 Download from http://example.com/FIXME.
@@ -37,6 +39,9 @@ FIXME: listing of options this app accepts.
 
 boot test --namespaces info.shelfunit.funcjava.chap01-test   
 
+boot run --args "hello world"   
+To use multiple args:    
+boot run -a "hello" -a "world"    
 ### Bugs
 
 ...
