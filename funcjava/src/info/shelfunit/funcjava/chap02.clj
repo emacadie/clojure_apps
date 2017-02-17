@@ -1,26 +1,33 @@
 (ns info.shelfunit.funcjava.chap02)
+(require '[clojure.string :as cs])
+; this is in ns:  (:require [clojure.string :as cs]))
 
-(defn calculate-the-long-way []
-  (println "in info.shelfunit.funcjava.chap01.calculate-the-long-way")
-  (def prices [ 10, 30, 17, 20, 15, 18, 45, 12 ])
-  (def over-20 (filter #(> %1 20) prices))
-  (def reduced-prices (map #(* %1 0.9) over-20))
-  (reduce + reduced-prices))
+(defn transform-list-to-uppercase []
+  (println "In transform-list-to-uppercase")
+  (def names [ "Brian", "Nate", "Neil", "Raju", "Sara", "Scott" ])
+  (println "here is names: " names)
+  (def names-upper (map #(cs/upper-case %1 ) names))
+  (println "here is names-upper: " names-upper)
+  (println "Done with transform-list-to-uppercase"))
 
-(defn calculate-the-one-liner []
-  (println "in info.shelfunit.funcjava.chap01.calculate-the-one-liner")
-  (def prices [ 10, 30, 17, 20, 15, 18, 45, 12 ])
-  (reduce + (map #(* %1 0.9) (filter #(> %1 20) prices))))
+(defn get-count-of-names []
+  (println "In get-count-of-names")
+  (def names [ "Brian", "Nate", "Neil", "Raju", "Sara", "Scott" ])
+  (println "Count of names: " (count names))
+  (println "Done with get-count-of-names"))
 
-(defn calculate-the-threaded-way []
-  (println "in info.shelfunit.funcjava.chap01.calculate-the-threaded-way")
-  (def prices [ 10, 30, 17, 20, 15, 18, 45, 12 ])
-  (->> prices
-       (filter #(> %1 20))
-       (map #(* %1 0.9))
-           (reduce +)))
+(defn reverse-upper-case []
+  (println "In reverse-upper-case []")
+  (def names [ "Brian", "Nate", "Neil", "Raju", "Sara", "Scott" ])
+  (def first-transform (map #(cs/reverse %1) (map #(cs/upper-case %1) names)))
+  (println "first-transform: " first-transform)
+  (def second-transform (->> names
+                             (map #(cs/upper-case %1))
+                             (map #(cs/reverse %1))))
+  (println "second-transform: " second-transform)
+  (println "Done with reverse-upper-case"))
+  
   
 
 (defn -main [& args]
-  (println "in info.shelfunit.funcjava.chap02.-main")
-  (println calculate-the-threaded-way))
+  (println "in info.shelfunit.funcjava.chap02.-main"))

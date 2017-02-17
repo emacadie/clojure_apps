@@ -37,11 +37,24 @@ FIXME: listing of options this app accepts.
 
 ## Examples
 
-boot test --namespaces info.shelfunit.funcjava.chap01-test   
+boot test --namespaces info.shelfunit.funcjava.chap01-test
+boot test --namespaces info.shelfunit.funcjava.chap02-test   
 
 boot run --args "hello world"   
 To use multiple args:    
-boot run -a "hello" -a "world"    
+boot run -a "hello" -a "world"
+
+Two ways to require
+```clojure
+(ns info.shelfunit.funcjava.chap02)
+    (:require [clojure.string :as cs])) 
+```
+or
+```clojure
+(require '[clojure.string :as cs])
+```
+The second one works in a REPL
+
 ### Bugs
 
 ...
