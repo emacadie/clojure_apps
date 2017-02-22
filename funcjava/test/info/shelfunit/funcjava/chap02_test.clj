@@ -8,16 +8,27 @@
     (transform-list-to-uppercase)
     (is (= 1 1))))
 
-(deftest test-get-count-of-names
-  (testing "Testing get-count-of-names"
-    (println "in test-get-count-of-names")
-    (get-count-of-names)
+(deftest test-get-count-of-friends
+  (testing "Testing get-count-of-friends"
+    (println "in test-get-count-of-friends")
+    (get-count-of-friends)
     (is (= 1 1))))
 
 (deftest test-reverse-upper-case
   (testing "Testing reverse-upper-case"
     (println "In test-reverse-upper-case ")
     (reverse-upper-case)
+    (is (= 1 1))))
+
+(deftest test-reuse-lambda
+  (testing "Testing reuse-lambda"
+    (println "In test-reuse-lambda")
+    (println "Calling with 'K'")
+    (reuse-lambda "K")
+    (println "\nCalling with 'J'")
+    (reuse-lambda "J")
+    (println "\nCalling with no arg")
+    (reuse-lambda)
     (is (= 1 1))))
 
 (deftest a-test
