@@ -1,0 +1,22 @@
+create database musicdb;
+grant all privileges on musicdb.* to 'music_lover'@'%' identified by 'this-is-music' with grant option;
+grant all privileges on musicdb.* to 'music_lover'@'localhost' identified by 'this-is-music' with grant option;
+flush privileges;
+commit;
+
+mysql --user music_lover --password=this-is-music --database=musicdb
+
+
+
+lein migratus create add-users-table
+lein migratus create add-trigger-to-users
+
+lein run migrate 20171114223719
+
+lein migratus up 20171114223719
+
+20171114234258-add-trigger-to-users.down.sql
+lein migratus up 20171114234258
+
+lein migratus up 2017-11-14-22.37.19
+
