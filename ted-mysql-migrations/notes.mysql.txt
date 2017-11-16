@@ -18,5 +18,16 @@ lein migratus up 20171114223719
 20171114234258-add-trigger-to-users.down.sql
 lein migratus up 20171114234258
 
+20171115225105-add-artists-table.up.sql
+20171115225105-add-artists-table.down.sql
+lein migratus up 20171115225105
+
 lein migratus up 2017-11-14-22.37.19
+
+20171115233006-add-rating-types-table.down.sql
+20171115233006-add-rating-types-table.up.sql
+
+20171115234807-add-ratings-table.down.sql
+20171115234807-add-ratings-table.up.sql
+
 
