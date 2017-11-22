@@ -72,6 +72,13 @@ fields in this order: email, pass, role
 insert into users ( email, pass, role )
 values :tuple*:users
 
+-- :name users-all
+-- :command :query
+-- :result n 
+-- :doc select all the users with all the attributes
+SELECT *  
+  FROM users
+
 -- :name users-by-email 
 -- :command :query
 -- :result :raw

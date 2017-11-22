@@ -15,9 +15,16 @@ keys :email, :pass and :role"
                   :role (:role arg-map)})))
 
 (defn tx-update-rating-type [arg-map]
-"Calls update-rating-type wrapped in a transaction. arg-map needs keys :description and :name"
+"Calls update-rating-type wrapped in a transaction. arg-map needs keys :description and :name
+The name is used to update the description"
   (clojure.java.jdbc/with-db-transaction [tx db-con]
     (update-rating-type tx {:description (:description arg-map)
+                    :name (:name arg-map) })))
+
+(defn tx-new-rating-type [arg-map]
+"Calls update-rating-type wrapped in a transaction. arg-map needs keys :description and :name"
+  (clojure.java.jdbc/with-db-transaction [tx db-con]
+    (new-rating-type tx {:description (:description arg-map)
                             :name (:name arg-map)})))
 
 (defn tx-delete-user [arg-map]

@@ -1,0 +1,35 @@
+(tx-update-rating-type [arg-map]
+"Calls update-rating-type wrapped in a transaction. arg-map needs keys :description and :name"
+  (clojure.java.jdbc/with-db-transaction [tx db-con]
+    (update-rating-type tx {:description (:description arg-map)
+:name (:name arg-map)})))
+
+(sql/tx-new-user {:email "goodbye@hello.com" :pass "hello" :role "dude"})
+
+(sql/tx-new-user {:email "hhhh@hello.com" :pass "hello" :role "dude"})
+
+(sql/tx-update-rating-type {:description "Hello" :name "What it is" })
+
+(sql/users-by-email db-con {:email "this@is.it"})
+
+
+Tue Nov 21 21:09:31 CST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+
+(ns ted-hugs-mysql.sql
+ (:require [hugsql.core :as hugsql]
+           [ted-hugs-mysql.db :refer [db-con]] 
+           [clojure.java.jdbc])) 
+In repl:
+(require '[hugsql.core :as hugsql])
+
+
+ted-hugs-mysql.core> 
+(require 'clojure.repl)
+(clojure.repl/dir ted-hugs-mysql.sql)
+
+select * from users where email LIKE '' OR '1'='1';
+
+See this: 
+https://stackoverflow.com/questions/650238/how-to-show-the-last-queries-executed-on-mysql
+How to enable/disable query logging at runtime
+
