@@ -33,3 +33,16 @@ See this:
 https://stackoverflow.com/questions/650238/how-to-show-the-last-queries-executed-on-mysql
 How to enable/disable query logging at runtime
 
+MySQL get connections: 
+as root in mysql:
+show status like '%onn%';
+To enable logs (as root in mysql)
+
+SET GLOBAL log_output = "FILE"; the default.
+SET GLOBAL general_log_file = "/path/to/your/logfile.log";
+SET GLOBAL general_log = 'ON';
+on my system, the file goes in /var/lib/mysql
+(or whatever the value is for "datadir" in mysqld.cnf)
+
+
+
