@@ -11,6 +11,9 @@ pom.xml.asc
 .hgignore
 .hg/
 
+# I added this
+*db
+
 # from https://github.com/github/gitignore/blob/master/Leiningen.gitignore
 pom.xml
 pom.xml.asc
