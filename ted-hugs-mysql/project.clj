@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [mysql/mysql-connector-java "5.1.44"]
+                 [hikari-cp "1.8.3"]
                  [com.layerware/hugsql "0.4.5"]]
   :main ^:skip-aot ted-hugs-mysql.core
   :target-path "target/%s"

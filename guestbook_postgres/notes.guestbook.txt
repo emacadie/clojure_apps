@@ -1,0 +1,49 @@
+:jdbc-url, :adapter, :datasource, or :datasource-classname
+:jdbc-url, :adapter, :datasource, or :datasource-classname
+env [:database-url])
+:DATABASE_URL "jdbc:h2:./guestbook.db"
+:database-url "jdbc:h2:./guestbook.db"
+
+/home/ericm/.m2/repository/com/h2database/h2/1.4.192/h2-1.4.192.jar -url jdbc:h2:/home/ericm/tmp/clojure/examples/guestbook/guestbook.db.mv.db
+jdbc:h2:./guestbook.db
+
+/home/ericm/tmp/clojure/examples/guestbook/src/clj/guestbook/db
+jdbc:h2:/home/ericm/tmp/clojure/examples/guestbook/guestbook.db.mv.db
+/home/ericm/tmp/clojure/examples/guestbook/test/clj/guestbook/test/db
+/home/ericm/tmp/clojure/examples/guestbook/guestbook.db.trace.db
+
+
+{:profiles/dev  {:env {:database-url "jdbc:postgresql://localhost/my_app_dev?user=db_user&password=db_password"}}
+ :profiles/test {:env {:database-url "jdbc:postgresql://localhost/myapp_test?user=db_user&password=db_password"}}}
+.
+{:jdbc-url "jdbc:postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"}
+CREATE TABLE guestbook
+(id INTEGER PRIMARY KEY AUTO_INCREMENT,
+ name VARCHAR(30),
+ message VARCHAR(200),
+timestamp TIMESTAMP);
+
+CREATE TABLE guestbook
+(id serial primary key NOT NULL,
+ name character varying ( 30 ),
+ message character varying( 200 ),
+timestamp  TIMESTAMP WITH TIME ZONE default clock_timestamp()); -- no good
+
+CREATE TABLE guestbook
+(id serial primary key NOT NULL,
+ name character varying ( 30 ),
+ message character varying( 200 ),
+timestamp  timestamp );
+
+CREATE TABLE guestbook
+(id serial primary key NOT NULL,
+ name character varying ( 30 ),
+ message character varying( 200 )
+-- timestamp  DATE 
+);
+
+Caused by: org.postgresql.util.PSQLException: Can't infer the SQL type to use for an instance of java.util.Date. Use setObject() with an explicit Types value to specify the type to use.
+
+i think for postgres it's 
+:database-url "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
+
