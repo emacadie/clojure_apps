@@ -1,8 +1,11 @@
 # guestbook
 
-generated using Luminus version "2.9.11.08"
+generated using Luminus version "2.9.11.08"   
+
+This is based on the Luminus example, but instead of using H2, I used Postgres.   
 
 FIXME
+
 
 ## Prerequisites
 
