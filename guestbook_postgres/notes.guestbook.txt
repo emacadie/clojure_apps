@@ -17,30 +17,25 @@ jdbc:h2:/home/ericm/tmp/clojure/examples/guestbook/guestbook.db.mv.db
  :profiles/test {:env {:database-url "jdbc:postgresql://localhost/myapp_test?user=db_user&password=db_password"}}}
 .
 {:jdbc-url "jdbc:postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"}
+
+psql --port=5433 --host=localhost --user=music_lover --dbname=musicdb --password
+pg_dump --port=5433 --host=localhost --user=music_lover --dbname=musicdb > gggg
+
+MySQL:
 CREATE TABLE guestbook
 (id INTEGER PRIMARY KEY AUTO_INCREMENT,
  name VARCHAR(30),
  message VARCHAR(200),
 timestamp TIMESTAMP);
 
-CREATE TABLE guestbook
-(id serial primary key NOT NULL,
- name character varying ( 30 ),
- message character varying( 200 ),
-timestamp  TIMESTAMP WITH TIME ZONE default clock_timestamp()); -- no good
-
+Postgres:
 CREATE TABLE guestbook
 (id serial primary key NOT NULL,
  name character varying ( 30 ),
  message character varying( 200 ),
 timestamp  timestamp );
 
-CREATE TABLE guestbook
-(id serial primary key NOT NULL,
- name character varying ( 30 ),
- message character varying( 200 )
--- timestamp  DATE 
-);
+
 
 Caused by: org.postgresql.util.PSQLException: Can't infer the SQL type to use for an instance of java.util.Date. Use setObject() with an explicit Types value to specify the type to use.
 

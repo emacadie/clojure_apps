@@ -45,4 +45,5 @@ on my system, the file goes in /var/lib/mysql
 (or whatever the value is for "datadir" in mysqld.cnf)
 
 
+mysql --user music_lover --password=this-is-music --database=musicdb
 

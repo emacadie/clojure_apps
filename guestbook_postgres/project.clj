@@ -63,15 +63,8 @@
                   :injections [(require 'pjstadig.humane-test-output)
                                (pjstadig.humane-test-output/activate!)]}
    :project/test {:resource-paths ["env/dev/resources" "env/test/resources"]}
-   :profiles/dev { :env { :DATABASE_URL "jdbc:h2:./guestbook.db" 
-                         ; :database-url "jdbc:h2:./guestbook.db" 
-                         ; :database-url "jdbc:h2:/home/ericm/tmp/clojure/examples/guestbook/guestbook.db.mv.db"
-                         ; :database-url "jdbc:postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
-                         :database-url "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
-                         ; :driver-class-name "org.postgresql.Driver"
-                         ; :driver "org.postgresql.Driver"
+   :profiles/dev { :env { :database-url "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
                          :classname "org.postgresql.Driver"
-                         ; :driver-class-name "org.postgresql.ds.PGSimpleDataSource"
                          } }
    :profiles/test {}})
 
