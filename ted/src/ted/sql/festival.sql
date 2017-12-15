@@ -12,7 +12,7 @@ From HugSQL docs:
 
 -- :name artists-all
 -- :command :query
--- :result n 
+-- :result many
 -- :doc select all the artists with all the attributes
 SELECT *  
   FROM artists
@@ -27,14 +27,20 @@ SELECT :i*:cols
 -- Note the terse style below
 -- ":command :query" -> ":?"
 -- ":result n" -> ":*" 
+-- :? :*
 
--- :name artist-by-id :? :*
+-- :name artist-by-id 
+-- :command :query
+-- :result :many
 -- :doc get artist info by music_brainz id
 SELECT *  
   FROM artists
  WHERE mb_id = :id
 
--- :name artists-by-name-like :? :*
+
+-- :name artists-by-name-like
+-- :command :query
+-- :result :many
 -- :doc use {:name-like "P%"} as the option param to get the P's
 SELECT *  
   FROM artists
@@ -79,7 +85,7 @@ select * from users where email=:email
 
 -- :name users-all
 -- :command :query
--- :result n 
+-- :result many
 -- :doc select all the users with all the attributes
 SELECT *  
   FROM users
