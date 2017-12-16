@@ -84,4 +84,5 @@ Then you can do
 ted.core=> (sql/users-all)
 {:email "hays@compose.io", :pass "secret", :role "music_lover"}
 
+Connection options at https://github.com/tomekw/hikari-cp#configuration-options  
 

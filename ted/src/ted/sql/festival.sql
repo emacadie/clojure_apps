@@ -12,7 +12,7 @@ From HugSQL docs:
 
 -- :name artists-all
 -- :command :query
--- :result many
+-- :result :many
 -- :doc select all the artists with all the attributes
 SELECT *  
   FROM artists
@@ -85,7 +85,7 @@ select * from users where email=:email
 
 -- :name users-all
 -- :command :query
--- :result many
+-- :result :many
 -- :doc select all the users with all the attributes
 SELECT *  
   FROM users
