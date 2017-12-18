@@ -7,8 +7,6 @@
                  [org.postgresql/postgresql "42.1.4"]
                  [conman "0.7.4"]
                  [mount "0.1.11"]
-                 ; [hikari-cp "1.8.3"]
-                 ; [com.layerware/hugsql "0.4.8"]
                  ]
   :main ^:skip-aot ted.core
   :target-path "target/%s"

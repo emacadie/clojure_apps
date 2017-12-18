@@ -27,7 +27,6 @@ SELECT :i*:cols
 -- Note the terse style below
 -- ":command :query" -> ":?"
 -- ":result n" -> ":*" 
--- :? :*
 
 -- :name artist-by-id 
 -- :command :query

@@ -6,7 +6,7 @@
 
 ;; :quoting did off
 ;; now try :ansi
-(hugsql/def-db-fns "ted/sql/festival.sql" {:quoting :ansi})
+(hugsql/def-db-fns "ted/sql/festival.sql" {:quoting :off})
 (hugsql/def-sqlvec-fns "ted/sql/festival.sql" {:quoting :ansi})
 
 (defn tx-new-user [arg-map]
@@ -26,6 +26,22 @@ keys :email, :pass and :role"
 (defn tx-delete-user [arg-map]
   (clojure.java.jdbc/with-db-transaction [tx db-con]
     (delete-user tx {:email (:email arg-map)})))
+
+(defn tx-new-user-and-rating-type [arg-map]
+  (clojure.java.jdbc/with-db-transaction [tx db-con]
+    (new-user tx {:email (:email (:user arg-map))
+                  :pass (:pass (:user arg-map))
+                  :role (:role (:user arg-map))})
+    (new-rating-type tx {:name (:name (:rating-type arg-map))
+                         :description (:description (:rating-type arg-map))})))
+
+(defn new-user-and-rating-type [arg-map]
+  (new-user db-con {:email (:email (:user arg-map))
+                    :pass (:pass (:user arg-map))
+                    :role (:role (:user arg-map))})
+  (new-rating-type db-con {:name (:name (:rating-type arg-map))
+                           :description (:description (:rating-type arg-map))})
+  )
 
 (comment
 (def datasource-options {; :auto-commit        true
