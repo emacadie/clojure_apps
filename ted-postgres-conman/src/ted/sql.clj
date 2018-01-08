@@ -40,5 +40,6 @@ keys :email, :pass and :role"
           :stop (conman/disconnect! *db*))
 
 (conman/bind-connection *db* "ted/sql/festival.sql")
+(mount.core/start)
 
 
