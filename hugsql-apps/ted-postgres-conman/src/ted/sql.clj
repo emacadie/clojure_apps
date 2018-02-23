@@ -31,7 +31,7 @@ keys :email, :pass and :role"
 
 (def pool-spec
   {
-   :jdbc-url "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
+   :jdbc-url "postgres://localhost:5432/musicdb?user=music_lover&password=this-is-music"
    :driver-class-name "org.postgresql.Driver"
    })
 

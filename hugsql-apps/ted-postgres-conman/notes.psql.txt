@@ -6,7 +6,7 @@ create user music_lover with password 'this-is-music';
 create database musicdb with owner music_lover;
 grant all privileges on database musicdb to music_lover;
 
-psql --port=5433 -h localhost -U music_lover -d musicdb
+psql --port=5432 -h localhost -U music_lover -d musicdb
 
 this-is-music
 
@@ -78,6 +78,10 @@ SELECT * FROM artists WHERE name LIKE '' OR '1'='1';
 (sql/users-by-email-sqlvec {:email "hello@example.com'; select * from users; "})
 (sql/artists-by-name-like-sqlvec {:name-like "' OR '1'='1"})
 
+(sql/artists-by-name-like {:name-like "' OR '1'='1"})
+SELECT * FROM artists WHERE name LIKE '' OR '1'='1';
+(sql/artists-by-name-like {:name-like "P%"})
+
 In the REPL, do this first:
 ted.core=> (mount.core/start)
 Then you can do
@@ -85,4 +89,14 @@ ted.core=> (sql/users-all)
 {:email "hays@compose.io", :pass "secret", :role "music_lover"}
 
 Connection options at https://github.com/tomekw/hikari-cp#configuration-options  
+
+NO:
+(sql/new-users {:users [{:email "a@gmail.com" :password "hello" :role "dude"} {:email "a@gmail.com" :password "hello" :role "dude"}]})
+
+NO:
+(sql/new-users [{:email "a@gmail.com" :password "hello" :role "dude"} {:email "a@gmail.com" :password "hello" :role "dude"}])
+
+YES:
+(sql/new-users {:users [ ["a@gmail.com", "hello", "dude" ] ["b@gmail.com", "hello", "dude"] ]})
+
 
