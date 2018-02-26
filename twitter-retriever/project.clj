@@ -10,6 +10,8 @@
                  [conman "0.7.4"]
                  [mount "0.1.11"]
                  ]
-  :main ^:skip-aot twitter_retriever.core
+  ; directories use underscores, namespaces use hyphens
+  :main ^:skip-aot twitter-retriever.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
+

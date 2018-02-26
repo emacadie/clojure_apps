@@ -8,5 +8,11 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-(println "Hello, World!"))
+  (println "Hello, World!")
+  (println "Let's write some clojure")
+  (println "Here are your args: ", args)
+  (println "args is a ", (class args))
+  (println "Let's make the args a map")
+  (def arg-map (apply hash-map args))
+  (println "here is the map:", arg-map))
 

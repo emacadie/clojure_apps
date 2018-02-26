@@ -1,0 +1,25 @@
+Prop file at twit-r.properties for now
+Database:
+
+lein deps
+lein compile
+lein run :greeting "hello" :filepath "/home/ericm/tmp/clojure/twitter-retriever/twit-r.properties"
+
+Reload in the repl: (use 'your.namespace :reload) or (use 'your.namespace :reload-all)
+or require
+in repl:
+(require '[clojure.java.io :as io])
+https://stackoverflow.com/questions/7658981/how-to-reload-a-clojure-file-in-repl
+(require 'my.namespace :reload-all)
+
+using reload in code (inside ns):
+(ns ted.core
+  (:require [ted.db :refer [db-con]]
+            [ted.sql :as sql]
+            [clojure.pprint :as pprint]))
+
+Another reload option:
+(clojure.tools.namespace.repl/refresh)
+to get to repl in emacs: M-x cider-jack-in
+
+
