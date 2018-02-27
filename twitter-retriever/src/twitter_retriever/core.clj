@@ -1,5 +1,10 @@
 (ns twitter-retriever.core)
 
+(defn print-stuff []
+  (println "Here is the first line")
+  (println "here is the second line")
+  (println "here is the third line"))
+
 (defn foo
   "I don't do a whole lot."
   [x]
