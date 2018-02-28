@@ -63,11 +63,15 @@ They are counting the number of v's, which is a really weird way to do it in my 
 
 lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log"
 
+
+
 lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log" --kk
 In cline
 here is something: {:options {:port 8080, :verbosity 2, :file-path /usr/local/log}, :arguments [3], :summary   -p, --port PORT            80  Port number
   -v                             Verbosity level
   -f, --file-path FILE_PATH      File path
   -h, --help, :errors [Unknown option: "--kk"]}
+
+lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/home/ericm/tmp/clojure/twitter-retriever/twit-r.properties" --kk
 
 

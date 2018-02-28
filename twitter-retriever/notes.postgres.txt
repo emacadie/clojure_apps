@@ -1,0 +1,7 @@
+create user twit_getter with password 'this-is-twitter';
+create database twit_retrieve_dev_db with owner twit_getter;
+grant all privileges on database twit_retrieve_dev_db to twit_getter;
+
+psql --port=5433 -h localhost -U twit_getter -d twit_retrieve_dev_db 
+
+
