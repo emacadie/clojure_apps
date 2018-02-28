@@ -10,13 +10,9 @@
     :default 80
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
-   ;; A non-idempotent option
-   ["-v" nil "Verbosity level"
-     :id :verbosity
-     :default 0
-     :assoc-fn (fn [m k _] (update-in m [k] inc))]
    ["-f" "--file-path FILE_PATH" "File path"
-    :id :file-path]
+    :id :file-path
+    :validate [#(> (count %) 10) "String must be at least 10 chars (like ending with .properties)"]]
    ;; A boolean option defaulting to nil
    ["-h" "--help"]])
 
@@ -29,6 +25,7 @@
   (println "here is file-path: ",  (class (:file-path (:options something))))
   (def prop-path (:file-path (:options something)))
   (println "Here is prop-path: ", prop-path)
+  ;; put some sort of checking in here
   (def the-prop (p/load-from (io/file prop-path)))
   (println "Here is the prop: ", the-prop)
   (println "the-prop is a ", (class the-prop))
