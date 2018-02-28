@@ -49,3 +49,25 @@ to get to repl in emacs: M-x cider-jack-in
 ;; * Enable ‘eldoc-mode’ to display function & method signatures in the minibuffer.
 ;; * Print CIDER’s refcard and keep it close to your keyboard.
 
+From lein notes:
+Providing a -m argument will tell Leiningen to look for the -main function in another namespace. Setting a default :main in project.clj lets you omit -m.
+Using example from https://github.com/clojure/tools.cli#example-usage
+lein run -m twitter-retriever.cline -vvvp8080 foo --help --invalid-opt
+Or
+lein run  -vvvp8080 foo --help --invalid-opt
+or
+lein run -m twitter-retriever.cline --port 8080 foo --help --invalid-opt
+That also sets port to 8080
+Not clear what is going on with "v"
+They are counting the number of v's, which is a really weird way to do it in my opinion
+
+lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log"
+
+lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log" --kk
+In cline
+here is something: {:options {:port 8080, :verbosity 2, :file-path /usr/local/log}, :arguments [3], :summary   -p, --port PORT            80  Port number
+  -v                             Verbosity level
+  -f, --file-path FILE_PATH      File path
+  -h, --help, :errors [Unknown option: "--kk"]}
+
+

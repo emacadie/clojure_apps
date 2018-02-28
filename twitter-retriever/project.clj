@@ -4,6 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
+                 [org.clojure/tools.cli "0.3.5"]
                  [twitter-api "1.8.0"]
                  [clojurewerkz/propertied "1.3.0"]
                  [org.postgresql/postgresql "42.1.4"]
@@ -13,6 +14,7 @@
    :plugins [[lein-autoreload "0.1.1"]]
   ; directories use underscores, namespaces use hyphens
   :main ^:skip-aot twitter-retriever.core
+  ; :main ^:skip-aot twitter-retriever.cline
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 
