@@ -10,8 +10,11 @@
                  [org.postgresql/postgresql "42.1.4"]
                  [conman "0.7.4"]
                  [mount "0.1.11"]
+                 [environ "1.1.0"]
                  ]
-   :plugins [[lein-autoreload "0.1.1"]]
+   :plugins [[lein-autoreload "0.1.1"]
+             [lein-environ "1.1.0"]
+             ]
   ; directories use underscores, namespaces use hyphens
   :main ^:skip-aot twitter-retriever.core
   ; :main ^:skip-aot twitter-retriever.cline

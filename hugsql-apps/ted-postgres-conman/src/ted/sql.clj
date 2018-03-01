@@ -26,8 +26,8 @@ keys :email, :pass and :role"
                              :name (:name arg-map)}))))
 
 (comment (defn tx-delete-user [arg-map]
-   (clojure.java.jdbc/with-db-transaction [tx db-con]
-     (delete-user tx {:email (:email arg-map)}))))
+           (clojure.java.jdbc/with-db-transaction [tx db-con]
+             (delete-user tx {:email (:email arg-map)}))))
 
 (def pool-spec
   {

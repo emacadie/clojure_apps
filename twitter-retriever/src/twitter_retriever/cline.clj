@@ -2,6 +2,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [clojurewerkz.propertied.properties :as p])
   (:require [clojure.java.io :as io])
+  (:require [environ.core :refer [env]])
   (:gen-class))
 
 (def cli-options
@@ -31,5 +32,10 @@
   (println "the-prop is a ", (class the-prop))
   (println "what happens if we conver to a map?", (class (p/properties->map the-prop true)))
   ;; perhaps the threading macro can help
-  (println "Here it is as a map: ", (p/properties->map the-prop true)))
+  (println "Here it is as a map: ", (p/properties->map the-prop true))
+  (def database-url (env :database-url))
+  (println "here is database-url: ", database-url)
+  (def client-token (env :client-token))
+  (println "Here is client-token: ", client-token)
+)
 
