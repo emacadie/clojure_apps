@@ -74,4 +74,49 @@ here is something: {:options {:port 8080, :verbosity 2, :file-path /usr/local/lo
 
 lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/home/ericm/tmp/clojure/twitter-retriever/twit-r.properties" --kk
 
+Find keys with word "data" in environ map:
+(filter #(s/includes? (s/lower-case %) "data") (keys env))
+For system environment:
+(def system-map (System/getenv))
+(filter #(s/includes? (s/lower-case %) "data") (keys system-map))
+
+Maybe cprop is the way to go
+https://github.com/tolitius/cprop
+
+At the repl:
+(require '[environ.core :refer [env]])
+(env :client-token)
+
+(use '[twitter.oauth]
+     '[twitter.callbacks]
+     '[twitter.callbacks.handlers]
+     '[twitter.api.restful])
+(import twitter.callbacks.protocols SyncSingleCallback)
+(def my-creds (make-oauth-creds (env :app-consumer-key)
+                                (env :app-consumer-secret)
+                                (env :user-access-token)
+                                (env :user-access-token-secret)))
+(users-show :oauth-creds my-creds :params {:screen-name "EMacAdie"})
+https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-show
+
+
+I will probably use this a lot:
+https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline.html
+
+(statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" :since-id 772855238608818176})
+
+(statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" :since-id 772855238608818176 :tweet_mode "extended"})
+
+
+To get one tweet
+https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-statuses-show-id
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800})
+
+This did not get full text:
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :truncated "false"})
+
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :tweet_mode "extended"})
+That works
+
+See https://developer.twitter.com/en/docs/tweets/tweet-updates
 

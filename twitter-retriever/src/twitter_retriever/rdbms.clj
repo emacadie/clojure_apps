@@ -1,6 +1,6 @@
 (ns twitter-retriever.rdbms
   (:require [hugsql.core :as hugsql]
-            [ted.db :refer [db-con]]
+            ; [ted.db :refer [db-con]]
             ; [hikari-cp.core :refer :all]
             [mount.core :refer [defstate]]
             [conman.core :as conman]
@@ -13,7 +13,7 @@
 
 (def pool-spec
   {
-   :jdbc-url "postgres://localhost:5432/musicdb?user=music_lover&password=this-is-music"
+   :jdbc-url "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
    :driver-class-name "org.postgresql.Driver"
    })
 

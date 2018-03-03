@@ -16,8 +16,8 @@
              [lein-environ "1.1.0"]
              ]
   ; directories use underscores, namespaces use hyphens
-  :main ^:skip-aot twitter-retriever.core
-  ; :main ^:skip-aot twitter-retriever.cline
+  ; :main ^:skip-aot twitter-retriever.core
+  :main ^:skip-aot twitter-retriever.cline
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 

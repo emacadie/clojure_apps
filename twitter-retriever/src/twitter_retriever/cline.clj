@@ -3,6 +3,7 @@
   (:require [clojurewerkz.propertied.properties :as p])
   (:require [clojure.java.io :as io])
   (:require [environ.core :refer [env]])
+  (:require [clojure.pprint :as pp])
   (:gen-class))
 
 (def cli-options
@@ -37,5 +38,12 @@
   (println "here is database-url: ", database-url)
   (def client-token (env :client-token))
   (println "Here is client-token: ", client-token)
+  (println "env is a", (class env))
+  (println "does env have a key named client-token: ", (contains? env :client-token))
+  (println "Here are the keys for env: ", (keys env))
+  ; (def system-map (System/getenv))
+  ; (println "Here is system-map: ",  (pp/pprint system-map))
+  ; (println "Here it is again")
+  ; (doall (for [[k v] system-map] (println k, ": ", v)))
 )
 
