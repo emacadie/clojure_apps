@@ -120,3 +120,11 @@ That works
 
 See https://developer.twitter.com/en/docs/tweets/tweet-updates
 
+iterative regex work:
+(re-find (re-matcher #"(\w{3})\s(\w{3}\s\d{2})" "Sun Dec 20 18:17:33 +0000 2009"))
+(re-find (re-matcher #"(\w{3})\s(\w{3}\s\d{2})\s\d{2}\p{Punct}\d{2}\p{Punct}" "Sun Dec 20 18:17:33 +0000 2009"))
+(re-find (re-matcher #"(\w{3})\s(\w{3}\s\d{2})\s(\d{2}\p{Punct}\d{2}\p{Punct}\d{2})\s\+\d{4}\s(\d{4})" "Sun Dec 20 18:17:33 +0000 2009"))
+You can only call (re-find matcher)
+once on a match
+
+
