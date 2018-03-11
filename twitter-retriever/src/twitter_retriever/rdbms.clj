@@ -3,6 +3,7 @@
             ; [ted.db :refer [db-con]]
             ; [hikari-cp.core :refer :all]
             [mount.core :refer [defstate]]
+            [environ.core :refer [env]]
             [conman.core :as conman]
             [clojure.java.jdbc]))
 
@@ -13,8 +14,8 @@
 
 (def pool-spec
   {
-   :jdbc-url "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
-   :driver-class-name "org.postgresql.Driver"
+   :jdbc-url (env :database-url) ;; "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
+   :driver-class-name (env :db-driver) ;; "org.postgresql.Driver"
    })
 
 (defstate ^:dynamic *db*

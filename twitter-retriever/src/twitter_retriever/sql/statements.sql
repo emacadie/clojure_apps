@@ -10,12 +10,37 @@ From HugSQL docs:
 :execute or :! = any statement
 */
 
--- :name artists-all
--- :command :query
--- :result :many
--- :doc select all the artists with all the attributes
-SELECT *  
-  FROM artists
+-- :name insert-user
+-- :command :execute 
+-- :result :affected
+-- :doc insert new users
+insert into twitter_user (
+    name, user_id_str, user_id, screen_name, description, location,    
+    lang, display_url, expaned_url, friends_count, followers_count, 
+    has_extended_profile, protected, statuses_count, time_zone, utc_offset,           
+    created_at 
+) values (
+    :name, :user_id_str, :user_id, :screen_name, :description, :location,    
+    :lang, :display_url, :expaned_url, :friends_count, :followers_count, 
+    :has_extended_profile, :protected, :statuses_count, :time_zone, :utc_offset,           
+    :created_at 
+);
+
+-- :name insert-tweet
+-- :command :execure
+-- :result :affected
+-- :doc insert tweet data
+insert into twitter_tweet (
+    tweet_id_str, tweet_id, full_text, display_text_range, user_id,
+    user_id_str, in_reply_to_screen_name, in_reply_to_status_id,
+    in_reply_to_status_id_str, in_reply_to_user_id, 
+    in_reply_to_user_id_str, created_at
+) values (
+    :tweet_id_str, :tweet_id, :full_text, :display_text_range, :user_id,
+    :user_id_str, :in_reply_to_screen_name, :in_reply_to_status_id,
+    :in_reply_to_status_id_str, :in_reply_to_user_id, 
+    :in_reply_to_user_id_str, :created_at
+);
 
 -- :name artists
 -- :command :query

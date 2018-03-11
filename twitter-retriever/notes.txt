@@ -127,4 +127,11 @@ iterative regex work:
 You can only call (re-find matcher)
 once on a match
 
+(clojure.string/replace "Let's work on some #Clojure at #CapitalFactory" #"(\#\w+)" "$1$1ay")
+(clojure.string/replace "Let's work on some #Clojure at #CapitalFactory" #"(\#\w+)" "<a href=\"https://twitter.com/hashtag/$1?src=hash\">$1</a>")
+(clojure.string/replace "Let's work on some @Clojure at @CapitalFactory" #"(\@\w+)" "<a href=\"http://twitter.com/$1\">$1</a>")
+
+Get every key except :user from a map containing a status:
+(filter #(not (contains? '#{:user} %1)) (keys (nth status-body 2)))
+
 

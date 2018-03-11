@@ -20,12 +20,12 @@
 
 (defn -main [& args]
   (println "In cline")
-  (def something (parse-opts args cli-options))
-  (println "here is something:", something)
-  (println "here is options: ", (:options something))
-  (println "here is file-path: ",  (:file-path (:options something)))
-  (println "here is file-path: ",  (class (:file-path (:options something))))
-  (def prop-path (:file-path (:options something)))
+  (def arg-map (parse-opts args cli-options))
+  (println "here is arg-map:", arg-map)
+  (println "here is options: ", (:options arg-map))
+  (println "here is file-path: ",  (:file-path (:options arg-map)))
+  (println "here is file-path: ",  (class (:file-path (:options arg-map))))
+  (def prop-path (:file-path (:options arg-map)))
   (println "Here is prop-path: ", prop-path)
   ;; put some sort of checking in here
   (def the-prop (p/load-from (io/file prop-path)))
