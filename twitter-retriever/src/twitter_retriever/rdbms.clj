@@ -5,7 +5,10 @@
             [mount.core :refer [defstate]]
             [environ.core :refer [env]]
             [conman.core :as conman]
-            [clojure.java.jdbc]))
+            [clojure.java.jdbc]
+            [clj-time.format :as timef] 
+            [clj-time.coerce :as timec]
+            ))
 
 ;; (hugsql/def-db-fns "twitter_retriever/sql/statements.sql" {:quoting :ansi})
 ;; (hugsql/def-sqlvec-fns "twitter_retriever/sql/statements.sql" {:quoting :ansi})
@@ -51,6 +54,12 @@
         (println "Here it is as a string: ", (str year,"-", month, "-", day, " ", time-of-day))
         (str year,"-", month, "-", day, " ", time-of-day)))
 
+;; from https://stackoverflow.com/questions/9305541/clojure-jdbc-postgresql-i-am-trying-to-update-a-timestamp-value-in-postgresql-f/9305737#9305737
+(defn get-time-from-map [time-from-map]
+  (->> time-from-map
+     (timef/parse (timef/formatter "EEE MMM dd HH:mm:ss Z yyyy"))
+     timec/to-timestamp))
+
 ;; we get the map which is the value for the "body" key
 (defn call-insert-user [user-map]
   (insert-user { :name (:name user-map) 
@@ -70,7 +79,7 @@
                 :time_zone (:time_zone user-map)
                 :utc_offset (:utc_offset user-map)
                 ;; :created_at  (create-time-from-map (:created_at user-map))
-                :created_at
+                :created_at (get-time-from-map (:created_at user-map))
                 
 }))
 

@@ -65,7 +65,7 @@ lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/lo
 
 lein run -m twitter-retriever.work --port 8080 -vv 3 --file-path "/usr/local/log"
 lein run -m twitter-retriever.work --port 8080 --action=retrieve-tweets --file-path "/usr/local/log"
-
+lein run -m twitter-retriever.work --port 8080 --action=create-user --user=
 
 
 lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log" --kk

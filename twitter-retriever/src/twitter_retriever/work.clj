@@ -56,5 +56,6 @@
     (do
       (println "Action ", action, " not specified.")
       (println "Possible actions: create-user retrieve-tweets"))))
+  (println "Done")
 )
 

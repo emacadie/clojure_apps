@@ -11,7 +11,7 @@
                  [conman "0.7.4"]
                  [mount "0.1.11"]
                  [environ "1.1.0"]
-                 [clj-time.core :as t]
+                 [clj-time "0.14.2"]
                  ]
    :plugins [[lein-autoreload "0.1.1"]
              [lein-environ "1.1.0"]
