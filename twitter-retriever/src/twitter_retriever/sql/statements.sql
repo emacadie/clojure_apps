@@ -16,12 +16,12 @@ From HugSQL docs:
 -- :doc insert new users
 insert into twitter_user (
     name, user_id_str, user_id, screen_name, description, location,    
-    lang, display_url, expaned_url, friends_count, followers_count, 
+    lang, display_url, expanded_url, friends_count, followers_count, 
     has_extended_profile, protected, statuses_count, time_zone, utc_offset,           
     created_at 
 ) values (
     :name, :user_id_str, :user_id, :screen_name, :description, :location,    
-    :lang, :display_url, :expaned_url, :friends_count, :followers_count, 
+    :lang, :display_url, :expanded_url, :friends_count, :followers_count, 
     :has_extended_profile, :protected, :statuses_count, :time_zone, :utc_offset,           
     :created_at 
 );
