@@ -140,4 +140,9 @@ Postgres time stamp:
 Get every key except :user from a map containing a status:
 (filter #(not (contains? '#{:user} %1)) (keys (nth status-body 2)))
 
+(def t-map (statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" :since-id 772855238608818176 :tweet_mode "extended"}))
+(def t-body (:body t-map))
+(doseq [the-body t-body]
+    (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body)))
+
 

@@ -19,6 +19,11 @@
   (def user-map (users-show :oauth-creds my-oauth-creds :params {:screen-name user-name}))
   (println "Here is user-map: ", user-map)
   (rdbms/call-insert-user (:body user-map))
+  (def tweet-map ((statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
+                                                                               :since-id 0
+                                                                               :include_rts false
+                                                                               :tweet_mode "extended"})))
+  (def map-body (:body tweet-map))
   (println "Done inserting")
 )
 

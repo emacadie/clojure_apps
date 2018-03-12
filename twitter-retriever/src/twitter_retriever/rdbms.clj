@@ -80,6 +80,21 @@
                 :utc_offset (:utc_offset user-map)
                 ;; :created_at  (create-time-from-map (:created_at user-map))
                 :created_at (get-time-from-map (:created_at user-map))
-                
-}))
+                }))
+
+(defn call-insert-tweet [tweet-map]
+  (insert-tweet {:tweet_id_str (:id_str tweet-map)
+                 :tweet_id (:id tweet-map)
+                 :full_text (:full_text tweet-map)
+                 :display_text_range (:display_text_range tweet-map)
+                 :user_id  (get-in tweet-map [:user :id])
+                 :user_id_str (get-in tweet-map [:user :id_str])
+                 :in_reply_to_screen_name (:in_reply_to_screen_name tweet-map)
+                 :in_reply_to_status_id (:in_reply_to_status_id tweet-map)
+                 :in_reply_to_status_id_str (:in_reply_to_status_id_str tweet-map)
+                 :in_reply_to_user_id (:in_reply_to_user_id tweet-map)
+                 :in_reply_to_user_id_str (:in_reply_to_user_id_str tweet-map)
+                 :created_at (get-time-from-map (:created_at tweet-map))
+                 }))
+
 
