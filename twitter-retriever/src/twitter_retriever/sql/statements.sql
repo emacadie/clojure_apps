@@ -27,16 +27,17 @@ insert into twitter_user (
 );
 
 -- :name insert-tweet
--- :command :execure
+-- :command :execute
 -- :result :affected
 -- :doc insert tweet data
 insert into twitter_tweet (
-    tweet_id_str, tweet_id, full_text, display_text_range, user_id,
+    tweet_id_str, tweet_id, full_text, -- display_text_range, 
+    user_id,
     user_id_str, in_reply_to_screen_name, in_reply_to_status_id,
     in_reply_to_status_id_str, in_reply_to_user_id, 
     in_reply_to_user_id_str, created_at
 ) values (
-    :tweet_id_str, :tweet_id, :full_text, :display_text_range, :user_id,
+    :tweet_id_str, :tweet_id, :full_text, :user_id,
     :user_id_str, :in_reply_to_screen_name, :in_reply_to_status_id,
     :in_reply_to_status_id_str, :in_reply_to_user_id, 
     :in_reply_to_user_id_str, :created_at

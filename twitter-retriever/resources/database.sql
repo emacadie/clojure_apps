@@ -24,7 +24,7 @@ create table twitter_tweet (
     tweet_id_str              character varying ( 100 ) not null, -- via twitter as id_str
     tweet_id                  bigint unique not null, -- provided by twitter as id
     full_text                 character varying ( 500 ) not null,
-    display_text_range        int not null,
+    -- display_text_range        int not null,
     user_id                   bigint not null, -- user who sent tweet
     user_id_str               character varying ( 100 ) not null,
     in_reply_to_screen_name   character varying ( 100 ),

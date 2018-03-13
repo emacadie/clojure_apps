@@ -19,11 +19,17 @@
   (def user-map (users-show :oauth-creds my-oauth-creds :params {:screen-name user-name}))
   (println "Here is user-map: ", user-map)
   (rdbms/call-insert-user (:body user-map))
-  (def tweet-map ((statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
-                                                                               :since-id 0
+  (def tweet-map (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
+                                                                               :since-id 642515818043994112
                                                                                :include_rts false
-                                                                               :tweet_mode "extended"})))
+                                                                               :tweet_mode "extended"}))
   (def map-body (:body tweet-map))
+  (doseq [the-body map-body]
+    (do
+      (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body))
+      (println "here is the-body: ", the-body)
+      (rdbms/call-insert-tweet the-body)
+))
   (println "Done inserting")
 )
 

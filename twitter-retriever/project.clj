@@ -13,7 +13,7 @@
                  [environ "1.1.0"]
                  [clj-time "0.14.2"]
                  ]
-   :plugins [[lein-autoreload "0.1.1"]
+   :plugins [; [lein-autoreload "0.1.1"]
              [lein-environ "1.1.0"]
              ]
   ; directories use underscores, namespaces use hyphens
