@@ -145,4 +145,4 @@ Get every key except :user from a map containing a status:
 (doseq [the-body t-body]
     (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body)))
 
-
+lowest tweet id so far: 499661460461477890

@@ -20,9 +20,11 @@
   (println "Here is user-map: ", user-map)
   (rdbms/call-insert-user (:body user-map))
   (def tweet-map (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
-                                                                               :since-id 642515818043994112
-                                                                               :include_rts false
-                                                                               :tweet_mode "extended"}))
+                                                                               ; :since-id 642515818043994112
+                                                                              :max_id 609813046207213568 ; 642515818043994112
+                                                                              ; :count 100
+                                                                              :include_rts false
+                                                                              :tweet_mode "extended"}))
   (def map-body (:body tweet-map))
   (doseq [the-body map-body]
     (do
