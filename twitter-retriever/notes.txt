@@ -77,6 +77,8 @@ here is something: {:options {:port 8080, :verbosity 2, :file-path /usr/local/lo
 
 lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/home/ericm/tmp/clojure/twitter-retriever/twit-r.properties" --kk
 
+lein run -m twitter-retriever.work --port 8080 --action=create-user --user=EMacAdie
+
 Find keys with word "data" in environ map:
 (filter #(s/includes? (s/lower-case %) "data") (keys env))
 For system environment:
@@ -146,3 +148,6 @@ Get every key except :user from a map containing a status:
     (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body)))
 
 lowest tweet id so far: 499661460461477890
+
+select * from twitter_user where lower( screen_name ) = lower( 'SHINZENYOUNG' );
+

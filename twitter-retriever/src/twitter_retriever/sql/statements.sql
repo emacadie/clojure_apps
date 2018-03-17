@@ -43,6 +43,23 @@ insert into twitter_tweet (
     :in_reply_to_user_id_str, :created_at
 );
 
+-- :name check-user
+-- :command :query
+-- :result n
+select count( screen_name) 
+from twitter_user 
+where lower( screen_name ) = lower( :screen_name )
+
+-- :name get-max-tweet-id
+-- :command :query
+-- :result n
+select max( t.tweet_id_str )
+from twitter_tweet t
+where t.user_id = (
+select u.user_id from twitter_user u
+where lower( u.screen_name ) = lower( :screen_name )
+)
+
 -- :name artists
 -- :command :query
 -- :result :many

@@ -46,16 +46,28 @@
                                 (env :user-access-token)
                                 (env :user-access-token-secret)))
   (println "Here is my-creds", my-creds)
-  (let [action (:action (:options arg-map))]
-    (case action
-      "create-user" (do
-                      (println "You want to create a user")
-                      (actions/create-user user-name my-creds))
-    "retrieve-tweets" (do
-                        (println "You want to retrieve tweets"))
+  (def num-user (rdbms/check-user {:screen_name user-name}))
+  (println "Here is num-user: ", num-user)
+  (println "Here is class of num-user: ", (class num-user))
+  (println "here is count of num-user: ", (:count num-user))
+  (def user-count (:count num-user))
+  (if (= user-count 0)
     (do
-      (println "Action ", action, " not specified.")
-      (println "Possible actions: create-user retrieve-tweets"))))
+      (println "You want to create a user")
+      (actions/create-user user-name my-creds))
+    (do
+      (println "You want to get more tweets")
+      (actions/insert-more-tweets user-name my-creds )))
+  (comment (let [action (:action (:options arg-map))]
+     (case action
+       "create-user" (do
+                       (println "You want to create a user")
+                       (actions/create-user user-name my-creds))
+       "retrieve-tweets" (do
+                           (println "You want to retrieve tweets"))
+       (do
+         (println "Action ", action, " not specified.")
+         (println "Possible actions: create-user retrieve-tweets")))))
   (println "Done")
 )
 
