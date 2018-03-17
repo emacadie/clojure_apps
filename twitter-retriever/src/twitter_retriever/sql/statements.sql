@@ -35,12 +35,12 @@ insert into twitter_tweet (
     user_id,
     user_id_str, in_reply_to_screen_name, in_reply_to_status_id,
     in_reply_to_status_id_str, in_reply_to_user_id, 
-    in_reply_to_user_id_str, created_at
+    in_reply_to_user_id_str, created_at, batch_time
 ) values (
     :tweet_id_str, :tweet_id, :full_text, :user_id,
     :user_id_str, :in_reply_to_screen_name, :in_reply_to_status_id,
     :in_reply_to_status_id_str, :in_reply_to_user_id, 
-    :in_reply_to_user_id_str, :created_at
+    :in_reply_to_user_id_str, :created_at, :batch_time
 );
 
 -- :name check-user
@@ -56,8 +56,18 @@ where lower( screen_name ) = lower( :screen_name )
 select max( t.tweet_id_str )
 from twitter_tweet t
 where t.user_id = (
-select u.user_id from twitter_user u
-where lower( u.screen_name ) = lower( :screen_name )
+      select u.user_id 
+      from twitter_user u
+      where lower( u.screen_name ) = lower( :screen_name )
+)
+
+-- :name insert-processed-tweet
+-- :command :execute
+-- :result :affected
+insert into processed-tweet (
+  tweet_id_str, tweet_id, user_id, user_id_str, final_html_text, created_at, batch_time
+) values (
+  :tweet_id_str, :tweet_id, :user_id, :user_id_str, :final_html_text, :created_at, :batch_time
 )
 
 -- :name artists

@@ -7,6 +7,8 @@
   (:require [twitter-retriever.rdbms :as rdbms])
   (:require [twitter-retriever.actions :as actions])
   (:require [twitter.oauth :refer [make-oauth-creds]])
+  (:require [clj-time.coerce :as c])
+  (:require [clj-time.local :as l])
   (:gen-class))
 
 (def cli-options
@@ -29,6 +31,7 @@
   (println "here is arg-map:", arg-map)
   (println "here is options: ", (:options arg-map))
   (println "here is action: ",  (:action (:options arg-map)))
+  (def batch-time (c/to-timestamp (l/local-now)))
   
   (def user-name (:user (:options arg-map)))
   (println "Here is user-name: ", user-name)
@@ -54,10 +57,10 @@
   (if (= user-count 0)
     (do
       (println "You want to create a user")
-      (actions/create-user user-name my-creds))
+      (actions/create-user user-name my-creds batch-time))
     (do
       (println "You want to get more tweets")
-      (actions/insert-more-tweets user-name my-creds )))
+      (actions/insert-more-tweets user-name my-creds batch-time)))
   (comment (let [action (:action (:options arg-map))]
      (case action
        "create-user" (do

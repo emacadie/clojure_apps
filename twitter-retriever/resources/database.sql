@@ -34,6 +34,7 @@ create table twitter_tweet (
     in_reply_to_user_id_str   character varying ( 100 ),
     created_at                TIMESTAMP  not null, --"Sun Dec 20 18:17:33 +0000 2009" "Thu Feb 04 18:04:20 +0000 2010",
     record_created_at         TIMESTAMP default clock_timestamp() not null,
+    batch_time                TIMESTAMP  not null, --"Sun Dec 20 18:17:33 +0000 2009" "Thu Feb 04 18:04:20 +0000 2010"
     FOREIGN KEY ( user_id ) REFERENCES twitter_user ( user_id ) on delete cascade
 );
 
@@ -46,6 +47,7 @@ create table processed_tweet (
     final_html_text   character varying ( 2000 ) not null,
     created_at        TIMESTAMP  not null, --"Sun Dec 20 18:17:33 +0000 2009" "Thu Feb 04 18:04:20 +0000 2010",
     record_created_at TIMESTAMP default clock_timestamp() not null,
+    batch_time        TIMESTAMP  not null, --"Sun Dec 20 18:17:33 +0000 2009" "Thu Feb 04 18:04:20 +0000 2010"
     FOREIGN KEY ( user_id )  REFERENCES twitter_user  ( user_id  ) on delete cascade,
     FOREIGN KEY ( tweet_id ) REFERENCES twitter_tweet ( tweet_id ) on delete cascade
 );

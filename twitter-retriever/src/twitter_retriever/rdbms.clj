@@ -82,7 +82,7 @@
                 :created_at (get-time-from-map (:created_at user-map))
                 }))
 
-(defn call-insert-tweet [tweet-map]
+(defn call-insert-tweet [tweet-map batch-time]
   (insert-tweet {:tweet_id_str (:id_str tweet-map)
                  :tweet_id (:id tweet-map)
                  :full_text (:full_text tweet-map)
@@ -95,6 +95,7 @@
                  :in_reply_to_user_id (:in_reply_to_user_id tweet-map)
                  :in_reply_to_user_id_str (:in_reply_to_user_id_str tweet-map)
                  :created_at (get-time-from-map (:created_at tweet-map))
+                 :batch_time batch-time
                  }))
 
 
