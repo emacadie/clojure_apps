@@ -6,8 +6,8 @@ create table twitter_user (
     description          character varying ( 200 ) not null,
     location             character varying ( 200 ) not null,
     lang                 character ( 2 )           not null,
-    display_url          character varying ( 100 ) not null, -- (get-in map-from-twitter [:body :entities :url :urls 0 :display_url])
-    expanded_url         character varying ( 100 ) not null, -- (get-in ebody [:entities :url :urls 0 :expanded_url])
+    display_url          character varying ( 100 ), -- (get-in map-from-twitter [:body :entities :url :urls 0 :display_url])
+    expanded_url         character varying ( 100 ), -- (get-in ebody [:entities :url :urls 0 :expanded_url])
     friends_count        bigint not null,
     followers_count      bigint not null,
     has_extended_profile boolean,
