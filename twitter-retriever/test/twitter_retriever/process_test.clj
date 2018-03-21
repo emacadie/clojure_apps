@@ -146,6 +146,7 @@
  :retweet_count 0,
  :favorite_count 0,
  :created_at "Mon Mar 19 05:31:56 +0000 2018"}
+
 )
 
 (comment (defn make-links-from-hashtags [tweet-string]
@@ -154,7 +155,25 @@
 
 (deftest test-make-links-from-hashtags
   (is (= 0 (compare (make-links-from-hashtags "Let's work on some #Clojure at CapitalFactory")
-                    "Let's work on some <a href=\"https://twitter.com/hashtag/#Clojure?src=hash\">#Clojure</a> at CapitalFactory")))
+                    "Let's work on some <a href=\"https://twitter.com/hashtag/Clojure?src=hash\">#Clojure</a> at CapitalFactory")))
+  (def hashtag-str "<a href=\"https://twitter.com/hashtag/")
+
+
+  (println "Result of calling (make-links-from-hashtags \"Let's work on some #Clojure at #CapitalFactory \":",
+           (make-links-from-hashtags "Let's work on some #Clojure at #CapitalFactory"))
+  (println "Expected outcome: ", (str "Let's work on some "
+                         hashtag-str
+                         "?src=hash\">#Clojure</a> at "
+                         hashtag-str
+                         "?src=hash\">#CapitalFactory</a>"))
+
+  (is (= 0 (compare (make-links-from-hashtags "Let's work on some #Clojure at #CapitalFactory")
+                    (str "Let's work on some "
+                         hashtag-str
+                         "?src=hash\">#Clojure</a> at "
+                         hashtag-str
+                         "?src=hash\">#CapitalFactory</a>")
+                    )))
 )
 
 (comment (defn convert-links [tweet-map]))
@@ -162,8 +181,11 @@
 
 
 (deftest test-convert-links 
+  (println "\n\n\n\n\n--------------")
+  (println "keys for tweet-map-02: ", (keys tweet-map-02))
+  (println "result of (convert-links tweet-map-02 (:full_text tweet-map-02)):", (convert-links tweet-map-02 (:full_text tweet-map-02)))
   (is (= 0 (compare "SICP author Hal Abelson says coders should read code, just as people read novels <a href=\"http://www.gigamonkeys.com/code-quarterly/2011/hal-abelson/\">https://t.co/fjKWdYC6TV</a> What #Clojure projects have code devs should read?"
-                    (convert-links tweet-map-02))))
+                    (convert-links tweet-map-02 (:full_text tweet-map-02)))))
 )
 
 
