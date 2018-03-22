@@ -8,7 +8,7 @@
   (println "Here is tweet-map: " + tweet-map)
   (def urls (get-in tweet-map [:entities :urls]))
   (println "--\nHere is urls: ", urls)
-  (println "In convert-links, here are keys to tweet-map: ", (keys tweet-map))
+  ; (println "In convert-links, here are keys to tweet-map: ", (keys tweet-map))
   (loop [url-vec (get-in tweet-map [:entities :urls])
          t-string tweet-string
          ;; result []
@@ -16,11 +16,12 @@
     (println "Here is count of url-vec: ", (count url-vec))
     (if (> (count url-vec) 0)
       (do
-        (def url-map (nth url-vec 0))
+        ; (def url-map (nth url-vec 0))
+        (def url-map (peek url-vec))
         (def new-str (str "<a href=\"" (:expanded_url url-map) "\">" (:url url-map) "</a>"))
         (println "Here is url-map: ",  url-map)
         (println "Here is new-str: ", new-str)
-        (recur (pop (reverse url-vec))
+        (recur (pop url-vec)                       ; (pop (reverse url-vec))
                (clojure.string/replace t-string (:url url-map) new-str)))
       t-string)
 )
