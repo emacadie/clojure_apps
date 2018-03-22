@@ -2,7 +2,7 @@
 
 ;; 
 (defn make-links-from-hashtags [tweet-string]
-  (clojure.string/replace tweet-string #"((\#)(\w+))" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))
+  (clojure.string/replace tweet-string #"((\#)(\w+))++" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))
 
 (defn convert-links [tweet-map tweet-string]
   (println "Here is tweet-map: " + tweet-map)

@@ -163,16 +163,16 @@
            (make-links-from-hashtags "Let's work on some #Clojure at #CapitalFactory"))
   (println "Expected outcome: ", (str "Let's work on some "
                          hashtag-str
-                         "?src=hash\">#Clojure</a> at "
+                         "Clojure?src=hash\">#Clojure</a> at "
                          hashtag-str
-                         "?src=hash\">#CapitalFactory</a>"))
+                         "CapitalFactory?src=hash\">#CapitalFactory</a>"))
 
   (is (= 0 (compare (make-links-from-hashtags "Let's work on some #Clojure at #CapitalFactory")
                     (str "Let's work on some "
                          hashtag-str
-                         "?src=hash\">#Clojure</a> at "
+                         "Clojure?src=hash\">#Clojure</a> at "
                          hashtag-str
-                         "?src=hash\">#CapitalFactory</a>")
+                         "CapitalFactory?src=hash\">#CapitalFactory</a>")
                     )))
 )
 
