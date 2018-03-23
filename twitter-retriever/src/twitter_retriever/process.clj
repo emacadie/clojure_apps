@@ -5,27 +5,41 @@
   (clojure.string/replace tweet-string #"((\#)(\w+))++" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))
 
 (defn convert-links [tweet-map tweet-string]
-  (println "Here is tweet-map: " + tweet-map)
-  (def urls (get-in tweet-map [:entities :urls]))
-  (println "--\nHere is urls: ", urls)
-  ; (println "In convert-links, here are keys to tweet-map: ", (keys tweet-map))
+  ; (def urls (get-in tweet-map [:entities :urls]))
   (loop [url-vec (get-in tweet-map [:entities :urls])
-         t-string tweet-string
-         ;; result []
-         ]
-    (println "Here is count of url-vec: ", (count url-vec))
+         t-string tweet-string]
     (if (> (count url-vec) 0)
       (do
-        ; (def url-map (nth url-vec 0))
         (def url-map (peek url-vec))
         (def new-str (str "<a href=\"" (:expanded_url url-map) "\">" (:url url-map) "</a>"))
-        (println "Here is url-map: ",  url-map)
-        (println "Here is new-str: ", new-str)
-        (recur (pop url-vec)                       ; (pop (reverse url-vec))
+        (recur (pop url-vec)
                (clojure.string/replace t-string (:url url-map) new-str)))
       t-string)
 )
 ) ;; defn
+
+(defn create-user-links [tweet-map tweet-string]
+  ; (def users (get-in tweet-map [:entities :user_mentions]))
+  (loop [user-vec (get-in tweet-map [:entities :user_mentions])
+         t-string tweet-string]
+    (if (> (count user-vec) 0)
+      (do
+        (def user-map (peek user-vec))
+        (def new-str (str "<a href=\"https://twitter.com/intent/user?user_id=" (:id_str user-map) "\">" (:screen-name user-map) "</a>"))
+        (recur (pop user-vec)
+               (clojure.string/replace t-string (:screen-name user-map) new-str)))
+      t-string)
+)
+) ;; defn
+(comment
+{:screen_name "AustinClojure",
+    :name "AustinClojure",
+    :id 2418042062,
+    :id_str "2418042062",
+    :indices [3 17]}
+https://twitter.com/intent/user?user_id=3077765161
+)
+
 
 (comment 
 (loop [x 5
@@ -36,6 +50,43 @@
       (println "about to recur with x equal to " x)
       (recur (dec x) (conj result (+ 2 x))))
 result))
+
+:entities
+ {:hashtags [],
+  :symbols [],
+  :user_mentions
+  [{:screen_name "AustinClojure",
+    :name "AustinClojure",
+    :id 2418042062,
+    :id_str "2418042062",
+    :indices [3 17]}
+   {:screen_name "CapitalFactory",
+    :name "Capital Factory",
+    :id 16887429,
+    :id_str "16887429",
+    :indices [21 36]}
+   {:screen_name "mondotortilla",
+    :name "David Betrayus",
+    :id 123456,
+    :id_str "123456",
+    :indices [57 71]}
+   {:screen_name "lisporleans",
+    :name "Nora Nora",
+    :id 1234567890,
+    :id_str "1234567890",
+    :indices [72 84]}
+   {:screen_name "staylisp",
+    :name "Lisp Is Best #CLOS-the-Ultimate-OO",
+    :id 25836914,
+    :id_str "25836914",
+    :indices [85 94]}
+   {:screen_name "FarOutMan",
+    :name "Far Outman",
+    :id 9876543210,
+    :id_str "9876543210",
+    :indices [95 105]}],
+  :urls []}
+
 )
 
 

@@ -4,4 +4,25 @@ grant all privileges on database twit_retrieve_dev_db to twit_getter;
 
 psql --port=5433 -h localhost -U twit_getter -d twit_retrieve_dev_db 
 
+select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id;
+
+select max( t.tweet_id )
+from twitter_tweet t
+where t.user_id = (
+select u.user_id from twitter_user u
+where lower( u.screen_name ) = lower( 'shinzenyoung' )
+);
+
+select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and u.screen_name = 'ev';
+
+select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = 'evdiv'
+order by t.created_at;
+
+select * from twitter_tweet where tweet_id = (select max(tweet_id) from twitter_tweet);
+select t.auto_id, t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and t.user_id = 354036155 order by t.record_created_at;
+
 

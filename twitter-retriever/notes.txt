@@ -156,3 +156,7 @@ lowest tweet id so far: 499661460461477890
 
 select * from twitter_user where lower( screen_name ) = lower( 'SHINZENYOUNG' );
 
+To get user from number: 
+https://twitter.com/intent/user?user_id=3077765161
+
+
