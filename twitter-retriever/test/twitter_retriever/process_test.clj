@@ -16,57 +16,46 @@
                     "Let's work on some <a href=\"https://twitter.com/hashtag/Clojure?src=hash\">#Clojure</a> at CapitalFactory")))
   (def hashtag-str "<a href=\"https://twitter.com/hashtag/")
 
-
-  (comment (println "Result of calling (make-links-from-hashtags \"Let's work on some #Clojure at #CapitalFactory \":",
-            (make-links-from-hashtags "Let's work on some #Clojure at #CapitalFactory")))
-  (comment (println "Expected outcome: ", (str "Let's work on some "
-                                       hashtag-str
-                                       "Clojure?src=hash\">#Clojure</a> at "
-                                       hashtag-str
-                                       "CapitalFactory?src=hash\">#CapitalFactory</a>")))
-
   (is (= 0 (compare (make-links-from-hashtags "Let's work on some #Clojure at #CapitalFactory")
                     (str "Let's work on some "
                          hashtag-str
                          "Clojure?src=hash\">#Clojure</a> at "
                          hashtag-str
-                         "CapitalFactory?src=hash\">#CapitalFactory</a>")
-                    )))
-)
-
-(comment (defn convert-links [tweet-map]))
-
-
+                         "CapitalFactory?src=hash\">#CapitalFactory</a>")))))
 
 (deftest test-convert-links 
   (println "\n\n\n\n\n--------------")
   (def tweet-map-02 (edn/read-string (slurp "test/twitter_retriever/tweet-map-02.edn")))
-  ;; (println "keys for tweet-map-02: ", (keys tweet-map-02))
-  ;; (println "result of (convert-links tweet-map-02 (:full_text tweet-map-02)):", (convert-links tweet-map-02 (:full_text tweet-map-02)))
   (is (= 0 (compare "SICP author Hal Abelson says coders should read code, just as people read novels <a href=\"http://www.gigamonkeys.com/code-quarterly/2011/hal-abelson/\">https://t.co/fjKWdYC6TV</a> What #Clojure projects have code devs should read?"
-                    (convert-links tweet-map-02 (:full_text tweet-map-02)))))
-)
+                    (convert-links tweet-map-02 (:full_text tweet-map-02))))))
 
 (deftest test-convert-multiple-links
 
-(comment
-"Test tweet (for my plugin) with a few links about #Clojure and #Groovy <a href=\"https://clojure.org/reference/data_structures\">https://t.co/0loSXMSF13</a> <a href=\"http://groovy-lang.org/metaprogramming.html\">https://t.co/Q7uJeABf8G</a>",
-  [{:url "https://t.co/0loSXMSF13",
-    :expanded_url "https://clojure.org/reference/data_structures",
-    :display_url "clojure.org/reference/data…",
-    :indices [71 94]}
-   {:url "https://t.co/Q7uJeABf8G",
-    :expanded_url "http://groovy-lang.org/metaprogramming.html",
-    :display_url "groovy-lang.org/metaprogrammin…",
-    :indices [95 118]}]
-)
-  (testing "converting multiple links"
+  (testing "\n\nconverting multiple links"
     (def tweet-map-03 (edn/read-string (slurp "test/twitter_retriever/tweet-map-03.edn")))
     (def result-string (str "Test tweet (for my plugin) with a few links about #Clojure and #Groovy "
                           "<a href=\"https://clojure.org/reference/data_structures\">https://t.co/0loSXMSF13</a> "
                           "<a href=\"http://groovy-lang.org/metaprogramming.html\">https://t.co/Q7uJeABf8G</a>"))
     (println "Result in test-convert-multiple links: ", (convert-links tweet-map-03 (:full_text tweet-map-03)))
-    (is (= 0 (compare result-string (convert-links tweet-map-03 (:full_text tweet-map-03))))))
+    (is (= 0 (compare result-string (convert-links tweet-map-03 (:full_text tweet-map-03)))))))
+
+(deftest test-create-user-links
+  (testing "\n\ntesting the creation of user links"
+    (def tweet-map-01 (edn/read-string (slurp "test/twitter_retriever/tweet-map-01.edn")))
+    (def user-link-str "https://twitter.com/intent/user?user_id=")
+    (def result-string (str "At <a href=\"", user-link-str, "2418042062",  ">@AustinClojure</a> in ",
+                            "<a href=\"",  user-link-str, "16887429", ">@CapitalFactory</a> - w/my best friends ",
+                            "<a href=\"",  user-link-str, "123456", ">@mondotortilla</a> ",
+                            "<a href=\"",  user-link-str, "1234567890", ">@lisporleans</a> "
+                            "<a href=\"",  user-link-str, "25836914", ">@staylisp</a> "
+                            "<a href=\"",  user-link-str, "9876543210", ">@FarOutMan</a> "))
+    (println "Here is result-string: ", result-string)
+    (println "here is function call: ", (create-user-links tweet-map-01  (:full_text tweet-map-01)))
+    (is (= 0 (compare result-string (create-user-links tweet-map-01  (:full_text tweet-map-01)))))
+    (comment create-user-links [tweet-map tweet-string]
+ :full_text  "At @AustinClojure in @CapitalFactory - w/my best friends @mondotortilla @lisporleans @staylisp @FarOutMan",
+
 )
 
+))
 
