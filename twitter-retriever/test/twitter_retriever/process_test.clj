@@ -48,3 +48,28 @@
     (println "here is function call: ", (create-user-links tweet-map-01  (:full_text tweet-map-01)))
     (is (= 0 (compare result-string (create-user-links tweet-map-01  (:full_text tweet-map-01)))))))
 
+(comment
+
+(deftest test-create-in-reply-str
+  (testing "testing creation of 'in reply to' str"
+    (def tweet-map-04 (edn/read-string (slurp "test/twitter_retriever/tweet-map-04.edn")))
+    (def result-str (str "@lincoln You could send a message via LinkedIn", 
+                         " in reply to <a href=\"http://twitter.com/lincoln/status/971093559494418432\">lincoln</a>"))
+    (is (= 0 (compare result-string (create-in-reply-str tweet-map-04 (:full_text tweet-map-04)))))
+))
+
+)
+
+
+
+(comment 
+
+create-in-reply-str [tweet-map tweet-string]
+(deftest test-append-timestamp
+  (testing "testing append timestamp"))
+append-timestamp [tweet-map tweet-string user-name]
+
+)
+
+
+

@@ -1,4 +1,5 @@
-(ns twitter-retriever.process)
+(ns twitter-retriever.process
+  (:require [clj-time.format :as timef]))
 
 (defn make-links-from-hashtags [tweet-string]
   (clojure.string/replace tweet-string #"((\#)(\w+))++" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))
@@ -26,6 +27,31 @@
       t-string))) ;; defn
 
 (defn create-in-reply-str [tweet-map tweet-string]
-)
+  (str tweet-string, 
+       " in reply to ", 
+       "<a href=\"http://twitter.com/", 
+       (:in_reply_to_screen_name tweet-map)
+       "/status/" 
+       (:in_reply_to_status_id_str tweet-map ), 
+       (:in_reply_to_screen_name tweet-map),
+       ">", 
+       (:in_reply_to_screen_name tweet-map)  
+       "\"</a>"))
+
+(defn get-time-from-map [time-from-map]
+  (->> time-from-map 
+       (timef/parse (timef/formatter "EEE MMM dd HH:mm:ss Z yyyy"))
+       (timef/unparse (timef/formatters :mysql))))
+
+(defn append-timestamp [tweet-map tweet-string user-name]
+  (str tweet-string, 
+       " <a href=\"http://twitter.com/", 
+       user-name, 
+       "/status/", 
+       (:id_str tweet-map), 
+       ">", 
+       (get-time-from-map (:created_at tweet-map)), 
+       "\"</a>" ))
+
 
 
