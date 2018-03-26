@@ -33,10 +33,10 @@
        (:in_reply_to_screen_name tweet-map)
        "/status/" 
        (:in_reply_to_status_id_str tweet-map ), 
-       (:in_reply_to_screen_name tweet-map),
-       ">", 
+       ; (:in_reply_to_screen_name tweet-map),
+       "\">", 
        (:in_reply_to_screen_name tweet-map)  
-       "\"</a>"))
+       "</a>"))
 
 (defn get-time-from-map [time-from-map]
   (->> time-from-map 
@@ -45,13 +45,13 @@
 
 (defn append-timestamp [tweet-map tweet-string user-name]
   (str tweet-string, 
-       " <a href=\"http://twitter.com/", 
+       " <a href=\"https://twitter.com/", 
        user-name, 
        "/status/", 
        (:id_str tweet-map), 
-       ">", 
+       "\">", 
        (get-time-from-map (:created_at tweet-map)), 
-       "\"</a>" ))
+       "</a>" ))
 
 
 
