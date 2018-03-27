@@ -53,5 +53,8 @@
        (get-time-from-map (:created_at tweet-map)), 
        "</a>" ))
 
+(defn wrap-in-li-tags [tweet-string]
+  (str "<li>", tweet-string, "</li>"))
+
 
 

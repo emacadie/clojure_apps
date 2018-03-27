@@ -1,14 +1,14 @@
 (ns twitter-retriever.work
   (:require [clojure.tools.cli :refer [parse-opts]])
-  (:require [clojurewerkz.propertied.properties :as p])
+  ; (:require [clojurewerkz.propertied.properties :as p])
   (:require [clojure.java.io :as io])
   (:require [environ.core :refer [env]])
   (:require [clojure.pprint :as pp])
   (:require [twitter-retriever.rdbms :as rdbms])
   (:require [twitter-retriever.actions :as actions])
   (:require [twitter.oauth :refer [make-oauth-creds]])
-  (:require [clj-time.coerce :as c])
-  (:require [clj-time.local :as l])
+  (:require [clj-time.coerce :as timec])
+  (:require [clj-time.local :as timel])
   (:gen-class))
 
 (def cli-options
@@ -31,7 +31,7 @@
   (println "here is arg-map:", arg-map)
   (println "here is options: ", (:options arg-map))
   (println "here is action: ",  (:action (:options arg-map)))
-  (def batch-time (c/to-timestamp (l/local-now)))
+  (def batch-time (timec/to-timestamp (timel/local-now)))
   
   (def user-name (:user (:options arg-map)))
   (println "Here is user-name: ", user-name)

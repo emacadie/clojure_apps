@@ -74,3 +74,14 @@
     ; (println "Here is function call: ", (append-timestamp tweet-map-04 (:full_text tweet-map-04) user-name))
     (is (= 0 (compare result-str (append-timestamp tweet-map-04 (:full_text tweet-map-04) user-name))))))
 
+(deftest test-wrap-in-li-tags
+  (testing "Wrap it in li tags"
+    (def tweet-map-04 (edn/read-string (slurp "test/twitter_retriever/tweet-map-04.edn")))
+    (def result-str (str "<li>@lincoln You could send a message via LinkedIn</li>"))
+    (is (= 0 (compare result-str (wrap-in-li-tags (:full_text tweet-map-04)))))
+))
+
+(comment 
+(defn wrap-in-li-tags [tweet-string]
+  (str "<li>", tweet-string, "</li>")))
+
