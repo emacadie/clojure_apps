@@ -4,7 +4,7 @@
 (defn make-links-from-hashtags [tweet-string]
   (clojure.string/replace tweet-string #"((\#)(\w+))++" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))
 
-(defn convert-links [tweet-map tweet-string]
+(defn convert-links [tweet-string tweet-map]
   (loop [url-vec (get-in tweet-map [:entities :urls])
          t-string tweet-string]
     (if (> (count url-vec) 0)
@@ -13,9 +13,9 @@
         (def new-str (str "<a href=\"" (:expanded_url url-map) "\">" (:url url-map) "</a>"))
         (recur (pop url-vec)
                (clojure.string/replace t-string (:url url-map) new-str)))
-      t-string))) ;; defn
+      t-string))) 
 
-(defn create-user-links [tweet-map tweet-string]
+(defn create-user-links [tweet-string tweet-map]
   (loop [user-vec (get-in tweet-map [:entities :user_mentions])
          t-string tweet-string]
     (if (> (count user-vec) 0)
@@ -24,26 +24,29 @@
         (def new-str (str "<a href=\"https://twitter.com/intent/user?user_id=" (:id_str user-map) "\">@" (:screen_name user-map) "</a>"))
         (recur (pop user-vec)
                (clojure.string/replace t-string (str "@", (:screen_name user-map)) new-str)))
-      t-string))) ;; defn
+      t-string))) 
 
-(defn create-in-reply-str [tweet-map tweet-string]
-  (str tweet-string, 
-       " in reply to ", 
-       "<a href=\"http://twitter.com/", 
-       (:in_reply_to_screen_name tweet-map)
+(defn create-in-reply-str [tweet-string tweet-map]
+  (def in-reply-to (:in_reply_to_screen_name tweet-map))
+  (if (= 0 (count in-reply-to))
+    (str tweet-string)
+    (do
+      (str tweet-string, 
+       " <a href=\"http://twitter.com/", 
+       in-reply-to
        "/status/" 
-       (:in_reply_to_status_id_str tweet-map ), 
-       ; (:in_reply_to_screen_name tweet-map),
+        (:in_reply_to_status_id_str tweet-map ), 
        "\">", 
-       (:in_reply_to_screen_name tweet-map)  
-       "</a>"))
+       "in reply to ", 
+       in-reply-to  
+       "</a>"))))
 
 (defn get-time-from-map [time-from-map]
   (->> time-from-map 
        (timef/parse (timef/formatter "EEE MMM dd HH:mm:ss Z yyyy"))
        (timef/unparse (timef/formatters :mysql))))
 
-(defn append-timestamp [tweet-map tweet-string user-name]
+(defn append-timestamp [tweet-string tweet-map user-name]
   (str tweet-string, 
        " <a href=\"https://twitter.com/", 
        user-name, 

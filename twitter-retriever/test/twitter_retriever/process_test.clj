@@ -22,7 +22,7 @@
                          "just as people read novels ",
                          "<a href=\"http://www.gigamonkeys.com/code-quarterly/2011/hal-abelson/\">https://t.co/fjKWdYC6TV</a> ",
                          "What #Clojure projects have code devs should read?")
-                    (convert-links tweet-map-02 (:full_text tweet-map-02))))))
+                    (convert-links (:full_text tweet-map-02) tweet-map-02 )))))
 
 (deftest test-convert-multiple-links
   (testing "converting multiple links"
@@ -31,7 +31,7 @@
                           "<a href=\"https://clojure.org/reference/data_structures\">https://t.co/0loSXMSF13</a> "
                           "<a href=\"http://groovy-lang.org/metaprogramming.html\">https://t.co/Q7uJeABf8G</a>"))
     ; (println "Result in test-convert-multiple links: ", (convert-links tweet-map-03 (:full_text tweet-map-03)))
-    (is (= 0 (compare result-string (convert-links tweet-map-03 (:full_text tweet-map-03)))))))
+    (is (= 0 (compare result-string (convert-links (:full_text tweet-map-03) tweet-map-03))))))
 
 (deftest test-create-user-links
   (testing "testing the creation of user links"
@@ -44,19 +44,26 @@
                             "<a href=\"",  user-link-str, "25836914", "\">@staylisp</a> "
                             "<a href=\"",  user-link-str, "9876543210", "\">@FarOutMan</a>"))
     ; (println "Here is result-string: ", result-string)
-    ; (println "here is function call: ", (create-user-links tweet-map-01  (:full_text tweet-map-01)))
-    (is (= 0 (compare result-string (create-user-links tweet-map-01 (:full_text tweet-map-01)))))))
+    ; (println "here is function call: ", (create-user-links (:full_text tweet-map-01) tweet-map-01))
+    (is (= 0 (compare result-string (create-user-links (:full_text tweet-map-01) tweet-map-01))))))
 
 (deftest test-create-in-reply-str
   (testing "testing creation of 'in reply to' str"
     ; (println "---")
     (def tweet-map-04 (edn/read-string (slurp "test/twitter_retriever/tweet-map-04.edn")))
     (def result-str (str "@lincoln You could send a message via LinkedIn", 
-                         " in reply to <a href=\"http://twitter.com/lincoln/status/971093559494418432\">lincoln</a>"))
+                         " <a href=\"http://twitter.com/lincoln/status/971093559494418432\">in reply to lincoln</a>"))
     ; (println "Here is result-str:    ", result-str)
-    ; (println "Here is function call: ", (create-in-reply-str tweet-map-04 (:full_text tweet-map-04)))
-    (is (= 0 (compare result-str (create-in-reply-str tweet-map-04 (:full_text tweet-map-04)))))))
+    ; (println "Here is function call: ", (create-in-reply-str (:full_text tweet-map-04) tweet-map-04))
+    (is (= 0 (compare result-str (create-in-reply-str (:full_text tweet-map-04) tweet-map-04))))))
 
+(deftest test-create-in-reply-with-no-reply
+  (testing "Testing a tweet with no reply"
+    (def tweet-map-03 (edn/read-string (slurp "test/twitter_retriever/tweet-map-03.edn")))
+    (def tweet-string (:full_text tweet-map-03))
+    ; (println "Here is tweet-string: ", tweet-string)
+    ; (println "here is function:     ", (create-in-reply-str tweet-string tweet-map-03))
+    (is (= 0 (compare tweet-string (create-in-reply-str tweet-string tweet-map-03))))))
 
 (deftest test-append-timestamp
   (testing "testing append timestamp"
@@ -71,17 +78,112 @@
                          "2018-03-08 01:47:41",
                          "</a>"))
     ; (println "Here is result-str:    ", result-str)
-    ; (println "Here is function call: ", (append-timestamp tweet-map-04 (:full_text tweet-map-04) user-name))
-    (is (= 0 (compare result-str (append-timestamp tweet-map-04 (:full_text tweet-map-04) user-name))))))
+    ; (println "Here is function call: ", (append-timestamp (:full_text tweet-map-04) tweet-map-04 user-name))
+    (is (= 0 (compare result-str (append-timestamp (:full_text tweet-map-04) tweet-map-04 user-name))))))
 
 (deftest test-wrap-in-li-tags
   (testing "Wrap it in li tags"
     (def tweet-map-04 (edn/read-string (slurp "test/twitter_retriever/tweet-map-04.edn")))
     (def result-str (str "<li>@lincoln You could send a message via LinkedIn</li>"))
-    (is (= 0 (compare result-str (wrap-in-li-tags (:full_text tweet-map-04)))))
-))
+    (is (= 0 (compare result-str (wrap-in-li-tags (:full_text tweet-map-04)))))))
 
-(comment 
-(defn wrap-in-li-tags [tweet-string]
-  (str "<li>", tweet-string, "</li>")))
+(deftest test-map-01-threading
+  (testing "testing map 01 with and without threadning macro"
+    (def tweet-map-01 (edn/read-string (slurp "test/twitter_retriever/tweet-map-01.edn")))
+    (def tweet-string (:full_text tweet-map-01))
+    (def user-name "Kai0p4ka")
+    (def non-threading-string (wrap-in-li-tags (append-timestamp (create-in-reply-str (create-user-links (convert-links (make-links-from-hashtags tweet-string) tweet-map-01) tweet-map-01) tweet-map-01) tweet-map-01 user-name)))
+    ; (println "here is non-threading-string: ", non-threading-string)
+    (def threading-string (->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-01) 
+                           (create-user-links tweet-map-01) 
+                           (create-in-reply-str tweet-map-01) 
+                           (append-timestamp tweet-map-01 user-name)
+                           (wrap-in-li-tags)))
+    ; (println "Here is the threading-string: ", threading-string)
+    (println "Here is the expanded macro: ", (macroexpand '(->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-01) 
+                           (create-user-links tweet-map-01) 
+                           (create-in-reply-str tweet-map-01) 
+                           (append-timestamp tweet-map-01 user-name)
+                           (wrap-in-li-tags))))
+
+    (is (= 0 (compare threading-string non-threading-string)))))
+
+(deftest test-map-02-threading
+  (testing "testing map 02 with and without threadning macro"
+    (def tweet-map-02 (edn/read-string (slurp "test/twitter_retriever/tweet-map-02.edn")))
+    (def tweet-string (:full_text tweet-map-02))
+    (def user-name "Kai0p4ka")
+    (def non-threading-string (wrap-in-li-tags (append-timestamp (create-in-reply-str (create-user-links (convert-links (make-links-from-hashtags tweet-string) tweet-map-02) tweet-map-02) tweet-map-02) tweet-map-02 user-name)))
+    ; (println "here is non-threading-string: ", non-threading-string)
+    (def threading-string (->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-02) 
+                           (create-user-links tweet-map-02) 
+                           (create-in-reply-str tweet-map-02) 
+                           (append-timestamp tweet-map-02 user-name)
+                           (wrap-in-li-tags)))
+    ; (println "Here is the threading-string: ", threading-string)
+    (println "Here is the expanded macro: ", (macroexpand '(->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-02) 
+                           (create-user-links tweet-map-02) 
+                           (create-in-reply-str tweet-map-02) 
+                           (append-timestamp tweet-map-02 user-name)
+                           (wrap-in-li-tags))))
+
+    (is (= 0 (compare threading-string non-threading-string)))))
+
+(deftest test-map-03-threading
+  (testing "testing map 03 with and without threadning macro"
+    (def tweet-map-03 (edn/read-string (slurp "test/twitter_retriever/tweet-map-03.edn")))
+    (def tweet-string (:full_text tweet-map-03))
+    (def user-name "Kai0p4ka")
+    (def non-threading-string (wrap-in-li-tags (append-timestamp (create-in-reply-str (create-user-links (convert-links (make-links-from-hashtags tweet-string) tweet-map-03) tweet-map-03) tweet-map-03) tweet-map-03 user-name)))
+    ; (println "here is non-threading-string: ", non-threading-string)
+    (def threading-string (->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-03) 
+                           (create-user-links tweet-map-03) 
+                           (create-in-reply-str tweet-map-03) 
+                           (append-timestamp tweet-map-03 user-name)
+                           (wrap-in-li-tags)))
+    ; (println "Here is the threading-string: ", threading-string)
+    (println "Here is the expanded macro: ", (macroexpand '(->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-03) 
+                           (create-user-links tweet-map-03) 
+                           (create-in-reply-str tweet-map-03) 
+                           (append-timestamp tweet-map-03 user-name)
+                           (wrap-in-li-tags))))
+
+    (is (= 0 (compare threading-string non-threading-string)))))
+
+(deftest test-map-04-threading
+  (testing "testing map 04 with and without threadning macro"
+    (def tweet-map-04 (edn/read-string (slurp "test/twitter_retriever/tweet-map-04.edn")))
+    (def tweet-string (:full_text tweet-map-04))
+    (def user-name "Kai0p4ka")
+    (def non-threading-string (wrap-in-li-tags (append-timestamp (create-in-reply-str (create-user-links (convert-links (make-links-from-hashtags tweet-string) tweet-map-04) tweet-map-04) tweet-map-04) tweet-map-04 user-name)))
+    ; (println "here is non-threading-string: ", non-threading-string)
+    (def threading-string (->
+                           (make-links-from-hashtags tweet-string) 
+                           (convert-links tweet-map-04) 
+                           (create-user-links tweet-map-04) 
+                           (create-in-reply-str tweet-map-04) 
+                           (append-timestamp tweet-map-04 user-name)
+                           (wrap-in-li-tags)))
+    ; (println "Here is the threading-string: ", threading-string)
+    (println "Here is the expanded macro: ", (macroexpand '(->
+                                                            (make-links-from-hashtags tweet-string) 
+                                                            (convert-links tweet-map-04) 
+                                                            (create-user-links tweet-map-04) 
+                                                            (create-in-reply-str tweet-map-04) 
+                                                            (append-timestamp tweet-map-04 user-name)
+                                                            (wrap-in-li-tags))))
+
+    (is (= 0 (compare threading-string non-threading-string)))))
 
