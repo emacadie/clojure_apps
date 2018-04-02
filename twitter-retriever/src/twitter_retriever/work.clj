@@ -43,9 +43,9 @@
     
   ;; with twitter API, sometimes map keys use underscores, instead of our trusted hyphen
   (def my-creds (make-oauth-creds (:app_consumer_key twitter-auth)
-                                (:app_consumer_secret twitter-auth)
-                                (:user_access_token twitter-auth)
-                                (:user_access_token_secret twitter-auth)))
+                                  (:app_consumer_secret twitter-auth)
+                                  (:user_access_token twitter-auth)
+                                  (:user_access_token_secret twitter-auth)))
   (println "Here is my-creds", my-creds)
   (def num-user (rdbms/check-user {:screen_name user-name}))
   (println "Here is num-user: ", num-user)
@@ -57,15 +57,6 @@
     (do
       (println "You want to get more tweets")
       (actions/insert-more-tweets user-name my-creds batch-time)))
-  (comment (let [action (:action (:options arg-map))]
-     (case action
-       "create-user" (do
-                       (println "You want to create a user")
-                       (actions/create-user user-name my-creds))
-       "retrieve-tweets" (do
-                           (println "You want to retrieve tweets"))
-       (do
-         (println "Action ", action, " not specified.")
-         (println "Possible actions: create-user retrieve-tweets")))))
+  
   (println "Done"))
 
