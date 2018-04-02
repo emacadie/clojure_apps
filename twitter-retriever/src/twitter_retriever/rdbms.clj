@@ -1,7 +1,5 @@
 (ns twitter-retriever.rdbms
   (:require [hugsql.core :as hugsql]
-            ; [ted.db :refer [db-con]]
-            ; [hikari-cp.core :refer :all]
             [mount.core :refer [defstate]]
             [environ.core :refer [env]]
             [conman.core :as conman]
@@ -10,14 +8,10 @@
             [clj-time.coerce :as timec]
             ))
 
-;; (hugsql/def-db-fns "twitter_retriever/sql/statements.sql" {:quoting :ansi})
-;; (hugsql/def-sqlvec-fns "twitter_retriever/sql/statements.sql" {:quoting :ansi})
-
-
 (def pool-spec
   {
-   :jdbc-url (env :database-url) ;; "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"
-   :driver-class-name (env :db-driver) ;; "org.postgresql.Driver"
+   :jdbc-url (env :database-url) ;; "postgres://localhost:5433/musicdb?user=music_lover&password=this-is-music"  
+   :driver-class-name (env :db-driver )   ;; "org.postgresql.Driver"  
    })
 
 (defstate ^:dynamic *db*
@@ -78,7 +72,6 @@
                 :statuses_count (:statuses_count user-map)
                 :time_zone (:time_zone user-map)
                 :utc_offset (:utc_offset user-map)
-                ;; :created_at  (create-time-from-map (:created_at user-map))
                 :created_at (get-time-from-map (:created_at user-map))
                 }))
 
@@ -86,7 +79,6 @@
   (insert-tweet {:tweet_id_str (:id_str tweet-map)
                  :tweet_id (:id tweet-map)
                  :full_text (:full_text tweet-map)
-                 ; :display_text_range (:display_text_range tweet-map)
                  :user_id  (get-in tweet-map [:user :id])
                  :user_id_str (get-in tweet-map [:user :id_str])
                  :in_reply_to_screen_name (:in_reply_to_screen_name tweet-map)
@@ -97,5 +89,4 @@
                  :created_at (get-time-from-map (:created_at tweet-map))
                  :batch_time batch-time
                  }))
-
 

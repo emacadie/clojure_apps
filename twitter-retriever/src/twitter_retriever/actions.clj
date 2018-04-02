@@ -1,13 +1,7 @@
 (ns twitter-retriever.actions
-  (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [clojure.java.io :as io])
-  (:require [environ.core :refer [env]])
   (:require [clojure.pprint :as pp])
   (:require [twitter-retriever.rdbms :as rdbms])
-  ; (:require [twitter.oauth])
-  ; (:require [twitter.callbacks])
-  ; (:require [twitter.callbacks.handlers])
-  ; (:require [twitter.api.restful])
   (:use [twitter.oauth]
         [twitter.callbacks]
         [twitter.callbacks.handlers]
@@ -25,15 +19,14 @@
                                                                               ; :count 100
                                                                               :include_rts false
                                                                               :tweet_mode "extended"}))
+
   (def map-body (:body tweet-map))
   (doseq [the-body map-body]
     (do
       (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body))
       (println "here is the-body: ", the-body)
-      (rdbms/call-insert-tweet the-body, batch-time)
-))
-  (println "Done inserting")
-)
+      (rdbms/call-insert-tweet the-body, batch-time)))
+  (println "Done inserting"))
 
 (defn insert-more-tweets [user-name my-oauth-creds batch-time]
   (def starting-tweet-id (rdbms/get-max-tweet-id {:screen_name user-name}))
@@ -47,10 +40,7 @@
   (def map-body (:body tweet-map))
   (doseq [the-body map-body]
     (do
-      (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body))
-      ; (println "here is the-body: ", the-body)
-      (rdbms/call-insert-tweet the-body batch-time)
-))
-  (println "Done inserting")
-)
+      (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body))      
+      (rdbms/call-insert-tweet the-body batch-time)))
+  (println "Done inserting"))
 

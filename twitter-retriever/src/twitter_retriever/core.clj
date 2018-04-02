@@ -1,5 +1,6 @@
 (ns twitter-retriever.core
-  (:require [clojure.pprint :as pp]))
+  (:require [clojure.pprint :as pp])
+  (:require [environ.core :refer [env]]))
 
 (defn print-stuff []
   (println "Here is the first line")
@@ -27,6 +28,8 @@
   (println "Here is system-map: ",  (pp/pprint system-map))
   (println "Here it is again")
   (doall (for [[k v] system-map] (println k, ": ", v)))
+  (println "Here are the keys for env: ", (keys env))
+  (println "Here is env: ", env)
 )
 
 

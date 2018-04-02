@@ -70,87 +70,10 @@ insert into processed-tweet (
   :tweet_id_str, :tweet_id, :user_id, :user_id_str, :final_html_text, :created_at, :batch_time
 )
 
--- :name artists
+-- :name get-twitter-auth
 -- :command :query
--- :result :many
--- :doc select all with cols defined by {:cols [<col_name>...]}
-SELECT :i*:cols  
-  FROM artists
+-- :result :one
+select * from twitter_auth
+where twitter_user_name = :twitter_auth_user
 
--- Note the terse style below
--- ":command :query" -> ":?"
--- ":result n" -> ":*" 
-
--- :name artist-by-id :? :*
--- :doc get artist info by music_brainz id
-SELECT *  
-  FROM artists
- WHERE mb_id = :id
-
--- :name artists-by-name-like :? :*
--- :doc use {:name-like "P%"} as the option param to get the P's
-SELECT *  
-  FROM artists
- WHERE name 
-  LIKE :name-like
-
--- :name new-rating 
--- :command :execute 
--- :result :affected
--- :doc insert new ratings
-INSERT INTO ratings (artist_name, email, rating_type_name, rating)  
-VALUES (:artist_name, :email, :rating_type_name, :rating)
-
--- :name new-rating-type 
--- :command :execute 
--- :result :affected
--- :doc insert new rating-types
-INSERT INTO rating_types (name, description)  
-VALUES (:name, :description)
-
--- :name new-user 
--- :command :execute 
--- :result :affected
--- :doc insert new user
-INSERT INTO users ( email,  pass, role )
-VALUES (:email, :pass, :role)
-
--- :name new-users 
--- :command :execute 
--- :result :affected
-/* :doc
-Insert multiple users with :tuple* parameter type,
-fields in this order: email, pass, role
-*/
-insert into users ( email, pass, role )
-values :tuple*:users
-
--- :name users-by-email 
--- :command :query
--- :result :raw
-select * from users where email=:email
-
--- :name users-all
--- :command :query
--- :result :many 
--- :doc select all the users with all the attributes
-SELECT *  
-  FROM users
-
-
--- :name update-rating-type 
--- :command :execute 
--- :result :affected
-update rating_types set description = :description
-where name = :name
-
--- :name delete-user 
--- :command :execute 
--- :result :affected
-delete from users where email = :email   
-
--- :name delete-from-ratings-by-rating-type-name
--- :comamnd :execute
--- :result :affected
-delete from ratings where rating_type_name = :rating_type_name
 

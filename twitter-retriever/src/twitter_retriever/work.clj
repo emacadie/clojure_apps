@@ -1,6 +1,5 @@
 (ns twitter-retriever.work
   (:require [clojure.tools.cli :refer [parse-opts]])
-  ; (:require [clojurewerkz.propertied.properties :as p])
   (:require [clojure.java.io :as io])
   (:require [environ.core :refer [env]])
   (:require [clojure.pprint :as pp])
@@ -18,10 +17,11 @@
     ; :parse-fn #(Integer/parseInt %)
     ; :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]
     ]
-   ["-u" "--user USER" "Name of twitter user"
+   ["-u" "--user USER" "Name of twitter user's tweets to get"
     :id :user
     ;:validate [#(> (count %) 10) "String must be at least 10 chars (like ending with .properties)"]
     ]
+   ["-o" "--oauth NAME" "Name of twitter user that has the OAuth creds you will be using"]
    ;; A boolean option defaulting to nil
    ["-h" "--help"]])
 
@@ -38,21 +38,17 @@
   ;; put some sort of checking in here
 
   (def database-url (env :database-url))
-  (println "here is database-url: ", database-url)
-  (def client-token (env :client-token))
-  (println "Here is client-token: ", client-token)
-  (println "env is a", (class env))
-  (println "does env have a key named client-token: ", (contains? env :client-token))
-  ; (println "Here are the keys for env: ", (keys env))
-  (def my-creds (make-oauth-creds (env :app-consumer-key)
-                                (env :app-consumer-secret)
-                                (env :user-access-token)
-                                (env :user-access-token-secret)))
+ 
+  (def twitter-auth (rdbms/get-twitter-auth {:twitter_auth_user (:oauth (:options arg-map))}))
+    
+  ;; with twitter API, sometimes map keys use underscores, instead of our trusted hyphen
+  (def my-creds (make-oauth-creds (:app_consumer_key twitter-auth)
+                                (:app_consumer_secret twitter-auth)
+                                (:user_access_token twitter-auth)
+                                (:user_access_token_secret twitter-auth)))
   (println "Here is my-creds", my-creds)
   (def num-user (rdbms/check-user {:screen_name user-name}))
   (println "Here is num-user: ", num-user)
-  (println "Here is class of num-user: ", (class num-user))
-  (println "here is count of num-user: ", (:count num-user))
   (def user-count (:count num-user))
   (if (= user-count 0)
     (do
@@ -71,6 +67,5 @@
        (do
          (println "Action ", action, " not specified.")
          (println "Possible actions: create-user retrieve-tweets")))))
-  (println "Done")
-)
+  (println "Done"))
 

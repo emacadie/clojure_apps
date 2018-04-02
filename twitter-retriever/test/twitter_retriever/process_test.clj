@@ -88,7 +88,7 @@
     (is (= 0 (compare result-str (wrap-in-li-tags (:full_text tweet-map-04)))))))
 
 (deftest test-map-01-threading
-  (testing "testing map 01 with and without threadning macro"
+  (testing "testing map 01 with and without threading macro"
     (def tweet-map-01 (edn/read-string (slurp "test/twitter_retriever/tweet-map-01.edn")))
     (def tweet-string (:full_text tweet-map-01))
     (def user-name "Kai0p4ka")
@@ -113,7 +113,7 @@
     (is (= 0 (compare threading-string non-threading-string)))))
 
 (deftest test-map-02-threading
-  (testing "testing map 02 with and without threadning macro"
+  (testing "testing map 02 with and without threading macro"
     (def tweet-map-02 (edn/read-string (slurp "test/twitter_retriever/tweet-map-02.edn")))
     (def tweet-string (:full_text tweet-map-02))
     (def user-name "Kai0p4ka")
@@ -138,7 +138,7 @@
     (is (= 0 (compare threading-string non-threading-string)))))
 
 (deftest test-map-03-threading
-  (testing "testing map 03 with and without threadning macro"
+  (testing "testing map 03 with and without threading macro"
     (def tweet-map-03 (edn/read-string (slurp "test/twitter_retriever/tweet-map-03.edn")))
     (def tweet-string (:full_text tweet-map-03))
     (def user-name "Kai0p4ka")
@@ -163,7 +163,7 @@
     (is (= 0 (compare threading-string non-threading-string)))))
 
 (deftest test-map-04-threading
-  (testing "testing map 04 with and without threadning macro"
+  (testing "testing map 04 with and without threading macro"
     (def tweet-map-04 (edn/read-string (slurp "test/twitter_retriever/tweet-map-04.edn")))
     (def tweet-string (:full_text tweet-map-04))
     (def user-name "Kai0p4ka")

@@ -66,6 +66,7 @@ lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/lo
 lein run -m twitter-retriever.work --port 8080 -vv 3 --file-path "/usr/local/log"
 lein run -m twitter-retriever.work --port 8080 --action=retrieve-tweets --file-path "/usr/local/log"
 lein run -m twitter-retriever.work --port 8080 --action=create-user --user=
+lein run -m twitter-retriever.work  --action=create-user --user= --oauth=
 
 
 lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log" --kk
@@ -159,4 +160,8 @@ select * from twitter_user where lower( screen_name ) = lower( 'SHINZENYOUNG' );
 To get user from number: 
 https://twitter.com/intent/user?user_id=3077765161
 
+To do 'lein uberjar', the db properties have to be in the environment when you compile:
+Do this:
+export DATABASE_URL="postgres://localhost:5433/twit_retrieve_dev_db?user=twit_getter&password=this-is-twitter"
+export DB_DRIVER=org.postgresql.Driver
 
