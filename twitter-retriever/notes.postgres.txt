@@ -15,14 +15,26 @@ where lower( u.screen_name ) = lower( 'shinzenyoung' )
 );
 
 select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
-join twitter_user u on u.user_id = t.user_id and u.screen_name = 'ev';
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'someuser' );
 
 select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
-join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = 'evdiv'
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'SomeUser' )
 order by t.created_at;
 
 select * from twitter_tweet where tweet_id = (select max(tweet_id) from twitter_tweet);
+
 select t.auto_id, t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
 join twitter_user u on u.user_id = t.user_id and t.user_id = 354036155 order by t.record_created_at;
+
+select name, screen_name, created_at, record_created_at from twitter_user ;
+
+delete from twitter_tweet t where t.user_id in 
+( 
+    select u.user_id 
+    from twitter_user u 
+    where lower( u.screen_name ) = lower( 'someuser' )  
+);
+
+delete from twitter_user where lower( screen_name ) = lower( 'SomeUser' );
 
 
