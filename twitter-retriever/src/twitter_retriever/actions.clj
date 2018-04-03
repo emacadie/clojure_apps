@@ -13,8 +13,8 @@
 
 (defn get-tweet-map-with-max [user-name my-oauth-creds max-id]
   "max-id comes in as a map with a key of :min"
-  (println "In get-tweet-map-with-max for ", user-name ", and max-id of ", max-id)
-  (println "Here is class of '(:min max-id): ", (class (:min max-id)))
+  ; (println "In get-tweet-map-with-max for ", user-name ", and max-id of ", max-id)
+  ; (println "Here is class of '(:min max-id): ", (class (:min max-id)))
   (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name                                                    
                                                                               :max_id (dec (Long/parseLong (:min max-id)))  
                                                                               :count 200
@@ -27,37 +27,25 @@
   (rdbms/call-insert-user (:body user-map))
   (def max-id (get-in user-map [ :body :status :id ]))
   (def tweet-map (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
-                                                                               ; :since-id 642515818043994112
-                                                                              ; :max_id 609813046207213568 ; 642515818043994112
                                                                               :count 200
                                                                               :include_rts false
                                                                               :tweet_mode "extended"}))
 
   (def map-body (:body tweet-map))
-  (comment (doseq [the-body map-body]
-     (do
-       (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body))
-       (println "here is the-body: ", the-body)
-       (rdbms/call-insert-tweet the-body, batch-time))))
-  (println "Done inserting")
   (println "Here is max-id: ", max-id)
 
-  (loop [the-max-id max-id
-         the-map-body map-body]
+  (loop [the-map-body map-body]
     (println "in loop, here is count of the-map-body: ", (count the-map-body))
-    (println "in loop, here is the-max-id: ", the-max-id)
     (if (> (count the-map-body) 0)
       (do
         (doseq [seq-body the-map-body]
          (do
            (print " Here is id: ", (:id seq-body))
-                                        ; (println "here is the-body: ", the-body)
            (rdbms/call-insert-tweet seq-body, batch-time)))
         (println "Here is next-max-id: ", (rdbms/get-min-tweet-id {:screen_name user-name}))
-        (recur (:min (rdbms/get-min-tweet-id {:screen_name user-name}))
-             (:body (get-tweet-map-with-max user-name my-oauth-creds (rdbms/get-min-tweet-id {:screen_name user-name})))))
-      ))
-)
+        ;; can I make a var to hold next max-id and cut down on some clutter? 
+        ;; I need the minimum at this particular point
+        (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (rdbms/get-min-tweet-id {:screen_name user-name}))))))))
 
 (defn get-with-default [arg-map the-key default-value]
   (def result (get arg-map the-key))
