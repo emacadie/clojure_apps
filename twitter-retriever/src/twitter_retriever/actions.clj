@@ -16,7 +16,7 @@
   ; (println "In get-tweet-map-with-max for ", user-name ", and max-id of ", max-id)
   ; (println "Here is class of '(:min max-id): ", (class (:min max-id)))
   (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name                                                    
-                                                                              :max_id (dec (Long/parseLong (:min max-id)))  
+                                                                              :max_id max-id  
                                                                               :count 200
                                                                               :include_rts false
                                                                               :tweet_mode "extended"}))
@@ -26,6 +26,7 @@
   (println "Here is user-map: ", user-map)
   (rdbms/call-insert-user (:body user-map))
   (def max-id (get-in user-map [ :body :status :id ]))
+  ;; can this be a function call?
   (def tweet-map (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
                                                                               :count 200
                                                                               :include_rts false
@@ -43,9 +44,11 @@
            (print " Here is id: ", (:id seq-body))
            (rdbms/call-insert-tweet seq-body, batch-time)))
         (println "Here is next-max-id: ", (rdbms/get-min-tweet-id {:screen_name user-name}))
+        (def next-max-id (:min (rdbms/get-min-tweet-id {:screen_name user-name})))
         ;; can I make a var to hold next max-id and cut down on some clutter? 
         ;; I need the minimum at this particular point
-        (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (rdbms/get-min-tweet-id {:screen_name user-name}))))))))
+        ; (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (rdbms/get-min-tweet-id {:screen_name user-name}))))
+        (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (dec next-max-id))))))))
 
 (defn get-with-default [arg-map the-key default-value]
   (def result (get arg-map the-key))

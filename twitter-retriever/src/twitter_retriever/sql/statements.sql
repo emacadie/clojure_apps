@@ -41,7 +41,7 @@ insert into twitter_tweet (
     :user_id_str, :in_reply_to_screen_name, :in_reply_to_status_id,
     :in_reply_to_status_id_str, :in_reply_to_user_id, 
     :in_reply_to_user_id_str, :created_at, :batch_time
-);
+)
 
 -- :name check-user
 -- :command :query
@@ -64,7 +64,7 @@ where t.user_id = (
 -- :name get-min-tweet-id
 -- :command :query
 -- :result n
-select min( t.tweet_id_str )
+select min( t.tweet_id )
 from twitter_tweet t
 where t.user_id = (
       select u.user_id 
