@@ -37,4 +37,12 @@ delete from twitter_tweet t where t.user_id in
 
 delete from twitter_user where lower( screen_name ) = lower( 'SomeUser' );
 
+select count( t.tweet_id ), u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id group by u.screen_name;
+
+select count( t.tweet_id ) from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'SomeUser' );
+
+select count( t.tweet_id ), max( t.tweet_id), u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id group by u.screen_name;
 

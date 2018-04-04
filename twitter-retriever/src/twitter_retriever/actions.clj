@@ -26,17 +26,15 @@
   (println "Here is user-map: ", user-map)
   (rdbms/call-insert-user (:body user-map))
   (def max-id (get-in user-map [ :body :status :id ]))
-  ;; can this be a function call?
-  (def tweet-map (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name 
-                                                                              :count 200
-                                                                              :include_rts false
-                                                                              :tweet_mode "extended"}))
-
+  
+  (def tweet-map (get-tweet-map-with-max user-name my-oauth-creds max-id))
+  
   (def map-body (:body tweet-map))
   (println "Here is max-id: ", max-id)
 
   (loop [the-map-body map-body]
     (println "in loop, here is count of the-map-body: ", (count the-map-body))
+    ;; would "when" be better here?
     (if (> (count the-map-body) 0)
       (do
         (doseq [seq-body the-map-body]
@@ -45,9 +43,6 @@
            (rdbms/call-insert-tweet seq-body, batch-time)))
         (println "Here is next-max-id: ", (rdbms/get-min-tweet-id {:screen_name user-name}))
         (def next-max-id (:min (rdbms/get-min-tweet-id {:screen_name user-name})))
-        ;; can I make a var to hold next max-id and cut down on some clutter? 
-        ;; I need the minimum at this particular point
-        ; (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (rdbms/get-min-tweet-id {:screen_name user-name}))))
         (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (dec next-max-id))))))))
 
 (defn get-with-default [arg-map the-key default-value]
