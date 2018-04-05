@@ -59,5 +59,13 @@
 (defn wrap-in-li-tags [tweet-string]
   (str "<li>", tweet-string, "</li>"))
 
+(defn create-processed-string [tweet-map user-name]
+  (->
+   (make-links-from-hashtags (:full_text tweet-map)) 
+   (convert-links tweet-map) 
+   (create-user-links tweet-map) 
+   (create-in-reply-str tweet-map) 
+   (append-timestamp tweet-map user-name)
+   (wrap-in-li-tags)))
 
 

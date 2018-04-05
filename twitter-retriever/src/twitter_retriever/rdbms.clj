@@ -63,3 +63,14 @@
                  :batch_time batch-time
                  }))
 
+(defn call-insert-processed-tweet [tweet-map processed-string batch-time]
+  (insert-processed-tweet {:tweet_id_str (:id_str tweet-map), 
+                           :tweet_id     (:id tweet-map), 
+                           :user_id      (get-in tweet-map [:user :id]), 
+                           :user_id_str  (get-in tweet-map [:user :id_str]), 
+                           :final_html_text processed-string, 
+                           :created_at   (get-time-from-map (:created_at tweet-map)), 
+                           :batch_time batch-time
+                           }))
+
+

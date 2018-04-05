@@ -24,7 +24,7 @@ insert into twitter_user (
     :lang, :display_url, :expanded_url, :friends_count, :followers_count, 
     :has_extended_profile, :protected, :statuses_count, :time_zone, :utc_offset,           
     :created_at 
-);
+)
 
 -- :name insert-tweet
 -- :command :execute
@@ -75,7 +75,7 @@ where t.user_id = (
 -- :name insert-processed-tweet
 -- :command :execute
 -- :result :affected
-insert into processed-tweet (
+insert into processed_tweet (
   tweet_id_str, tweet_id, user_id, user_id_str, final_html_text, created_at, batch_time
 ) values (
   :tweet_id_str, :tweet_id, :user_id, :user_id_str, :final_html_text, :created_at, :batch_time

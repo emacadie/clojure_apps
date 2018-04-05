@@ -44,7 +44,7 @@ create table processed_tweet (
     tweet_id          bigint unique not null, -- provided by twitter as id
     user_id           bigint not null, -- user who sent tweet
     user_id_str       character varying ( 100 )  not null,
-    final_html_text   character varying ( 2000 ) not null,
+    final_html_text   character varying ( 10000 ) not null,
     created_at        TIMESTAMP  not null, --"Sun Dec 20 18:17:33 +0000 2009" "Thu Feb 04 18:04:20 +0000 2010",
     record_created_at TIMESTAMP default clock_timestamp() not null,
     batch_time        TIMESTAMP  not null, --"Sun Dec 20 18:17:33 +0000 2009" "Thu Feb 04 18:04:20 +0000 2010"

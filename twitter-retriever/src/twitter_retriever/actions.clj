@@ -2,6 +2,7 @@
   (:require [clojure.java.io :as io])
   (:require [clojure.pprint :as pp])
   (:require [twitter-retriever.rdbms :as rdbms])
+  (:require [twitter-retriever.process :as process])
   ; look into this later
   ; (:require [conman.core :refer [with-transaction]])
   (:use [twitter.oauth]
@@ -40,7 +41,11 @@
         (doseq [seq-body the-map-body]
          (do
            (print " Here is id: ", (:id seq-body))
-           (rdbms/call-insert-tweet seq-body, batch-time)))
+           (rdbms/call-insert-tweet seq-body, batch-time)
+           (def processed-string (process/create-processed-string seq-body user-name))
+           (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)
+           ))
+        
         (println "Here is next-max-id: ", (rdbms/get-min-tweet-id {:screen_name user-name}))
         (def next-max-id (:min (rdbms/get-min-tweet-id {:screen_name user-name})))
         (recur (:body (get-tweet-map-with-max user-name my-oauth-creds (dec next-max-id))))))))
