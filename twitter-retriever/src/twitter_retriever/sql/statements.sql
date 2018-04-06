@@ -53,7 +53,7 @@ where lower( screen_name ) = lower( :screen_name )
 -- :name get-max-tweet-id
 -- :command :query
 -- :result n
-select max( t.tweet_id_str )
+select max( t.tweet_id )
 from twitter_tweet t
 where t.user_id = (
       select u.user_id 

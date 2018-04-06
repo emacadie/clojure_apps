@@ -35,7 +35,6 @@
   (def batch-time (timec/to-timestamp (timel/local-now)))
   
   (def user-name (:user (:options arg-map)))
-  (println "Here is user-name: ", user-name)
   ;; put some sort of checking in here
 
   (def database-url (env :database-url))
@@ -43,23 +42,21 @@
   (def twitter-auth (rdbms/get-twitter-auth {:twitter_auth_user (:oauth (:options arg-map))}))
     
   ;; with twitter API, sometimes map keys use underscores, instead of our trusted hyphen
-  (def my-creds (make-oauth-creds (:app_consumer_key twitter-auth)
+  (def my-creds (make-oauth-creds (:app_consumer_key    twitter-auth)
                                   (:app_consumer_secret twitter-auth)
-                                  (:user_access_token twitter-auth)
+                                  (:user_access_token   twitter-auth)
                                   (:user_access_token_secret twitter-auth)))
-  (println "Here is my-creds", my-creds)
+  ; (println "Here is my-creds", my-creds)
   (def num-user (rdbms/check-user {:screen_name user-name}))
   (println "Here is num-user: ", num-user)
   (def user-count (:count num-user))
   (if (= user-count 0)
     (do
       (println "You want to create a user")
-      (actions/create-user user-name my-creds batch-time)
-      )
+      (actions/create-user user-name my-creds batch-time))
     (do
       (println "You want to get more tweets")
-      (actions/insert-more-tweets user-name my-creds batch-time)
-      ))
+      (actions/insert-more-tweets user-name my-creds batch-time)))
   (process/create-processed-file user-name batch-time)
   (println "Done"))
 
