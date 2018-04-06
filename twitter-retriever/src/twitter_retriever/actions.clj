@@ -16,12 +16,6 @@
   "max-id comes in as a map with a key of :min"
   (statuses-user-timeline :oauth-creds my-oauth-creds :params params-map ))
 
-(comment {:screen-name user-name                                                    
-                                                                :max_id max-id  
-                                                                :count 200
-                                                                :include_rts false
-                                                                :tweet_mode "extended"})
-
 (defn create-user [user-name my-oauth-creds batch-time]
   (def user-map (users-show :oauth-creds my-oauth-creds :params {:screen-name user-name}))
   (println "Here is user-map: ", user-map)
@@ -76,10 +70,16 @@
 (defn insert-more-tweets [user-name my-oauth-creds batch-time]
   (def starting-tweet-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
   (println "Here is starting-tweet-id: ", starting-tweet-id)
-  (def tweet-map (get-tweet-map-with-since user-name my-oauth-creds, starting-tweet-id))
+  (def tweet-map (get-tweet-map  my-oauth-creds 
+                                 {:screen-name user-name                                                    
+                                  :since_id starting-tweet-id  
+                                  :count 10
+                                  :include_rts false
+                                  :tweet_mode "extended"}))
   (def map-body (:body tweet-map))
 
-    (loop [the-map-body map-body]
+    (loop [the-map-body map-body
+           ]
     (println "in loop, here is count of the-map-body: ", (count the-map-body))
     ;; would "when" be better here?
     (if (> (count the-map-body) 0)
@@ -94,12 +94,15 @@
         
         (println "Here is next-since-id: ", (rdbms/get-max-tweet-id {:screen_name user-name}))
         (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
-        (recur (:body (get-tweet-map-with-since user-name my-oauth-creds next-since-id))))))
+        (def next-max-id (rdbms/get-min-tweet-id-for-batch {:screen_name user-name, :batch_time batch-time}))
+        (recur (:body (get-tweet-map my-oauth-creds {:screen-name user-name                                                    
+                                                     :since_id starting-tweet-id  
+                                                     :count 10
+                                                     :max_id (dec (:min next-max-id))
+                                                     :include_rts false
+                                                     :tweet_mode "extended"})))
+        )))
 
 
-  (comment (doseq [the-body map-body]
-     (do
-       (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body))      
-       (rdbms/call-insert-tweet the-body batch-time))))
   (println "Done inserting"))
 

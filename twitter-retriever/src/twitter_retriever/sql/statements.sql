@@ -72,6 +72,17 @@ where t.user_id = (
       where lower( u.screen_name ) = lower( :screen_name )
 )
 
+-- :name get-min-tweet-id-for-batch
+-- :command :query
+-- :result n
+select min( t.tweet_id )
+from twitter_tweet t
+where t.user_id = (
+      select u.user_id 
+      from twitter_user u
+      where lower( u.screen_name ) = lower( :screen_name )
+) and t.batch_time = :batch_time
+
 -- :name insert-processed-tweet
 -- :command :execute
 -- :result :affected
