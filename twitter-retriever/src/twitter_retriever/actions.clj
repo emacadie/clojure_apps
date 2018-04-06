@@ -14,13 +14,11 @@
 
 (defn get-tweet-map-with-max [user-name my-oauth-creds max-id]
   "max-id comes in as a map with a key of :min"
-  ; (println "In get-tweet-map-with-max for ", user-name ", and max-id of ", max-id)
-  ; (println "Here is class of '(:min max-id): ", (class (:min max-id)))
   (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name                                                    
-                                                                              :max_id max-id  
-                                                                              :count 200
-                                                                              :include_rts false
-                                                                              :tweet_mode "extended"}))
+                                                               :max_id max-id  
+                                                               :count 200
+                                                               :include_rts false
+                                                               :tweet_mode "extended"}))
 
 (defn create-user [user-name my-oauth-creds batch-time]
   (def user-map (users-show :oauth-creds my-oauth-creds :params {:screen-name user-name}))

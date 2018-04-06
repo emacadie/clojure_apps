@@ -5,6 +5,7 @@
   (:require [clojure.pprint :as pp])
   (:require [twitter-retriever.rdbms :as rdbms])
   (:require [twitter-retriever.actions :as actions])
+  (:require [twitter-retriever.process :as process])
   (:require [twitter.oauth :refer [make-oauth-creds]])
   (:require [clj-time.coerce :as timec])
   (:require [clj-time.local :as timel])
@@ -53,10 +54,12 @@
   (if (= user-count 0)
     (do
       (println "You want to create a user")
-      (actions/create-user user-name my-creds batch-time))
+      (actions/create-user user-name my-creds batch-time)
+      )
     (do
       (println "You want to get more tweets")
-      (actions/insert-more-tweets user-name my-creds batch-time)))
-  
+      (actions/insert-more-tweets user-name my-creds batch-time)
+      ))
+  (process/create-processed-file user-name batch-time)
   (println "Done"))
 

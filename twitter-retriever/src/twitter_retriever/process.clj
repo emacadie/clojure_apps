@@ -1,5 +1,7 @@
 (ns twitter-retriever.process
-  (:require [clj-time.format :as timef]))
+  (:require [clj-time.format :as timef])
+  (:require [clj-time.local :as timel])
+  (:require [twitter-retriever.rdbms :as rdbms]))
 
 (defn make-links-from-hashtags [tweet-string]
   (clojure.string/replace tweet-string #"((\#)(\w+))++" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))
@@ -68,4 +70,33 @@
    (append-timestamp tweet-map user-name)
    (wrap-in-li-tags)))
 
+(defn create-file-name [user-name]
+  (def custom-formatter (timef/formatter "yyyy-MM-dd_hh-mm-ss"))
+  (def time-str (timef/unparse custom-formatter (timel/local-now)))
+  (str time-str, "_", user-name, ".html"))
+
+(defn create-processed-file [user-name batch-time]
+  (def file-name (create-file-name user-name))
+  (def tweet-vec (rdbms/get-processed-tweets-by-user {:user_name user-name
+                                                      :batch-time batch-time}))
+  (println "Here is size of tweet-vec: ", (count tweet-vec))
+  (with-open [w (clojure.java.io/writer file-name)]
+    (.write w "<ul>\n")
+  (doseq [line tweet-vec]
+    
+    (.write w (:final_html_text line))
+    (.newLine w))
+    (.write w "</ul>\n"))
+)
+
+(comment
+-- :name get-processed-tweets-by-user
+-- :command :query
+-- :result :many
+select p.auto_id, p.tweet_id, p.user_id, p.final_html_text, p.created_at
+from processed_tweet p
+join twitter_user u on u.user_id = p.user_id and lower( u.screen_name ) = lower( :user_name )
+where p.batch_time = :batch-time
+order by p.created_at
+)
 

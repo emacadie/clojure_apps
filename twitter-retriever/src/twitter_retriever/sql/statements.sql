@@ -81,6 +81,15 @@ insert into processed_tweet (
   :tweet_id_str, :tweet_id, :user_id, :user_id_str, :final_html_text, :created_at, :batch_time
 )
 
+-- :name get-processed-tweets-by-user
+-- :command :query
+-- :result :many
+select p.auto_id, p.tweet_id, p.user_id, p.final_html_text, p.created_at
+from processed_tweet p
+join twitter_user u on u.user_id = p.user_id and lower( u.screen_name ) = lower( :user_name )
+where p.batch_time = :batch-time
+order by p.created_at
+
 -- :name get-twitter-auth
 -- :command :query
 -- :result :one
