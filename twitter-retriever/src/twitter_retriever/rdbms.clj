@@ -5,8 +5,7 @@
             [conman.core :as conman]
             [clojure.java.jdbc]
             [clj-time.format :as timef] 
-            [clj-time.coerce :as timec]
-            ))
+            [clj-time.coerce :as timec]))
 
 (def pool-spec
   {

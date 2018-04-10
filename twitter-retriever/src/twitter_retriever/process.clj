@@ -1,7 +1,7 @@
 (ns twitter-retriever.process
-  (:require [clj-time.format :as timef])
-  (:require [clj-time.local :as timel])
-  (:require [twitter-retriever.rdbms :as rdbms]))
+  (:require [clj-time.format :as timef]
+            [clj-time.local :as timel]
+            [twitter-retriever.rdbms :as rdbms]))
 
 (defn make-links-from-hashtags [tweet-string]
   (clojure.string/replace tweet-string #"((\#)(\w+))++" "<a href=\"https://twitter.com/hashtag/$3?src=hash\">$1</a>"))

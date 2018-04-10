@@ -1,8 +1,8 @@
 (ns twitter-retriever.actions
-  (:require [clojure.java.io :as io])
-  (:require [clojure.pprint :as pp])
-  (:require [twitter-retriever.rdbms :as rdbms])
-  (:require [twitter-retriever.process :as process])
+  (:require [clojure.java.io :as io]
+            [clojure.pprint :as pp]
+            [twitter-retriever.rdbms :as rdbms]
+            [twitter-retriever.process :as process])
   ; look into this later
   ; (:require [conman.core :refer [with-transaction]])
   (:use [twitter.oauth]

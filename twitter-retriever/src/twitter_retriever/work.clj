@@ -1,14 +1,14 @@
 (ns twitter-retriever.work
-  (:require [clojure.tools.cli :refer [parse-opts]])
-  (:require [clojure.java.io :as io])
-  (:require [environ.core :refer [env]])
-  (:require [clojure.pprint :as pp])
-  (:require [twitter-retriever.rdbms :as rdbms])
-  (:require [twitter-retriever.actions :as actions])
-  (:require [twitter-retriever.process :as process])
-  (:require [twitter.oauth :refer [make-oauth-creds]])
-  (:require [clj-time.coerce :as timec])
-  (:require [clj-time.local :as timel])
+  (:require [clojure.tools.cli :refer [parse-opts]]
+            [clojure.java.io :as io]
+            [environ.core :refer [env]]
+            [clojure.pprint :as pp]
+            [twitter-retriever.rdbms :as rdbms]
+            [twitter-retriever.actions :as actions]
+            [twitter-retriever.process :as process]
+            [twitter.oauth :refer [make-oauth-creds]]
+            [clj-time.coerce :as timec]
+            [clj-time.local :as timel])
   (:gen-class))
 
 (def cli-options

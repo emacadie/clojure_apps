@@ -1,4 +1,4 @@
-(ns twitter-retriever.cline
+(ns twitter-retriever.practice.cline
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [clojurewerkz.propertied.properties :as p])
   (:require [clojure.java.io :as io])
