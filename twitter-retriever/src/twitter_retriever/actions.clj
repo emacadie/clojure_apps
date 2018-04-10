@@ -41,8 +41,7 @@
            (print " Here is id: ", (:id seq-body))
            (rdbms/call-insert-tweet seq-body, batch-time)
            (def processed-string (process/create-processed-string seq-body user-name))
-           (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)
-           ))
+           (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
         
         (println "Here is next-max-id: ", (rdbms/get-min-tweet-id {:screen_name user-name}))
         (def next-max-id (:min (rdbms/get-min-tweet-id {:screen_name user-name})))
@@ -59,13 +58,13 @@
     default-value
     result))
 
-(defn get-tweet-map-with-since [user-name my-oauth-creds since-id]
-  "max-id comes in as a map with a key of :min"
-  (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name                                                    
-                                                               :since_id since-id  
-                                                               :count 10
-                                                               :include_rts false
-                                                               :tweet_mode "extended"}))
+(comment (defn get-tweet-map-with-since [user-name my-oauth-creds since-id]
+   "max-id comes in as a map with a key of :min"
+   (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name                                                    
+                                                                :since_id since-id  
+                                                                :count 10
+                                                                :include_rts false
+                                                                :tweet_mode "extended"})))
 
 (defn insert-more-tweets [user-name my-oauth-creds batch-time]
   (def starting-tweet-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
@@ -78,19 +77,17 @@
                                   :tweet_mode "extended"}))
   (def map-body (:body tweet-map))
 
-    (loop [the-map-body map-body
-           ]
+    (loop [the-map-body map-body]
     (println "in loop, here is count of the-map-body: ", (count the-map-body))
-    ;; would "when" be better here?
-    (if (> (count the-map-body) 0)
+    ;; would "when" be better than "if" here?
+    (when (> (count the-map-body) 0)
       (do
         (doseq [seq-body the-map-body]
          (do
            (print " Here is id: ", (:id seq-body))
            (rdbms/call-insert-tweet seq-body, batch-time)
            (def processed-string (process/create-processed-string seq-body user-name))
-           (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)
-           ))
+           (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
         
         (println "Here is next-since-id: ", (rdbms/get-max-tweet-id {:screen_name user-name}))
         (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
@@ -100,9 +97,6 @@
                                                      :count 10
                                                      :max_id (dec (:min next-max-id))
                                                      :include_rts false
-                                                     :tweet_mode "extended"})))
-        )))
-
-
+                                                     :tweet_mode "extended"}))))))
   (println "Done inserting"))
 

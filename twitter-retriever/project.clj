@@ -12,13 +12,14 @@
                  [mount "0.1.11"]
                  [environ "1.1.0"]
                  [clj-time "0.14.2"]
+                 [clj-http "3.8.0"]
                  ]
    :plugins [; [lein-autoreload "0.1.1"]
              [lein-environ "1.1.0"]
              ]
   ; directories use underscores, namespaces use hyphens
   ; :main ^:skip-aot twitter-retriever.core
-  :main ^:skip-aot twitter-retriever.cline
+  :main ^:skip-aot twitter-retriever.work
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 
