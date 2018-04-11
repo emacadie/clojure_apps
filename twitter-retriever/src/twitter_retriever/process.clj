@@ -1,6 +1,6 @@
 (ns twitter-retriever.process
   (:require [clj-time.format :as timef]
-            [clj-time.local :as timel]
+            [clj-time.local  :as timel]
             [twitter-retriever.rdbms :as rdbms]))
 
 (defn make-links-from-hashtags [tweet-string]
@@ -64,10 +64,10 @@
 (defn create-processed-string [tweet-map user-name]
   (->
    (make-links-from-hashtags (:full_text tweet-map)) 
-   (convert-links tweet-map) 
-   (create-user-links tweet-map) 
+   (convert-links       tweet-map) 
+   (create-user-links   tweet-map) 
    (create-in-reply-str tweet-map) 
-   (append-timestamp tweet-map user-name)
+   (append-timestamp    tweet-map user-name)
    (wrap-in-li-tags)))
 
 (defn create-file-name [user-name]
@@ -86,17 +86,6 @@
     
     (.write w (:final_html_text line))
     (.newLine w))
-    (.write w "</ul>\n"))
-)
+    (.write w "</ul>\n")))
 
-(comment
--- :name get-processed-tweets-by-user
--- :command :query
--- :result :many
-select p.auto_id, p.tweet_id, p.user_id, p.final_html_text, p.created_at
-from processed_tweet p
-join twitter_user u on u.user_id = p.user_id and lower( u.screen_name ) = lower( :user_name )
-where p.batch_time = :batch-time
-order by p.created_at
-)
 

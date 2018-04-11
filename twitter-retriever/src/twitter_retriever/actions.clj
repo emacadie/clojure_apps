@@ -58,14 +58,6 @@
     default-value
     result))
 
-(comment (defn get-tweet-map-with-since [user-name my-oauth-creds since-id]
-   "max-id comes in as a map with a key of :min"
-   (statuses-user-timeline :oauth-creds my-oauth-creds :params {:screen-name user-name                                                    
-                                                                :since_id since-id  
-                                                                :count 10
-                                                                :include_rts false
-                                                                :tweet_mode "extended"})))
-
 (defn insert-more-tweets [user-name my-oauth-creds batch-time]
   (def starting-tweet-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
   (println "Here is starting-tweet-id: ", starting-tweet-id)
@@ -90,7 +82,7 @@
            (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
         
         (println "Here is next-since-id: ", (rdbms/get-max-tweet-id {:screen_name user-name}))
-        (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
+        ; (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
         (def next-max-id (rdbms/get-min-tweet-id-for-batch {:screen_name user-name, :batch_time batch-time}))
         (recur (:body (get-tweet-map my-oauth-creds {:screen-name user-name                                                    
                                                      :since_id starting-tweet-id  
