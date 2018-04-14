@@ -74,5 +74,12 @@
 (vec (concat [1 2 3 4] [5]))
 (vector 1 2 3)
 (vec 1 2 3)
-
+(cons 0 [1 2 3 4]) ;; puts 0 at front, returns list
+(vec (cons 0 [1 2 3 4])) ;; puts 0 at front, converts to vector
+(conj  [1 2 3 4] 0) ;; puts 0 at the end
+(cons 0 '(1 2 3 4))
+(conj '(1 2 3 4) 0)
+;; so cons for list, conj for vectors
+;; cons, arg is in front and added to front
+;; conj, arg is in back, and added to back
 
