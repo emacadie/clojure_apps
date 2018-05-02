@@ -43,8 +43,9 @@ join twitter_user u on u.user_id = t.user_id group by u.screen_name;
 select count( t.tweet_id ) from twitter_tweet t
 join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'SomeUser' );
 
-select count( t.tweet_id ), max( t.tweet_id), u.screen_name from twitter_tweet t
-join twitter_user u on u.user_id = t.user_id group by u.screen_name;
+select count( t.tweet_id ), u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id group by u.screen_name order by u.screen_name desc;
+
 
 select count( p.tweet_id ), max( p.tweet_id), u.screen_name from processed_tweet p
 join twitter_user u on u.user_id = p.user_id group by u.screen_name;
