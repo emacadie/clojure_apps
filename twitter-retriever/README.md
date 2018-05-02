@@ -1,14 +1,14 @@
 # twitter-retriever
 
-A Clojure app to automate the retrieval of tweets and write them to a database.   
+A Clojure app to automate the retrieval of tweets and write them to a database and print them to an HTML file.   
 
-In the (near) future I plan on adding functionality to write them to a file in HTML format and using the WordPress API to add them to WordPress.  
+The original plan was to use the WordPress REST API to post them to WordPress. I spent some time trying to do this and I was unsuccessful. So for the time being you will have to copy and paste.    
 
 You will be able to use cron to run this every day/week/whenever to archive your tweets and/or display them on your site.   
 
 The DB used is Postgres. You will need to get your own Twitter OAuth credentials.   
 
-There are a few Clojure namespaces with a "main" function. Right now (2018-04-01), twitter_retriever/work.clj is the best one to use. The others are just places where I was messing around with different libraries.   
+The "main" function is in twitter_retriever/work.clj.  
 
 The OAuth creds are stored in the db in a table called twitter_auth:
 ```sql
@@ -31,6 +31,9 @@ lein run -m twitter-retriever.work --user=GitHub --oauth=YourNameHere
 
 You might only have one user whose credentials you will use, but it's one less file to manage for you. You're welcome.   
 
+The first time you call it for a user, it will get the most recent 3200 tweets. I do not fetch retweets, but retweets do count towards the 3200. The 3200 limit is set by Twitter.   
+
+Every time you call it for the same user after that, it should get any tweets since the last time you called, again up to 3200. If you are missing tweets, increase the frequency. You should not have to specify whether or not you have retrieved tweets for a user in the past. The app should be able to figure out what to do.  
 
 ## Usage
 

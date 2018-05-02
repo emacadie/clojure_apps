@@ -1,7 +1,7 @@
 (ns twitter-retriever.actions
   (:require [clojure.java.io :as io]
-            [clojure.pprint :as pp]
-            [twitter-retriever.rdbms :as rdbms]
+            [clojure.pprint  :as pp]
+            [twitter-retriever.rdbms   :as rdbms]
             [twitter-retriever.process :as process])
   ; look into this later
   ; (:require [conman.core :refer [with-transaction]])
@@ -12,8 +12,11 @@
   (:import [twitter.callbacks.protocols SyncSingleCallback])
   (:gen-class))
 
-(defn get-tweet-map [my-oauth-creds params-map]
+(defn get-tweet-map-body [my-oauth-creds params-map]
   "max-id comes in as a map with a key of :min"
+  ;; when you get tweets, you get a map with nested maps and vectors, etc
+  ;; you have a section called "header" with metadata, and a section called "body" which is a vector of maps, 
+  ;; with each tweet being a map in the vector
   (:body (statuses-user-timeline :oauth-creds my-oauth-creds :params params-map )))
 
 (defn create-user [user-name my-oauth-creds batch-time]
@@ -22,13 +25,12 @@
   (rdbms/call-insert-user (:body user-map))
   (def max-id (get-in user-map [ :body :status :id ]))
   
-  (def tweet-map-body (get-tweet-map my-oauth-creds {:screen-name user-name                                                    
-                                                :max_id max-id  
-                                                :count 200
-                                                :include_rts false
-                                                :tweet_mode "extended"}))
+  (def tweet-map-body (get-tweet-map-body my-oauth-creds {:screen-name user-name
+                                                          :max_id max-id  
+                                                          :count 200
+                                                          :include_rts false
+                                                          :tweet_mode "extended"}))
   
-  ; (def map-body (:body tweet-map))
   (println "Here is max-id: ", max-id)
 
   (loop [the-map-body tweet-map-body]
@@ -45,29 +47,22 @@
         
         (println "Here is next-max-id: ", (rdbms/get-min-tweet-id {:screen_name user-name}))
         (def next-max-id (:min (rdbms/get-min-tweet-id {:screen_name user-name})))
-        (recur (get-tweet-map my-oauth-creds 
-                              {:screen-name user-name                                                    
-                               :max_id (dec next-max-id) 
-                               :count 200
-                               :include_rts false
-                               :tweet_mode "extended"}))))))
-
-(defn get-with-default [arg-map the-key default-value]
-  (def result (get arg-map the-key))
-  (if (nil? result)
-    default-value
-    result))
+        (recur (get-tweet-map-body my-oauth-creds 
+                                   {:screen-name user-name
+                                    :max_id (dec next-max-id) 
+                                    :count 200
+                                    :include_rts false
+                                    :tweet_mode "extended"}))))))
 
 (defn insert-more-tweets [user-name my-oauth-creds batch-time]
   (def starting-tweet-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
   (println "Here is starting-tweet-id: ", starting-tweet-id)
-  (def tweet-map-body (get-tweet-map  my-oauth-creds 
-                                 {:screen-name user-name                                                    
-                                  :since_id starting-tweet-id  
-                                  :count 10
-                                  :include_rts false
-                                  :tweet_mode "extended"}))
-  ; (def map-body (:body tweet-map))
+  (def tweet-map-body (get-tweet-map-body  my-oauth-creds 
+                                           {:screen-name user-name
+                                            :since_id starting-tweet-id  
+                                            :count 200
+                                            :include_rts false
+                                            :tweet_mode "extended"}))
 
     (loop [the-map-body tweet-map-body]
     (println "in loop, here is count of the-map-body: ", (count the-map-body))
@@ -84,11 +79,11 @@
         (println "Here is next-since-id: ", (rdbms/get-max-tweet-id {:screen_name user-name}))
         ; (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
         (def next-max-id (rdbms/get-min-tweet-id-for-batch {:screen_name user-name, :batch_time batch-time}))
-        (recur (get-tweet-map my-oauth-creds {:screen-name user-name                                                    
-                                              :since_id starting-tweet-id  
-                                              :count 10
-                                              :max_id (dec (:min next-max-id))
-                                              :include_rts false
-                                              :tweet_mode "extended"})))))
+        (recur (get-tweet-map-body my-oauth-creds {:screen-name user-name
+                                                   :since_id starting-tweet-id  
+                                                   :count 200
+                                                   :max_id (dec (:min next-max-id))
+                                                   :include_rts false
+                                                   :tweet_mode "extended"})))))
   (println "Done inserting"))
 

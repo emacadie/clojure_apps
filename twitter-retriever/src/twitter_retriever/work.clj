@@ -3,12 +3,12 @@
             [clojure.java.io :as io]
             [environ.core :refer [env]]
             [clojure.pprint :as pp]
-            [twitter-retriever.rdbms :as rdbms]
+            [twitter-retriever.rdbms   :as rdbms]
             [twitter-retriever.actions :as actions]
             [twitter-retriever.process :as process]
             [twitter.oauth :refer [make-oauth-creds]]
             [clj-time.coerce :as timec]
-            [clj-time.local :as timel])
+            [clj-time.local  :as timel])
   (:gen-class))
 
 (def cli-options
@@ -29,13 +29,8 @@
         user-name (:user (:options arg-map))]
     (println "here is arg-map:", arg-map)
     (println "here is options: ", (:options arg-map))
-    ; (def )
-  
-    ; (def user-name (:user (:options arg-map)))
+    
     ;; put some sort of checking in here
-
-    (def database-url (env :database-url))
- 
     (def twitter-auth (rdbms/get-twitter-auth {:twitter_auth_user (:oauth (:options arg-map))}))
     
     ;; with twitter API, sometimes map keys use underscores, instead of our trusted hyphen
@@ -43,7 +38,7 @@
                                     (:app_consumer_secret twitter-auth)
                                     (:user_access_token   twitter-auth)
                                     (:user_access_token_secret twitter-auth)))
-                                        ; (println "Here is my-creds", my-creds)
+    
     (def num-user (rdbms/check-user {:screen_name user-name}))
     (println "Here is num-user: ", num-user)
     (def user-count (:count num-user))
