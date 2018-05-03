@@ -1,24 +1,24 @@
 (ns twitter-retriever.rdbms
-  (:require [hugsql.core :as hugsql]
-            [mount.core :refer [defstate]]
-            [environ.core :refer [env]]
-            [conman.core :as conman]
+  (:require [hugsql.core  :as hugsql]
+            [mount.core   :as mount]
+            [environ.core :as environ]
+            [conman.core  :as conman]
             [clojure.java.jdbc]
             [clj-time.format :as timef] 
             [clj-time.coerce :as timec]))
 
 (def pool-spec
   {
-   :jdbc-url (env :database-url) 
-   :driver-class-name (env :db-driver ) 
+   :jdbc-url (environ/env :database-url) 
+   :driver-class-name (environ/env :db-driver ) 
    })
 
-(defstate ^:dynamic *db*
+(mount/defstate ^:dynamic *db*
           :start (conman/connect! pool-spec)
           :stop (conman/disconnect! *db*))
 
 (conman/bind-connection *db* "twitter_retriever/sql/statements.sql")
-(mount.core/start)
+; (mount.core/start)
 
 ;; from https://stackoverflow.com/questions/9305541/clojure-jdbc-postgresql-i-am-trying-to-update-a-timestamp-value-in-postgresql-f/9305737#9305737
 (defn get-time-from-map [time-from-map]

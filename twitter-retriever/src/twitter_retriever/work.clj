@@ -1,12 +1,13 @@
 (ns twitter-retriever.work
-  (:require [clojure.tools.cli :refer [parse-opts]]
-            [clojure.java.io :as io]
-            [environ.core :refer [env]]
-            [clojure.pprint :as pp]
+  (:require [clojure.tools.cli :as cli]
+            [clojure.java.io   :as io]
+            [environ.core      :as environ]
+            [clojure.pprint    :as pp]
+            [mount.core :as mount]
             [twitter-retriever.rdbms   :as rdbms]
             [twitter-retriever.actions :as actions]
             [twitter-retriever.process :as process]
-            [twitter.oauth :refer [make-oauth-creds]]
+            [twitter.oauth   :as twitter-oauth]
             [clj-time.coerce :as timec]
             [clj-time.local  :as timel])
   (:gen-class))
@@ -23,8 +24,8 @@
 
 (defn -main [& args]
   (println "In work")
-  
-  (let [arg-map (parse-opts args cli-options)
+  (mount/start)
+  (let [arg-map (cli/parse-opts args cli-options)
         batch-time (timec/to-timestamp (timel/local-now))
         user-name (:user (:options arg-map))]
     (println "here is arg-map:", arg-map)
@@ -34,15 +35,16 @@
     (def twitter-auth (rdbms/get-twitter-auth {:twitter_auth_user (:oauth (:options arg-map))}))
     
     ;; with twitter API, sometimes map keys use underscores, instead of our trusted hyphen
-    (def my-creds (make-oauth-creds (:app_consumer_key    twitter-auth)
-                                    (:app_consumer_secret twitter-auth)
-                                    (:user_access_token   twitter-auth)
-                                    (:user_access_token_secret twitter-auth)))
+    (def my-creds (twitter-oauth/make-oauth-creds (:app_consumer_key    twitter-auth)
+                                                  (:app_consumer_secret twitter-auth)
+                                                  (:user_access_token   twitter-auth)
+                                                  (:user_access_token_secret twitter-auth)))
     
-    (def num-user (rdbms/check-user {:screen_name user-name}))
-    (println "Here is num-user: ", num-user)
-    (def user-count (:count num-user))
-    (if (= user-count 0)
+    ;; (def num-user (rdbms/check-user {:screen_name user-name}))
+    ;; (println "Here is num-user: ", num-user)
+    ;; (def user-count (:count num-user))
+    ;; does the user exist in DB?
+    (if (= 0 (:count (rdbms/check-user {:screen_name user-name})))
       (do
         (println "You want to create a user")
         (actions/create-user user-name my-creds batch-time))
