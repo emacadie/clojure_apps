@@ -16,7 +16,6 @@
   ;; An option with a required argument
   [["-u" "--user USER" "Name of twitter user's tweets to get"
     :id :user
-    ;:validate [#(> (count %) 10) "String must be at least 10 chars (like ending with .properties)"]
     ]
    ["-o" "--oauth NAME" "Name of twitter user that has the OAuth creds you will be using"]
    ;; A boolean option defaulting to nil
@@ -25,9 +24,9 @@
 (defn -main [& args]
   (println "In work")
   (mount/start)
-  (let [arg-map (cli/parse-opts args cli-options)
+  (let [arg-map    (cli/parse-opts args cli-options)
         batch-time (timec/to-timestamp (timel/local-now))
-        user-name (:user (:options arg-map))]
+        user-name  (:user (:options arg-map))]
     (println "here is arg-map:", arg-map)
     (println "here is options: ", (:options arg-map))
     
@@ -40,9 +39,6 @@
                                                   (:user_access_token   twitter-auth)
                                                   (:user_access_token_secret twitter-auth)))
     
-    ;; (def num-user (rdbms/check-user {:screen_name user-name}))
-    ;; (println "Here is num-user: ", num-user)
-    ;; (def user-count (:count num-user))
     ;; does the user exist in DB?
     (if (= 0 (:count (rdbms/check-user {:screen_name user-name})))
       (do
@@ -51,7 +47,6 @@
       (do
         (println "You want to get more tweets")
         (actions/insert-more-tweets user-name my-creds batch-time)))
-    (process/create-processed-file user-name batch-time)
-    )
+    (process/create-processed-file user-name batch-time))
   (println "All done"))
 

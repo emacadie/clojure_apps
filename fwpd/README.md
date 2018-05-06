@@ -1,6 +1,7 @@
 # fwpd
 
-FIXME: description
+This is the project for Chapter 4 in Clojure For The Brave And True    
+
 
 ## Installation
 
