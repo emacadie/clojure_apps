@@ -24,7 +24,9 @@ using reload in code (inside ns):
 Another reload option, run both of these:
 (require '[clojure.tools.namespace.repl])
 (clojure.tools.namespace.repl/refresh)
-
+or:
+(require '[clojure.tools.namespace.repl :refer [refresh]])
+(refresh)
 Another option:
 https://github.com/grampelberg/lein-autoreload
 This did not work
