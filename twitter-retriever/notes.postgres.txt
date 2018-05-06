@@ -11,8 +11,16 @@ select max( t.tweet_id )
 from twitter_tweet t
 where t.user_id = (
 select u.user_id from twitter_user u
-where lower( u.screen_name ) = lower( 'shinzenyoung' )
+where lower( u.screen_name ) = lower( 'someuser' )
 );
+
+select max( t.created_at )
+from twitter_tweet t
+where t.user_id = (
+select u.user_id from twitter_user u
+where lower( u.screen_name ) = lower( 'netflix' )
+);
+
 
 select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
 join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'someuser' );

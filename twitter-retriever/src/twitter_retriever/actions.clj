@@ -33,7 +33,7 @@
           (do
             (doseq [seq-body the-map-body]
               (do
-                (print " Here is id: ", (:id seq-body))
+                ; (print " Here is id: ", (:id seq-body))
                 (rdbms/call-insert-tweet seq-body, batch-time)
                 (def processed-string (process/create-processed-string seq-body user-name))
                 (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
@@ -46,15 +46,15 @@
   (let [param-map {:screen-name user-name, :count 200, :include_rts false, :tweet_mode "extended"}]
       (def starting-tweet-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
       (println "Here is starting-tweet-id: ", starting-tweet-id)
-
       (loop [the-map-body (get-tweet-map-body my-oauth-creds (conj param-map {:since_id starting-tweet-id}))]
         (println "in loop, here is count of the-map-body: ", (count the-map-body))
         ;; would "when" be better than "if" here?
         (when (> (count the-map-body) 0)
           (do
+            (println "Here is min id from the group: ", (apply min (map :id the-map-body)))
             (doseq [seq-body the-map-body]
               (do
-                (print " Here is id: ", (:id seq-body))
+                ; (print " Here is id: ", (:id seq-body))
                 (rdbms/call-insert-tweet seq-body, batch-time)
                 (def processed-string (process/create-processed-string seq-body user-name))
                 (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
@@ -62,6 +62,7 @@
             (println "Here is next-since-id: ", (rdbms/get-max-tweet-id {:screen_name user-name}))
                                         ; (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
             (def next-max-id (rdbms/get-min-tweet-id-for-batch {:screen_name user-name, :batch_time batch-time}))
+            (println "here is min-tweetid-for-batch: ", next-max-id)
             (recur (get-tweet-map-body my-oauth-creds (conj param-map {:since_id starting-tweet-id, :max_id (dec (:min next-max-id))})))))))
   (println "Done inserting")) 
 ;; line 83

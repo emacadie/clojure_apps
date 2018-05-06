@@ -3,7 +3,6 @@
             [mount.core   :as mount]
             [environ.core :as environ]
             [conman.core  :as conman]
-            [clojure.java.jdbc]
             [clj-time.format :as timef] 
             [clj-time.coerce :as timec]))
 
