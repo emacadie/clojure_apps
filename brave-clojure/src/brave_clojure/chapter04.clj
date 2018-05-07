@@ -83,3 +83,27 @@
 ;; cons, arg is in front and added to front
 ;; conj, arg is in back, and added to back
 
+; exercises
+; The Vampire Data Analysis Program for the FWPD is in subproject fwpd
+
+;; 1. Turn the result of your glitter filter into a list of names.
+;; You can take this:
+(glitter-filter 4 (mapify (parse (slurp filename))))
+;; and get a list:
+({:name "Edward Cullen", :glitter-index 10} {:name "Carlisle Cullen", :glitter-index 6})
+;; Here is the function:
+(map #(get %1 :name) glit-map)
+
+;; 2. Write a function, append, which will append a new suspect to your list of suspects.
+(defn append-suspect [sus-list new-sus]
+  "This will put new suspect at the end; conj would put at the front"
+  (concat sus-list (list new-sus)))
+
+;; 3.Write a function, validate, which will check that :name and :glitter-index are present when you append. 
+;; The validate function should accept two arguments: a map of keywords to validating functions, similar to conversions, and the record to be validated.
+
+
+;;    Write a function that will take your list of maps and convert it back to a CSV string. You’ll need to use the clojure.string/join function.
+
+
+

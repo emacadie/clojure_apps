@@ -11,4 +11,5 @@
   :profiles {:uberjar {:aot :all}
              :dev [:project/dev ]
              :project/dev  {:dependencies [[org.clojure/tools.namespace "0.2.11"] ]
-                            }})
+}})
+

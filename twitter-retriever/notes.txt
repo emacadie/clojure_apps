@@ -26,6 +26,7 @@ Another reload option, run both of these:
 (clojure.tools.namespace.repl/refresh)
 or:
 (require '[clojure.tools.namespace.repl :refer [refresh]])
+or: (require '[clojure.tools.namespace.repl :as repl])
 (refresh)
 Another option:
 https://github.com/grampelberg/lein-autoreload
