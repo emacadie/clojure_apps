@@ -58,7 +58,7 @@
       (let [[part & remaining] remaining-asym-parts] 
         (recur remaining 
                (into final-body-parts
-                     (set [part (matching-part part)])))))))
+                     (set [part (matching-part part "")])))))))
 
 ;; make a call to the other part
 (defn better-symmetrize-body-parts

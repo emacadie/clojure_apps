@@ -27,9 +27,9 @@
 
 ;; he uses map to get values from one key from a vector
 (def identities
-  [{:alias "Batman" :real "Bruce Wayne"}
-   {:alias "Spider-Man" :real "Peter Parker"}
-   {:alias "Santa" :real "Your mom"}
+  [{:alias "Batman"       :real "Bruce Wayne"}
+   {:alias "Spider-Man"   :real "Peter Parker"}
+   {:alias "Santa"        :real "Your mom"}
    {:alias "Easter Bunny" :real "Your dad"}])
 
 (map :real identities)
@@ -73,7 +73,7 @@
 (vector (concat [1 2 3 4] [5]))
 (vec (concat [1 2 3 4] [5]))
 (vector 1 2 3)
-(vec 1 2 3)
+;; (vec 1 2 3)
 (cons 0 [1 2 3 4]) ;; puts 0 at front, returns list
 (vec (cons 0 [1 2 3 4])) ;; puts 0 at front, converts to vector
 (conj  [1 2 3 4] 0) ;; puts 0 at the end
@@ -105,11 +105,11 @@
 
 ;; 4. Write a function that will take your list of maps and convert it back to a CSV string. 
 ;; You'll need to use the clojure.string/join function.
-(def list-of-maps ({:name "Edward Cullen",   :glitter-index 10} 
-                   {:name "Bella Swan",      :glitter-index 0} 
-                   {:name "Charlie Swan",    :glitter-index 0} 
-                   {:name "Jacob Black",     :glitter-index 3} 
-                   {:name "Carlisle Cullen", :glitter-index 6}))
+(def list-of-maps '({:name "Edward Cullen",   :glitter-index 10} 
+                    {:name "Bella Swan",      :glitter-index 0} 
+                    {:name "Charlie Swan",    :glitter-index 0} 
+                    {:name "Jacob Black",     :glitter-index 3} 
+                    {:name "Carlisle Cullen", :glitter-index 6}))
 
 
 
