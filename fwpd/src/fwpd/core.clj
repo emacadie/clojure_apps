@@ -34,20 +34,34 @@
                  (map vector vamp-keys unmapped-row)))
        rows))
 
+; (map vector vamp-keys ["Ed" "10"])
+; gives something like
+; ([:name "Ed"] [:glitter-index "10"])
+; so you could make key/value pairs from vectors
+; IF everything is in the right place
+
 (defn glitter-filter [minimum-glitter records]
   (filter #(>= (:glitter-index %1) minimum-glitter) records))
 
-;; (append-suspect glit-map {:name "John Doe" :glitter-index 3})
-;; (def glit-map (glitter-filter 4 (mapify (parse (slurp filename)))))
+;; (append-suspect glit-vec {:name "John Doe" :glitter-index 3})
+;; (def glit-vec (glitter-filter 4 (mapify (parse (slurp filename)))))
 (defn append-suspect [sus-list new-sus]
   "This will put new suspect at the end; conj would put at the front"
   (concat sus-list (list new-sus)))
 
-(defn validate-suspect [key-map suspect]
-  (when (= 0 (compare (vec (sort (keys key-map))) (vec (sort (keys suspect)))))
+(defn keys-match [map1 map2]
+  (if (= 0 (compare (vec (sort (keys map1))) (vec (sort (keys map2)))))
     true
-)
-  )
+    false))
+
+;; (validate-suspect conversions {:name "Edward" :glitter-index "3r"})
+(defn validate-suspect [key-map suspect]
+  ;; key-map could be conversions above
+  (if (and (keys-match key-map suspect)
+             (not-any? nil? (map (fn [[key value]] (convert key value))
+                                 suspect))) 
+    true
+    false))
 
 (defn -main
   "I don't do a whole lot ... yet."
