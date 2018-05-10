@@ -105,11 +105,22 @@
 
 ;; 4. Write a function that will take your list of maps and convert it back to a CSV string. 
 ;; You'll need to use the clojure.string/join function.
+
+(require '[clojure.string :as string])
+
 (def list-of-maps '({:name "Edward Cullen",   :glitter-index 10} 
                     {:name "Bella Swan",      :glitter-index 0} 
                     {:name "Charlie Swan",    :glitter-index 0} 
                     {:name "Jacob Black",     :glitter-index 3} 
                     {:name "Carlisle Cullen", :glitter-index 6}))
-
-
+;; you could do this:
+(map #(string/join "," (vals %1) ) list-of-maps)
+;; that gives this:
+'("Edward Cullen,10" "Bella Swan,0" "Charlie Swan,0" "Jacob Black,3" "Carlisle Cullen,6")
+;; you cannot do this:
+(map #(string/join "\n" (map #(string/join "," (vals %1) ) list-of-maps)))
+;; IllegalStateException Nested #()s are not allowed  clojure.lang.LispReader$FnReader.invoke (LispReader.java:703)
+;; so much for combining functions
+;; so try this:
+(string/join "\n" (map #(string/join "," (vals %1) ) list-of-maps))
 
