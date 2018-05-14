@@ -43,7 +43,7 @@ insert into twitter_tweet (
     :in_reply_to_user_id_str, :created_at, :batch_time
 )
 
--- :name check-user
+-- :name check-for-user-count
 -- :command :query
 -- :result n
 select count( screen_name) 
@@ -71,17 +71,6 @@ where t.user_id = (
       from twitter_user u
       where lower( u.screen_name ) = lower( :screen_name )
 )
-
--- :name get-min-tweet-id-for-batch
--- :command :query
--- :result n
-select min( t.tweet_id )
-from twitter_tweet t
-where t.user_id = (
-      select u.user_id 
-      from twitter_user u
-      where lower( u.screen_name ) = lower( :screen_name )
-) and t.batch_time = :batch_time
 
 -- :name insert-processed-tweet
 -- :command :execute

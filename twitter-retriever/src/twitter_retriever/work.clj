@@ -40,7 +40,7 @@
                                                   (:user_access_token_secret twitter-auth)))
     
     ;; does the user exist in DB?
-    (if (= 0 (:count (rdbms/check-user {:screen_name user-name})))
+    (if (= 0 (:count (rdbms/check-for-user-count {:screen_name user-name})))
       (do
         (println "You want to create a user")
         (actions/create-user user-name my-creds batch-time))

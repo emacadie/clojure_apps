@@ -1,5 +1,5 @@
 (ns twitter-retriever.rdbms
-  (:require [hugsql.core  :as hugsql]
+  (:require ; [hugsql.core  :as hugsql]
             [mount.core   :as mount]
             [environ.core :as environ]
             [conman.core  :as conman]
@@ -17,7 +17,6 @@
           :stop (conman/disconnect! *db*))
 
 (conman/bind-connection *db* "twitter_retriever/sql/statements.sql")
-; (mount.core/start)
 
 ;; from https://stackoverflow.com/questions/9305541/clojure-jdbc-postgresql-i-am-trying-to-update-a-timestamp-value-in-postgresql-f/9305737#9305737
 (defn get-time-from-map [time-from-map]

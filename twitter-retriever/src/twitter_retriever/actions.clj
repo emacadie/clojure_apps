@@ -5,7 +5,7 @@
             [twitter.callbacks]
             [twitter-retriever.rdbms   :as rdbms]
             [twitter-retriever.process :as process])
-  ; look into this later
+
   ; (:require [conman.core :refer [with-transaction]])
   (:import [twitter.callbacks.protocols SyncSingleCallback])
   (:gen-class))
@@ -33,7 +33,6 @@
           (do
             (doseq [seq-body the-map-body]
               (do
-                ; (print " Here is id: ", (:id seq-body))
                 (rdbms/call-insert-tweet seq-body, batch-time)
                 (def processed-string (process/create-processed-string seq-body user-name))
                 (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
@@ -54,16 +53,11 @@
             (println "Here is min id from the group: ", (apply min (map :id the-map-body)))
             (doseq [seq-body the-map-body]
               (do
-                ; (print " Here is id: ", (:id seq-body))
                 (rdbms/call-insert-tweet seq-body, batch-time)
                 (def processed-string (process/create-processed-string seq-body user-name))
                 (rdbms/call-insert-processed-tweet seq-body processed-string batch-time)))
-        
-            (println "Here is next-since-id: ", (rdbms/get-max-tweet-id {:screen_name user-name}))
-                                        ; (def next-since-id (:max (rdbms/get-max-tweet-id {:screen_name user-name})))
-            (def next-max-id (rdbms/get-min-tweet-id-for-batch {:screen_name user-name, :batch_time batch-time}))
-            (println "here is min-tweetid-for-batch: ", next-max-id)
-            (recur (get-tweet-map-body my-oauth-creds (conj param-map {:since_id starting-tweet-id, :max_id (dec (:min next-max-id))})))))))
+                 
+            (recur (get-tweet-map-body my-oauth-creds (conj param-map {:since_id starting-tweet-id, :max_id (dec (apply min (map :id the-map-body)))})))))))
   (println "Done inserting")) 
 ;; line 83
 

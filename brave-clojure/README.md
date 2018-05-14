@@ -4,6 +4,7 @@ This is a repo for the exercises for "Clojure For The Brave and True"
 which you can find at: https://www.braveclojure.com/clojure-for-the-brave-and-true/   
 by Daniel Higginbotham   
 
+Git repo https://github.com/braveclojure/cftbat-code   
 
 
 ## Usage
