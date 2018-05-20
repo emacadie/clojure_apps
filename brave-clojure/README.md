@@ -6,6 +6,7 @@ by Daniel Higginbotham
 
 Git repo https://github.com/braveclojure/cftbat-code   
 
+Git repo for pegthing in chapter five at: https://github.com/flyingmachine/pegthing   
 
 ## Usage
 
