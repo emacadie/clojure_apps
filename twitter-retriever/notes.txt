@@ -124,7 +124,7 @@ https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuse
 
 To get one tweet
 https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-statuses-show-id
-(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800})
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :trim_user true})
 
 This did not get full text:
 (statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :truncated "false"})

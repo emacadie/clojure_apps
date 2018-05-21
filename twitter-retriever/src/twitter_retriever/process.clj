@@ -17,6 +17,18 @@
                (clojure.string/replace t-string (:url url-map) new-str)))
       t-string))) 
 
+(defn convert-media-links [tweet-string tweet-map]
+  (loop [url-vec (get-in tweet-map [:entities :media])
+         t-string tweet-string]
+    (if (> (count url-vec) 0)
+      (do
+        (def url-map (peek url-vec))
+        (def new-str (str "<a href=\"" (:media_url_https url-map) "\">" (:url url-map) "</a>"))
+        (recur (pop url-vec)
+               (clojure.string/replace t-string (:url url-map) new-str)))
+      t-string))
+)
+
 (defn create-user-links [tweet-string tweet-map]
   (loop [user-vec (get-in tweet-map [:entities :user_mentions])
          t-string tweet-string]
@@ -64,7 +76,8 @@
 (defn create-processed-string [tweet-map user-name]
   (->
    (make-links-from-hashtags (:full_text tweet-map)) 
-   (convert-links       tweet-map) 
+   (convert-links       tweet-map)
+   (convert-media-links tweet-map)
    (create-user-links   tweet-map) 
    (create-in-reply-str tweet-map) 
    (append-timestamp    tweet-map user-name)
