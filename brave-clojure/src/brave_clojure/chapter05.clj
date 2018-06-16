@@ -60,6 +60,8 @@
    (f1 (apply f2 args))))
 ;; I am bailing on this one
 ;; see https://github.com/dancrumb/clojure-brave-and-true for one that works
+;; I just looked at the source of comp. It uses "apply", "reduce", and there is a recursive call to "comp"
+
 
 ;; 3. Implement the assoc-in function. 
 ;; Hint: use the assoc function and define its parameters as [m [k & ks] v]

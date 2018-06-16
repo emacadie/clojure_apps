@@ -3,7 +3,7 @@
             [clojure.java.io   :as io]
             [environ.core      :as environ]
             [clojure.pprint    :as pp]
-            [mount.core :as mount]
+            [mount.core        :as mount]
             [twitter-retriever.rdbms   :as rdbms]
             [twitter-retriever.actions :as actions]
             [twitter-retriever.process :as process]
@@ -48,5 +48,7 @@
         (println "You want to get more tweets")
         (actions/insert-more-tweets user-name my-creds batch-time)))
     (process/create-processed-file user-name batch-time))
-  (println "All done"))
+  (mount/stop)
+  (println "All done")
+  (System/exit 0))
 

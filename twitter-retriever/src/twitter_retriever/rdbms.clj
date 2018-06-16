@@ -48,7 +48,7 @@
 (defn call-insert-tweet [tweet-map batch-time]
   (insert-tweet {:tweet_id_str (:id_str tweet-map)
                  :tweet_id     (:id tweet-map)
-                 :full_text    (:full_text tweet-map)
+                 :full_text    (subs (:full_text tweet-map) 0 (min 2056 (.length (:full_text tweet-map))))
                  :user_id      (get-in tweet-map [:user :id])
                  :user_id_str  (get-in tweet-map [:user :id_str])
                  :in_reply_to_screen_name   (:in_reply_to_screen_name tweet-map)
