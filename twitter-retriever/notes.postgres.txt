@@ -62,4 +62,11 @@ join twitter_user u on u.user_id = t.user_id group by u.screen_name order by u.s
 select count( p.tweet_id ), max( p.tweet_id), u.screen_name from processed_tweet p
 join twitter_user u on u.user_id = p.user_id group by u.screen_name;
 
+select t.batch_time, count( t.batch_time ) from twitter_tweet t where t.user_id = (
+    select u.user_id from twitter_user u
+    where lower( u.screen_name ) = lower( 'clojure' )
+) 
+group by t.batch_time
+order by t.batch_time;
+
 
