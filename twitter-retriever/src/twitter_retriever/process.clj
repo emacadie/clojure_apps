@@ -26,8 +26,7 @@
         (def new-str (str "<a href=\"" (:media_url_https url-map) "\">" (:url url-map) "</a>"))
         (recur (pop url-vec)
                (clojure.string/replace t-string (:url url-map) new-str)))
-      t-string))
-)
+      t-string)))
 
 (defn create-user-links [tweet-string tweet-map]
   (loop [user-vec (get-in tweet-map [:entities :user_mentions])
@@ -88,17 +87,21 @@
   (def time-str (timef/unparse custom-formatter (timel/local-now)))
   (str time-str, "_", user-name, ".html"))
 
-(defn create-processed-file [user-name batch-time]
-  (def file-name (create-file-name user-name))
-  (def tweet-vec (rdbms/get-processed-tweets-by-user {:user_name user-name
-                                                      :batch-time batch-time}))
+(defn write-processed-file [tweet-vec file-name]
   (println "Here is size of tweet-vec: ", (count tweet-vec))
   (with-open [w (clojure.java.io/writer file-name)]
     (.write w "<ul>\n")
   (doseq [line tweet-vec]
-    
     (.write w (:final_html_text line))
     (.newLine w))
     (.write w "</ul>\n")))
+
+(defn create-processed-file [user-name batch-time]
+  (let [tweet-vec (rdbms/get-processed-tweets-by-user {:user_name user-name
+                                                      :batch-time batch-time})]
+    (when (not-empty tweet-vec)
+      (write-processed-file tweet-vec (create-file-name user-name)))))
+
+
 
 

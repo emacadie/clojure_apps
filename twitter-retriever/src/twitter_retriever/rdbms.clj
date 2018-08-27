@@ -1,8 +1,7 @@
 (ns twitter-retriever.rdbms
-  (:require ; [hugsql.core  :as hugsql]
-            [mount.core   :as mount]
-            [environ.core :as environ]
-            [conman.core  :as conman]
+  (:require [mount.core      :as mount]
+            [environ.core    :as environ]
+            [conman.core     :as conman]
             [clj-time.format :as timef] 
             [clj-time.coerce :as timec]))
 
