@@ -1,10 +1,8 @@
 (ns twitter-retriever.actions
-  (:require [clojure.java.io :as io]
-            [clojure.pprint  :as pp]
-            [twitter.api.restful :as restful]
+  (:require [twitter.api.restful :as restful]
             [twitter.callbacks]
-            [twitter-retriever.rdbms   :as rdbms]
-            [twitter-retriever.process :as process])
+            [twitter-retriever.process :as process]
+            [twitter-retriever.rdbms   :as rdbms])
   (:import [twitter.callbacks.protocols SyncSingleCallback]))
 
 (defn get-tweet-map-body [my-oauth-creds params-map]

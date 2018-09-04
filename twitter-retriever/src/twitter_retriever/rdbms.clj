@@ -1,9 +1,9 @@
 (ns twitter-retriever.rdbms
-  (:require [mount.core      :as mount]
-            [environ.core    :as environ]
+  (:require [clj-time.coerce :as timec]
+            [clj-time.format :as timef]
             [conman.core     :as conman]
-            [clj-time.format :as timef] 
-            [clj-time.coerce :as timec]))
+            [environ.core    :as environ]
+            [mount.core      :as mount]))
 
 (def pool-spec
   {
