@@ -21,5 +21,8 @@
   ; :main ^:skip-aot twitter-retriever.core
   :main ^:skip-aot twitter-retriever.work
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}}
+  ; :repl-options { :skip-default-init true}
+
+  )
 
