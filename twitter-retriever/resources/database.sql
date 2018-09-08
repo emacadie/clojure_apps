@@ -23,7 +23,7 @@ create table twitter_tweet (
     auto_id                   serial primary key not null, -- provided by postgres
     tweet_id_str              character varying ( 100 ) not null, -- via twitter as id_str
     tweet_id                  bigint unique not null, -- provided by twitter as id
-    full_text                 character varying ( 500 ) not null,
+    full_text                 character varying ( 2056 ) not null,
     -- display_text_range        int not null,
     user_id                   bigint not null, -- user who sent tweet
     user_id_str               character varying ( 100 ) not null,
