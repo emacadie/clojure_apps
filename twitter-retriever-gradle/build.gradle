@@ -151,44 +151,7 @@ task(console, dependsOn: 'classes', type: JavaExec) {
   main = 'groovy.ui.Console'
   classpath = sourceSets.main.runtimeClasspath
 }
-/*
-checkstyle {
-  // configProperties = [translation.severity: 'warn'] // [tabWidth: 10, translation.severity: 'warn']
-  // Map<String, Object> configProperties = new HashMap<String, Object>()
-// configProperties.put('translation.severity', 'warn')
-// apply(configProperties)
-   // configProperties {
-     // translation.serverity = 'warning'
-   // }
 
-   // def configProperties = [ "translation.severity":"warning"] // , likes:"cheese", id:1234]
-   // this works:
-   // configProperties = [ "translation.severity":"warning"] // , likes:"cheese", id:1234]
-   // these two together work:
-   // configProperties = new HashMap<String, Object>()
-   // configProperties.put('translation.severity', 'warning')
-   // this also works
-   configProperties.put('translation.severity', 'warning')
-   println("configProperties is a " + configProperties.getClass().getName())
-}
-*/
-/*
-task sourceSetProperties << {
-	sourceSets {
-		main {
-			println "java.srcDirs = ${java.srcDirs}"
-			println "resources.srcDirs = ${resources.srcDirs}"
-			println "java.files = ${java.files.name}"
-			println "allJava.files = ${allJava.files.name}"
-			println "resources.files = ${resources.files.name}"
-			println "allSource.files = ${allSource.files.name}"
-			println "output.classesDir = ${output.classesDir}"
-			println "output.resourcesDir = ${output.resourcesDir}"
-			println "output.files = ${output.files}"
-		}
-	}
-}
-*/
 
 // task callClojure(type: ClojureExec) {
 //     main = "twitter-retriever.work/-main"
