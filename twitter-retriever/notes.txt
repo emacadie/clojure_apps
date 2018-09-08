@@ -10,7 +10,7 @@ or require
 in repl:
 (require '[clojure.java.io :as io])
 (require '[clojure.java.io :as io])
-(require '[twitter-retriever.core :as tr-c])
+(require '[twitter-retriever.work :as tr-w])
 (require 'ss :as ss)
 This did not work: (require 'twitter-retriever.core :as tr-c)
 https://stackoverflow.com/questions/7658981/how-to-reload-a-clojure-file-in-repl
