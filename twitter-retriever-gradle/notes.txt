@@ -1,0 +1,170 @@
+Prop file at twit-r.properties for now
+Database:
+
+lein deps
+lein compile
+lein run :greeting "hello" :filepath "/home/ericm/tmp/clojure/twitter-retriever/twit-r.properties"
+
+Reload in the repl: (use 'your.namespace :reload) or (use 'your.namespace :reload-all)
+or require
+in repl:
+(require '[clojure.java.io :as io])
+(require '[clojure.java.io :as io])
+(require '[twitter-retriever.core :as tr-c])
+(require 'ss :as ss)
+This did not work: (require 'twitter-retriever.core :as tr-c)
+https://stackoverflow.com/questions/7658981/how-to-reload-a-clojure-file-in-repl
+(require 'my.namespace :reload-all)
+using reload in code (inside ns):
+(ns ted.core
+  (:require [ted.db :refer [db-con]]
+            [ted.sql :as sql]
+            [clojure.pprint :as pprint]))
+
+Another reload option, run both of these:
+(require '[clojure.tools.namespace.repl])
+(clojure.tools.namespace.repl/refresh)
+or:
+(require '[clojure.tools.namespace.repl :refer [refresh]])
+or: (require '[clojure.tools.namespace.repl :as repl])
+(refresh)
+Another option:
+https://github.com/grampelberg/lein-autoreload
+This did not work
+
+to get to repl in emacs: M-x cider-jack-in
+
+;; If you’re new to CIDER it is highly recommended to go through its
+;; manual first. Type <M-x cider-view-manual> to view it.
+;; In case you’re seeing any warnings you should consult the manual’s
+;; "Troubleshooting" section.
+;;
+;; Here are few tips to get you started:
+;;
+;; * Press <C-h m> to see a list of the keybindings available (this
+;;   will work in every Emacs buffer)
+;; * Press <,> to quickly invoke some REPL command
+;; * Press <C-c C-z> to switch between the REPL and a Clojure file
+;; * Press <M-.> to jump to the source of something (e.g. a var, a
+;;   Java method)
+;; * Press <C-c C-d C-d> to view the documentation for something (e.g.
+;;   a var, a Java method)
+;; * Enable ‘eldoc-mode’ to display function & method signatures in the minibuffer.
+;; * Print CIDER’s refcard and keep it close to your keyboard.
+
+From lein notes:
+Providing a -m argument will tell Leiningen to look for the -main function in another namespace. Setting a default :main in project.clj lets you omit -m.
+Using example from https://github.com/clojure/tools.cli#example-usage
+lein run -m twitter-retriever.cline -vvvp8080 foo --help --invalid-opt
+Or
+lein run  -vvvp8080 foo --help --invalid-opt
+or
+lein run -m twitter-retriever.cline --port 8080 foo --help --invalid-opt
+That also sets port to 8080
+Not clear what is going on with "v"
+They are counting the number of v's, which is a really weird way to do it in my opinion
+
+lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log"
+
+lein run -m twitter-retriever.work --port 8080 -vv 3 --file-path "/usr/local/log"
+lein run -m twitter-retriever.work --port 8080 --action=retrieve-tweets --file-path "/usr/local/log"
+lein run -m twitter-retriever.work --port 8080 --action=create-user --user=
+lein run -m twitter-retriever.work  --action=create-user --user= --oauth=
+
+
+lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/usr/local/log" --kk
+In cline
+here is something: {:options {:port 8080, :verbosity 2, :file-path /usr/local/log}, :arguments [3], :summary   -p, --port PORT            80  Port number
+  -v                             Verbosity level
+  -f, --file-path FILE_PATH      File path
+  -h, --help, :errors [Unknown option: "--kk"]}
+
+lein run -m twitter-retriever.cline --port 8080 -vv 3 --file-path "/home/ericm/tmp/clojure/twitter-retriever/twit-r.properties" --kk
+
+lein run -m twitter-retriever.work --port 8080 --action=create-user --user=EMacAdie
+
+Find keys with word "data" in environ map:
+(filter #(s/includes? (s/lower-case %) "data") (keys env))
+For system environment:
+(def system-map (System/getenv))
+(filter #(s/includes? (s/lower-case %) "data") (keys system-map))
+
+Maybe cprop is the way to go
+https://github.com/tolitius/cprop
+
+At the repl:
+(require '[environ.core :refer [env]])
+(env :client-token)
+
+(use '[twitter.oauth]
+     '[twitter.callbacks]
+     '[twitter.callbacks.handlers]
+     '[twitter.api.restful])
+(import twitter.callbacks.protocols SyncSingleCallback)
+(def my-creds (make-oauth-creds (env :app-consumer-key)
+                                (env :app-consumer-secret)
+                                (env :user-access-token)
+                                (env :user-access-token-secret)))
+(users-show :oauth-creds my-creds :params {:screen-name "EMacAdie"})
+https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-show
+
+
+I will probably use this a lot:
+https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline.html
+
+(statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" :since-id 772855238608818176})
+
+(statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" :since-id 772855238608818176 :tweet_mode "extended"})
+(statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" 
+                        :since-id 772855238608818176 
+                        :tweet_mode "extended"
+                        :trim_user true
+                        :include_rts true})
+
+
+To get one tweet
+https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-statuses-show-id
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :trim_user true})
+
+This did not get full text:
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :truncated "false"})
+
+(statuses-show-id :oauth-creds my-creds :params{:id 966910875159244800 :tweet_mode "extended"})
+That works
+
+See https://developer.twitter.com/en/docs/tweets/tweet-updates
+
+iterative regex work:
+(re-find (re-matcher #"(\w{3})\s(\w{3}\s\d{2})" "Sun Dec 20 18:17:33 +0000 2009"))
+(re-find (re-matcher #"(\w{3})\s(\w{3}\s\d{2})\s\d{2}\p{Punct}\d{2}\p{Punct}" "Sun Dec 20 18:17:33 +0000 2009"))
+(re-find (re-matcher #"(\w{3})\s(\w{3}\s\d{2})\s(\d{2}\p{Punct}\d{2}\p{Punct}\d{2})\s\+\d{4}\s(\d{4})" "Sun Dec 20 18:17:33 +0000 2009"))
+(re-matches #"(\w{3})\s(\w{3})\s(\d{2})\s(\d{2}\p{Punct}\d{2}\p{Punct}\d{2})\s\+\d{4}\s(\d{4})" "Sun Dec 20 18:17:33 +0000 2009")
+You can only call (re-find matcher)
+once on a match
+Postgres time stamp:
+1999-01-08 04:05:06
+
+(clojure.string/replace "Let's work on some #Clojure at #CapitalFactory" #"(\#\w+)" "$1$1ay")
+(clojure.string/replace "Let's work on some #Clojure at #CapitalFactory" #"(\#\w+)" "<a href=\"https://twitter.com/hashtag/$1?src=hash\">$1</a>")
+(clojure.string/replace "Let's work on some @Clojure at @CapitalFactory" #"(\@\w+)" "<a href=\"http://twitter.com/$1\">$1</a>")
+
+Get every key except :user from a map containing a status:
+(filter #(not (contains? '#{:user} %1)) (keys (nth status-body 2)))
+
+(def t-map (statuses-user-timeline :oauth-creds my-creds :params {:screen-name "EMacAdie" :since-id 772855238608818176 :tweet_mode "extended"}))
+(def t-body (:body t-map))
+(doseq [the-body t-body]
+    (println "Here is id: ", (:id the-body), " Here is text: ", (:full_text the-body)))
+
+lowest tweet id so far: 499661460461477890
+
+select * from twitter_user where lower( screen_name ) = lower( 'SHINZENYOUNG' );
+
+To get user from number: 
+https://twitter.com/intent/user?user_id=3077765161
+
+To do 'lein uberjar', the db properties have to be in the environment when you compile:
+Do this:
+export DATABASE_URL="postgres://localhost:5433/twit_retrieve_dev_db?user=twit_getter&password=this-is-twitter"
+export DB_DRIVER=org.postgresql.Driver
+

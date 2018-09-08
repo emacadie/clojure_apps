@@ -1,0 +1,15 @@
+Two new tasks: 
+clojureRepl - Run Clojure repl.
+clojureRun - Run a Clojure command.
+
+Example: clojureRun --fn='my-ns/my-fn arg1 arg2'
+
+I had to put statements.sql in both src/main/clojure/twitter_retriever/sql for compiling, 
+and resources/twitter_retriever/sql for deploying.   
+You can also:
+after running gradle distZip and unzipping the file, do this:
+cd twitter-retriever-gradle/
+bin/twitter-retriever-gradle --user=TweetsToGet --oauth=YourID
+hh
+
+

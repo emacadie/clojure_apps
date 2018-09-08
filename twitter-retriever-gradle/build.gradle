@@ -1,0 +1,199 @@
+buildscript {
+  repositories {
+    maven {
+          url "https://plugins.gradle.org/m2/"
+    }
+  }
+    dependencies {
+      classpath "com.netflix.nebula:nebula-clojure-plugin:5.1.0"  
+    }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'groovy'
+// do not run this every single time
+// apply plugin: 'checkstyle'
+apply plugin: 'nebula.clojure'
+apply plugin: 'application'
+
+repositories {
+  mavenCentral()
+}
+
+allprojects {
+  dependencies {
+    testCompile 'junit:junit:4.10'
+    testCompile 'org.mockito:mockito-all:[1.8.5,)'
+    // From Maven, it's GroupId:ArtifactId:Version 
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+
+    // testCompile ''
+    compile 'commons-codec:commons-codec:1.6'
+    compile 'log4j:log4j:1.2.17'
+
+    // logging
+    compile 'org.slf4j:slf4j-api:1.7.+'
+    testRuntime 'org.slf4j:slf4j-ext:1.7.+'
+    testRuntime 'org.slf4j:jcl-over-slf4j:1.7.+'
+    testRuntime 'org.slf4j:jul-to-slf4j:1.7.+'
+    testRuntime 'org.slf4j:log4j-over-slf4j:1.7.+'
+    
+    testRuntime 'ch.qos.logback:logback-core:1.0.+'
+    testRuntime 'ch.qos.logback:logback-classic:1.0.+'
+
+    // compile 'org.codehaus.groovy:groovy-all:2.4.8'
+
+    // for clojure
+    compile 'org.clojure:clojure:1.9.0'
+    // compile "camel-snake-kebab:camel-snake-kebab:0.4.0"
+    compile 'org.clojure:tools.nrepl:0.2.12'
+    compile "clojuresque:clojuresque-nrepl-runtime:1.2.0"
+    compile 'org.clojure:tools.cli:0.3.7'
+    compile 'twitter-api:twitter-api:1.8.0'
+    compile 'environ:environ:1.1.0'
+    compile 'mount:mount:0.1.12'
+    compile 'conman:conman:0.8.2'
+    compile 'clj-time:clj-time:0.14.4'
+    compile 'clojurewerkz:propertied:1.3.0'
+    compile 'org.postgresql:postgresql:42.2.4'
+    compile 'cprop:cprop:0.1.11'
+  }
+
+sourceSets {
+        main {
+            // java {
+            //     srcDir 'src/java'
+            // }
+            resources {
+                srcDir 'resources'
+            }
+            // clojure {
+            // srcDir 'src'
+            // }
+        }
+    }
+
+
+  tasks.withType( JavaCompile ) { JavaCompile compile ->
+    compile.options.debug = true
+    compile.options.compilerArgs = [
+      '-Xlint:deprecation',
+      '-Xlint:unchecked'
+      ]
+  }
+
+}
+
+test {
+  maxParallelForks = 5
+  forkEvery = 50
+  // this will make it run the test every time you run 'gradle test'
+  outputs.upToDateWhen { false }
+}
+
+task runJava(type: JavaExec) {
+     println( "-- Groovy version: " + groovy.lang.GroovySystem.getVersion() )
+     dependsOn classes
+     description = 'Run gradle.sample.SampleApp'
+     // Java main class to execute.
+     if ( rootProject.hasProperty("mainClass") ) {     
+     	main = mainClass
+     } else {
+       main = 'org.lookup'
+     }
+     // We need to set the classpath.
+     classpath sourceSets.main.runtimeClasspath
+     // Extra options can be set.
+     systemProperty 'sysProp', 'notUsed'
+     println System.properties['iterations'] 
+     systemProperty 'iterations', System.properties['iterations'] 
+     // you can use this if nothing is set via command line
+     // systemProperties = System.getProperties()
+     jvmArgs '-server'
+     // We can pass arguments to the main() method
+     if ( rootProject.hasProperty( "mainArgs" ) ) {     
+     	args = mainArgs.tokenize() // args wants a List, so split by spaces if need be
+     } 
+}
+
+task runGroovy(type: JavaExec) {
+     println( "-- Groovy version: " + groovy.lang.GroovySystem.getVersion() )
+     dependsOn classes
+     description = 'Run gradle.sample.SampleApp'
+     // main class to execute
+     if ( rootProject.hasProperty("mainClass") ) {     
+     	main = mainClass
+     } else {
+       main = 'org.lookup'
+     }
+     // We need to set the classpath.
+     classpath sourceSets.main.runtimeClasspath
+     // Extra options can be set.
+     systemProperty 'sysProp', 'notUsed'
+     jvmArgs '-client'
+     // We can pass arguments to the main() method
+     if ( rootProject.hasProperty( "mainArgs" ) ) {     
+     	args = mainArgs.tokenize() // args wants a List, so split by spaces if need be
+     } 
+}
+
+task showProperties {
+  doLast {
+    println "Version: $version"
+    println "Custom property: $customProperty"
+  }
+}
+
+// you can type "gradle console" and get a console with all your classes
+task(console, dependsOn: 'classes', type: JavaExec) {
+  main = 'groovy.ui.Console'
+  classpath = sourceSets.main.runtimeClasspath
+}
+/*
+checkstyle {
+  // configProperties = [translation.severity: 'warn'] // [tabWidth: 10, translation.severity: 'warn']
+  // Map<String, Object> configProperties = new HashMap<String, Object>()
+// configProperties.put('translation.severity', 'warn')
+// apply(configProperties)
+   // configProperties {
+     // translation.serverity = 'warning'
+   // }
+
+   // def configProperties = [ "translation.severity":"warning"] // , likes:"cheese", id:1234]
+   // this works:
+   // configProperties = [ "translation.severity":"warning"] // , likes:"cheese", id:1234]
+   // these two together work:
+   // configProperties = new HashMap<String, Object>()
+   // configProperties.put('translation.severity', 'warning')
+   // this also works
+   configProperties.put('translation.severity', 'warning')
+   println("configProperties is a " + configProperties.getClass().getName())
+}
+*/
+/*
+task sourceSetProperties << {
+	sourceSets {
+		main {
+			println "java.srcDirs = ${java.srcDirs}"
+			println "resources.srcDirs = ${resources.srcDirs}"
+			println "java.files = ${java.files.name}"
+			println "allJava.files = ${allJava.files.name}"
+			println "resources.files = ${resources.files.name}"
+			println "allSource.files = ${allSource.files.name}"
+			println "output.classesDir = ${output.classesDir}"
+			println "output.resourcesDir = ${output.resourcesDir}"
+			println "output.files = ${output.files}"
+		}
+	}
+}
+*/
+
+// task callClojure(type: ClojureExec) {
+//     main = "twitter-retriever.work/-main"
+// }
+
+// for application plug-in
+mainClassName = "clojure.main --main twitter-retriever.work" 
+

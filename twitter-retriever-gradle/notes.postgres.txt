@@ -1,0 +1,72 @@
+create user twit_getter with password 'this-is-twitter';
+create database twit_gradle_dev_db with owner twit_getter;
+grant all privileges on database twit_gradle_dev_db to twit_getter;
+
+psql --port=5433 -h localhost -U twit_getter -d twit_gradle_dev_db 
+
+select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id;
+
+select max( t.tweet_id )
+from twitter_tweet t
+where t.user_id = (
+select u.user_id from twitter_user u
+where lower( u.screen_name ) = lower( 'someuser' )
+);
+
+select max( t.created_at )
+from twitter_tweet t
+where t.user_id = (
+select u.user_id from twitter_user u
+where lower( u.screen_name ) = lower( 'netflix' )
+);
+
+
+select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'someuser' );
+
+select t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'SomeUser' )
+order by t.created_at;
+
+select * from twitter_tweet where tweet_id = (select max(tweet_id) from twitter_tweet);
+
+select t.auto_id, t.tweet_id, t.created_at, t.user_id, u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and t.user_id = 354036155 order by t.record_created_at;
+
+select name, screen_name, created_at, record_created_at from twitter_user ;
+
+delete from twitter_tweet t where t.user_id in 
+( 
+    select u.user_id 
+    from twitter_user u 
+    where lower( u.screen_name ) = lower( 'someuser' )  
+);
+
+delete from twitter_user where lower( screen_name ) = lower( 'SomeUser' );
+
+select count( t.tweet_id ), u.screen_name 
+from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id 
+group by u.screen_name  
+order by u.screen_name;
+
+select count( t.tweet_id ) 
+from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id and lower( u.screen_name ) = lower( 'SomeUser' );
+
+select count( t.tweet_id ), u.screen_name from twitter_tweet t
+join twitter_user u on u.user_id = t.user_id group by u.screen_name order by u.screen_name desc;
+
+
+select count( p.tweet_id ), max( p.tweet_id), u.screen_name from processed_tweet p
+join twitter_user u on u.user_id = p.user_id group by u.screen_name;
+
+select t.batch_time, count( t.batch_time ) from twitter_tweet t where t.user_id = (
+    select u.user_id from twitter_user u
+    where lower( u.screen_name ) = lower( 'clojure' )
+) 
+group by t.batch_time
+order by t.batch_time;
+
+

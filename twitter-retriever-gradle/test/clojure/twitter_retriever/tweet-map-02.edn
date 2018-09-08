@@ -1,0 +1,36 @@
+{:in_reply_to_screen_name nil,
+ :is_quote_status false,
+ :coordinates nil,
+ :in_reply_to_status_id_str nil,
+ :place nil,
+ :possibly_sensitive false,
+ :geo nil,
+ :in_reply_to_status_id nil,
+ :entities
+ {:hashtags [{:text "Clojure", :indices [110 118]}],
+  :symbols [],
+  :user_mentions [],
+  :urls
+  [{:url "https://t.co/fjKWdYC6TV",
+    :expanded_url
+    "http://www.gigamonkeys.com/code-quarterly/2011/hal-abelson/",
+    :display_url "gigamonkeys.com/code-quarterly…",
+    :indices [81 104]}]},
+ :source
+ "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+ :lang "en",
+ :in_reply_to_user_id_str nil,
+ :full_text
+ "SICP author Hal Abelson says coders should read code, just as people read novels https://t.co/fjKWdYC6TV What #Clojure projects have code devs should read?",
+ :id 966910875159244800,
+ :contributors nil,
+ :display_text_range [0 155],
+ :truncated false,
+ :retweeted false,
+ :in_reply_to_user_id nil,
+ :id_str "966910875159244800",
+ :favorited false,
+ :user {:id 111373627, :id_str "111373627"},
+ :retweet_count 1,
+ :favorite_count 0,
+ :created_at "Fri Feb 23 05:41:31 +0000 2018"}
