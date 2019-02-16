@@ -1,6 +1,8 @@
 (ns twitter-retriever.rdbms
   (:require [clj-time.coerce :as timec]
             [clj-time.format :as timef]
+            [cprop.core :refer [load-config]]
+            [cprop.source :refer [from-system-props]]
             [conman.core     :as conman]
             [environ.core    :as environ]
             [mount.core      :as mount]))
@@ -11,6 +13,8 @@
     :jdbc-url (environ/env :database-url) 
     :driver-class-name (environ/env :db-driver ) 
     }))
+
+; (def config-map (load-config :merge [(from-system-props)]))
 
 (def pool-spec
   {
@@ -23,6 +27,7 @@
           :start (conman/connect! pool-spec)
           :stop (conman/disconnect! *db*))
 
+#_ (conman/bind-connection *db* (:statements-file config-map) )
 (conman/bind-connection *db* "twitter_retriever/sql/statements.sql")
 
 ;; from https://stackoverflow.com/questions/9305541/clojure-jdbc-postgresql-i-am-trying-to-update-a-timestamp-value-in-postgresql-f/9305737#9305737

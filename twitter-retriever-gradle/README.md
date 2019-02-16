@@ -2,6 +2,8 @@
 
 A Clojure app to automate the retrieval of tweets and write them to a database and print them to an HTML file.   
 
+This application uses gradle instead of leiningen. So far, the tests do not work.    
+
 The original plan was to use the WordPress REST API to post them to WordPress. I spent some time trying to do this and I was unsuccessful. So for the time being you will have to copy and paste.    
 
 You will be able to use cron to run this every day/week/whenever to archive your tweets and/or display them on your site.   
@@ -25,7 +27,6 @@ insert into twitter_auth (
 
 Right now I am running with lein. Here is a command:   
 ```shell
-lein run -m twitter-retriever.work --user=GitHub --oauth=YourNameHere
 gradle clojureRun --fn='twitter-retriever.work/-main --user=GitHub --oauth=YourNameHere'
 ```
 

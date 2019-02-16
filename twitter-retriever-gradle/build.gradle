@@ -95,6 +95,8 @@ test {
 
 task runJava(type: JavaExec) {
      println( "-- Groovy version: " + groovy.lang.GroovySystem.getVersion() )
+     println( "In runJava, here is system prop of conf: ${System.properties[ 'conf' ] }" )
+     
      dependsOn classes
      description = 'Run gradle.sample.SampleApp'
      // Java main class to execute.
@@ -106,12 +108,15 @@ task runJava(type: JavaExec) {
      // We need to set the classpath.
      classpath sourceSets.main.runtimeClasspath
      // Extra options can be set.
+     systemProperty "browser", "chrome"
      systemProperty 'sysProp', 'notUsed'
-     println System.properties['iterations'] 
+     println "Iterations: " + System.properties['iterations'] 
      systemProperty 'iterations', System.properties['iterations'] 
      // you can use this if nothing is set via command line
-     // systemProperties = System.getProperties()
-     jvmArgs '-server'
+     systemProperties = System.getProperties()
+     jvmArgs = ["-Dbrowser=wwww", "-Dsun.net.inetaddr.ttl=60", "-Djava.security.egd=file:/dev/./urandom"]
+     jvmFlags = ["-Dbrowser=flags", "-Dsun.net.inetaddr.ttl=60", "-Djava.security.egd=file:/dev/./urandom"]
+     // jvmArgs '-server' 
      // We can pass arguments to the main() method
      if ( rootProject.hasProperty( "mainArgs" ) ) {     
      	args = mainArgs.tokenize() // args wants a List, so split by spaces if need be
@@ -119,7 +124,7 @@ task runJava(type: JavaExec) {
 }
 
 task runGroovy(type: JavaExec) {
-     println( "-- Groovy version: " + groovy.lang.GroovySystem.getVersion() )
+     println( "-- Groovy version in runGroovy: " + groovy.lang.GroovySystem.getVersion() )
      dependsOn classes
      description = 'Run gradle.sample.SampleApp'
      // main class to execute
@@ -139,6 +144,16 @@ task runGroovy(type: JavaExec) {
      } 
 }
 
+[ run ].each { runTask ->
+    configure( runTask ) {
+        systemProperties System.properties
+        jvmArgs = ["-Dbrowser=wwww", "-Dsun.net.inetaddr.ttl=60", "-Djava.security.egd=file:/dev/./urandom"]
+     jvmFlags = ["-Dbrowser=flags", "-Dsun.net.inetaddr.ttl=60", "-Djava.security.egd=file:/dev/./urandom"]
+    }
+}
+
+
+
 task showProperties {
   doLast {
     println "Version: $version"
@@ -152,11 +167,9 @@ task(console, dependsOn: 'classes', type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
 }
 
-
-// task callClojure(type: ClojureExec) {
-//     main = "twitter-retriever.work/-main"
-// }
-
 // for application plug-in
 mainClassName = "clojure.main --main twitter-retriever.work" 
+// applicationDefaultJvmArgs = ["-Dclojure.awesome=of-course-it-is"]
+applicationDefaultJvmArgs = ["-Dbrowser=of-course-it-is"]
+
 
