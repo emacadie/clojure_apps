@@ -26,16 +26,32 @@
     (test/is (= "12 PM" (to-american-time 12)))
     (test/is (= "11 AM" (to-american-time 11)))))
 
-;;> (european-time '(8 am))
-;;8
-;;> (european-time '(4 pm))
-;;16
-;;> (european-time '(12 am))
-;;24
 (test/deftest test-to-european-time
   (test/testing "Testing to-european-time"
     (test/is (= "8" (to-european-time "8 AM")))
-)  
-)
+    (test/is (= "0" (to-european-time "12 AM")))
+    (test/is (= "11" (to-european-time "11 AM")))
+    (test/is (= "12" (to-european-time "12 PM")))
+    (test/is (= "16" (to-european-time "4 PM")))
+    (test/is (thrown? java.lang.NumberFormatException (to-european-time "XX PM")))))
 
+(test/deftest test-teen?
+  (test/testing "Testing teen?"
+    (test/is (= false (teen? "14")))
+    (test/is (= false (teen? :14)))
+    (test/is (= false (teen? 12)))
+    (test/is (= true (teen? 13)))
+    (test/is (= true (teen? 19)))
+    (test/is (= false (teen? 20)))))
+
+(test/deftest test-type-of
+  (test/testing "Testing type-of"
+    ; (test/is (= :boolean (type-of true)))
+    (test/is (= :number (type-of 33)))
+    (test/is (= :number (type-of 33.33)))
+    (test/is (= :sentence (type-of "this is a sentence")))
+    (test/is (= :word (type-of "thisisaword")))
+    (test/is (= :nothing (type-of [1 2 3 4])))
+)
+)
 

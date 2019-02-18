@@ -29,7 +29,7 @@
 
 ;; Real Exercises
 ;; Note: Writing helper procedures may be useful in solving some of these problems.
-;;6.5  Write a procedure european-time to convert a time from American AM/PM notation into European 24-hour notation. 
+;; 6.5  Write a procedure european-time to convert a time from American AM/PM notation into European 24-hour notation. 
 ;; Also write american-time, which does the opposite:
 
 ;; Assume "number" is an integer, not a string
@@ -40,22 +40,44 @@
         (= number 12) (str "12 PM")
         (helper/number-tween-inclusive number 13 23) (str (- number 12) " PM")
         :else (str "12 AM")))
-(comment
-(define (european-time time)
-  ;; (display-all "first time: " (first time))
-  (cond ((equal? (first time) "12")
-         (if (equal? (second time) "am")
-             (display-all "0")
-             (display-all "12")))
-        ((equal? (second time) "am") (display-all (first time)))
-        ((equal? (second time) "pm") (display-all (+ (first time) 12)))))
-)
+
 (defn to-european-time [time]
-  (cond (= (helper/second-string time) "AM") (str (helper/first-string time))
-        (= (helper/second-string time) "PM") (str (helper/first-string time))
-        :else time
-)
-)
+  (cond (and (= (helper/first-string time) "12") (= (helper/second-string time) "AM")) (str "0") 
+        (and (= (helper/first-string time) "12") (= (helper/second-string time) "PM")) (str "12") 
+        (= (helper/second-string time) "AM") (str (helper/first-string time))
+        ;; I am not clear why it only worked when the call to integer? was placed second
+        (and (= (helper/second-string time) "PM") (integer? (Integer/parseInt (helper/first-string time)))) 
+          (str (+ (Integer/parseInt (helper/first-string time)) 12))
+        :else time))
 
+;; 6.6  Write a predicate teen? that returns true if its argument is between 13 and 19.
+(defn teen? [number]
+  (cond (not (integer? number)) false
+        (helper/number-tween-inclusive number 13 19) true
+        :else false))
 
+;; 6.7  Write a procedure type-of that takes anything as its argument and returns one of the words word, sentence, number, or boolean:
+;; boolean? is in 1.9
+(defn type-of [arg]
+  (cond ; (boolean? arg) :boolean
+        (number? arg) :number
+        (and (string? arg) (not (helper/string-is-word))) :sentence
+        (and (string? arg) (helper/string-is-word)) :word
+        :else :nothing))
+
+;; 6.8  Write a procedure indef-article that works like this:
+;; ** examples omitted **
+;; I only deal w/ words, not sentences
+;; there is a better vowel up above
+(comment
+(define (vowel? arg)
+  (cond ((or (equal? arg "a") (equal? arg "e") (equal? arg "i") (equal? arg "o") (equal? arg "u")) #t)
+        ((or (equal? arg "a") (equal? arg "E") (equal? arg "I") (equal? arg "O") (equal? arg "U")) #t)
+      (else #f)))
+      
+(define (indef-article arg)
+  (cond ((and (word? arg) (vowel? (first arg))) (display-all "an " arg))
+        ((word? arg) (display-all "a " arg))
+(else arg)))
+)
 
