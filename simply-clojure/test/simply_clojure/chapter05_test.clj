@@ -1,8 +1,6 @@
 (ns simply-clojure.chapter05-test
   (:require [clojure.test :as test]
-            [simply-clojure.chapter05 :refer :all]
-            ; [simply-clojure.helper :as helper]
-))
+            [simply-clojure.chapter05 :refer :all]))
 
 (test/deftest test-third
   (test/testing "Testing third"

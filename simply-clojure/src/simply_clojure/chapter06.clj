@@ -3,25 +3,12 @@
             [simply-clojure.helper :as helper]))
 
 ;; 6.3  Rewrite the following procedure using a cond instead of the ifs:
-(comment
-  (define (sign number)
-  (if (< number 0)
-      'negative
-      (if (= number 0)
-            'zero
-'positive)))
-)
 (defn sign-number [the-num]
   (cond (pos? the-num) :positive
         (neg? the-num) :negative
         :else :zero))
 
 ;; 6.4  Rewrite the following procedure using an if instead of the cond:
-(comment
-  (define (utensil meal)
-  (cond ((equal? meal 'chinese) 'chopsticks)
-        (else 'fork)))
-)
 (defn if-utensil [meal]
   (if (= meal :Chinese)
     :chopsticks
@@ -102,7 +89,8 @@
         (= num 1) (str "1 " thing)
         :else (str num " " (plural thing))))
 
-;; 6.10  Write a procedure sort2 that takes as its argument a sentence containing two numbers. It should return a sentence containing the same two numbers, but in ascending order:
+;; 6.10  Write a procedure sort2 that takes as its argument a sentence containing two numbers. 
+;; It should return a sentence containing the same two numbers, but in ascending order:
 (defn sort2 [nums]
 "nums is a vector of two numbers"
   (cond (or (not (number? (get nums 0))) (not (number? (get nums 1)))) (str "one of your nums is not a number: " nums)
@@ -141,15 +129,7 @@
         :else false))
 
 ;; 6.14  Write a procedure describe-time that takes a number of seconds as its argument and returns a more useful description of that amount of time:
-(comment
-(define (describe-time time)
-  (cond ((not (number? time)) time)
-        ((not (positive? time)) time)
-        
-        
-        ((>= time 60) (sentence (+ (quotient time 60) (inexact (/ (remainder time 60) 60))) 'MINUTES))
-        (else (sentence time 'SECONDS))))
-)
+
 ;; it seems to have an issue with large numbers
 (defn get-time-number 
   ([time num-sec round-factor]

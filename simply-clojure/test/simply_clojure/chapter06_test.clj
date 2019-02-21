@@ -1,8 +1,6 @@
 (ns simply-clojure.chapter06-test
   (:require [clojure.test :as test]
-            [simply-clojure.chapter06 :refer :all]
-            ; [simply-clojure.helper :as helper]
-))
+            [simply-clojure.chapter06 :refer :all]))
 
 (test/deftest sign-test
   (test/testing "Testing sign-test"

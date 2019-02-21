@@ -1,11 +1,12 @@
 # simply-clojure
 
-A Clojure library designed to ... well, that part is up to you.
+"Simply Scheme" in Clojure.
 
 ## Usage
 
 FIXME
-
+(require '[clojure.tools.namespace.repl :as repl])
+(repl/refresh)
 ## License
 
 Copyright © 2019 FIXME
