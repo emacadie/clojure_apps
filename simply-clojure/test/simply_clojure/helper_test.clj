@@ -13,6 +13,15 @@
   (test/testing "Working with string 'thisisalongword'"
     (test/is (= true (string-is-word "thisisalongword")))))
 
+(test/deftest test-vowel?
+  (test/testing "Testing vowel?"
+    (test/is (= true (vowel? "A")))
+    (test/is (= true (vowel? "a")))
+    (test/is (= false (vowel? "B")))
+    (test/is (= false (vowel? "b")))
+)
+)
+
 (test/deftest test-butfirst-string
   (test/testing "Testing a string 'this is a sentence'"
     (test/is (= "is a sentence" (butfirst-string "this is a sentence"))))

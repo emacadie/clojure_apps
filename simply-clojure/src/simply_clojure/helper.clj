@@ -13,6 +13,11 @@
     true
     false))
 
+(defn vowel? [the-string]
+  (cond (not (string? the-string)) false
+        (contains? #{"A", "E", "I", "O", "U", "a", "e", "i", "o", "u"} the-string) true
+        :else false))
+
 (defn butfirst-string [the-string]
   (if (string-is-word the-string)
     (subs the-string 1)
