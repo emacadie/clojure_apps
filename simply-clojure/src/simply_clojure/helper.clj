@@ -1,15 +1,20 @@
-(ns simply-clojure.helper)
+(ns simply-clojure.helper
+  (:require [clojure.string :as str])
+)
 
 (defn queue
   ([] (clojure.lang.PersistentQueue/EMPTY))
   ([coll]
     (reduce conj clojure.lang.PersistentQueue/EMPTY coll)))
 
+(defn square [x]
+  (* x x))
+
 (defn butlast-q [my-queue]
   (reverse (pop (reverse my-queue))))
 
 (defn string-is-word [the-string]
-  (if (nil? (clojure.string/index-of the-string " "))
+  (if (nil? (str/index-of the-string " "))
     true
     false))
 
@@ -21,20 +26,20 @@
 (defn butfirst-string [the-string]
   (if (string-is-word the-string)
     (subs the-string 1)
-    (subs the-string (inc (clojure.string/index-of the-string " ")))))
+    (subs the-string (inc (str/index-of the-string " ")))))
 
 (defn first-string [the-string]
   (if (string-is-word the-string)
     (subs the-string 0 1)
-    (subs the-string 0 (clojure.string/index-of the-string " "))))
+    (subs the-string 0 (str/index-of the-string " "))))
 
 (defn last-string [the-string]
   (if (string-is-word the-string)
-    (first-string (clojure.string/reverse the-string))
-    (clojure.string/reverse (first-string (clojure.string/reverse the-string)))))
+    (first-string (str/reverse the-string))
+    (str/reverse (first-string (str/reverse the-string)))))
 
 (defn butlast-string [the-string]
-  (clojure.string/reverse (butfirst-string (clojure.string/reverse the-string))))
+  (str/reverse (butfirst-string (str/reverse the-string))))
 
 (defn second-string [the-string]
   (cond (not (string? the-string)) the-string 
@@ -44,6 +49,13 @@
 
 (defn number-tween-inclusive [number lower upper]
   (and (>= number lower) (<= number upper)))
+
+;; that slick string splitter from https://clojuredocs.org/clojure.string/split
+(defn split-word-to-letters [the-word]
+  (str/split the-word #""))
+
+(defn split-string-to-words [the-word]
+  (str/split the-word #" "))
 
 ;; from http://clojure-doc.org/articles/language/functions.html
 ;; Is this in any library? It seems pretty useful.

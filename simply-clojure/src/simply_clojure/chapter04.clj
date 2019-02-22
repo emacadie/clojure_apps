@@ -22,10 +22,9 @@
   (* x x x x))
 ;; and with square. Scheme has a square function, Clojure does not.
 ;; I might move this to another namespace
-(defn square [x]
-  (* x x))
+
 (defn fourth-with-square [x]
-  (square (square x)))
+  (helper/square (helper/square x)))
 ;; for fun, use reduce
 (defn fourth-with-reduce [x]
   (reduce * 1 [x x x x]))
@@ -47,8 +46,8 @@
 ;; hard to do without if (which is chapter 6)
 (defn simply-abs [x]
   (if (pos? x)
-    (/ (square x) x)
-    (/ (square x) (* -1 x))))
+    (/ (helper/square x) x)
+    (/ (helper/square x) (* -1 x))))
 
 ;; 4.8  "Scientific notation" is a way to represent very small or very large numbers by combining a medium-sized number with a power of 10. 
 ;; For example, 5×107 represents the number 50000000, while 3.26×10-9 represents 0.00000000326 in scientific notation. 
