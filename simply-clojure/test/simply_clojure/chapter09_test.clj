@@ -14,8 +14,16 @@
     (test/is (= '("i" "i" "f") ((sentence-version helper/first-string) (helper/split-string-to-words "if i fell"))))))
 
 (test/deftest test-letterwords
-  (test/testing "Test lettewords"
+  (test/testing "Test letterwords"
     (test/is (= '("got" "to" "you" "into") (letterwords "o" "got to get you into my life")))))
+
+(test/deftest test-hang
+  (test/testing "Test hang"
+    (test/is (= '("_" "o" "t" "_" "t" "i" "_" "_" "e" "_") (hang "potsticker" "etaoi")))))
+
+(test/deftest test-common-words
+  (test/testing "Test common-words"
+    (test/is (= '("good" "this" "thing") (common-words "this is good thing" "what good can this little thing do")))))
 
 
 
