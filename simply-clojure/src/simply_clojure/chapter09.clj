@@ -47,6 +47,29 @@
   (let [first-set (set (helper/split-string-to-words first-sen))]
     (filter #(contains? first-set %1) (helper/split-string-to-words second-sen))))
 
+;; 9.10  In Chapter 2 we used a function called appearances that returns 
+;; the number of times its first argument appears as a member of its second argument. 
+;; Implement appearances.
+;; this would be accumulate?
+;; no this is keep again
+;; Perhaps this could be a multi-method?
+(defn appearances-string [part whole]
+  (if (helper/string-is-word whole)
+    (count (filter #(= part %1) (helper/split-word-to-letters whole)))
+    (count (filter #(= part %1) (helper/split-string-to-words whole)))))
+
+(defmulti my-appearances (fn [the-map] (:type the-map)))
+
+(defmethod my-appearances :sentence
+  [the-map]
+  (count (filter #(= (:part the-map) %1) (helper/split-string-to-words (:whole the-map)))))
+
+(defmethod my-appearances :word [the-map]
+  (count (filter #(= (:part the-map) %1) (helper/split-word-to-letters (:whole the-map)))))
+
+(defmethod my-appearances :vector [the-map]
+  (count (filter #(= (:part the-map) %1) (:whole the-map))))
+
 
 
 

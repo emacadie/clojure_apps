@@ -25,5 +25,16 @@
   (test/testing "Test common-words"
     (test/is (= '("good" "this" "thing") (common-words "this is good thing" "what good can this little thing do")))))
 
+(test/deftest test-appearances
+  (test/testing "Testing appearances"
+    (test/is (= 2 (appearances-string "e" "feelings")))
+    (test/is (= 2 (appearances-string "hello" "hello goodbye hello again goodbye again nothing again")))))
 
+(test/deftest test-my-appearances
+  (test/testing "Testing my-appearances"
+    (test/is (= 2 (my-appearances {:type :word, :part "e" :whole "feelings"})))
+    (test/is (= 2 (my-appearances {:type :sentence :part "hello" :whole "hello goodbye hello again goodbye again nothing again" })))
+    (test/is (= 3 (my-appearances {:type :vector :part 2 :whole [1 2 3 2 4 2 5]})))
+)
+)
 
