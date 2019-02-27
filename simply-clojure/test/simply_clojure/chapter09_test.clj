@@ -34,7 +34,5 @@
   (test/testing "Testing my-appearances"
     (test/is (= 2 (my-appearances {:type :word, :part "e" :whole "feelings"})))
     (test/is (= 2 (my-appearances {:type :sentence :part "hello" :whole "hello goodbye hello again goodbye again nothing again" })))
-    (test/is (= 3 (my-appearances {:type :vector :part 2 :whole [1 2 3 2 4 2 5]})))
-)
-)
+    (test/is (= 3 (my-appearances {:type :vector :part 2 :whole [1 2 3 2 4 2 5]})))))
 
