@@ -36,3 +36,14 @@
     (test/is (= 2 (my-appearances {:type :sentence :part "hello" :whole "hello goodbye hello again goodbye again nothing again" })))
     (test/is (= 3 (my-appearances {:type :vector :part 2 :whole [1 2 3 2 4 2 5]})))))
 
+(test/deftest test-unabbrev
+  (test/testing "Testing unabbrev"
+    (test/is (= "John Bill Wayne Fred Joey" (unabbrev "John 1 Wayne Fred 4" "Bill Hank Kermit Joey")))
+    (test/is (= "I want to tell you" (unabbrev "I 3 4 tell 2" "Do you want to know a secret?")))))
+
+(test/deftest test-first-last
+  (test/testing "Testing first-last"
+    (test/is (= ["ohio" "alabama" "alaska"] (first-last ["california" "ohio" "nebraska" "alabama" "alaska" "delaware"])))))
+
+
+

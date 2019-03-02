@@ -47,6 +47,13 @@
         (string-is-word (butfirst-string the-string)) (butfirst-string the-string)
         :else (first-string (butfirst-string the-string))))
 
+(defn is-string-number? [s-num]
+  (try
+    (Double/parseDouble s-num)
+    true
+    (catch Exception Ex
+      false)))
+
 (defn number-tween-inclusive [number lower upper]
   (and (>= number lower) (<= number upper)))
 

@@ -69,18 +69,12 @@
 
 ;; 8.8  [12.5] Write an exaggerate procedure which exaggerates sentences:
 ;; It should double all the numbers in the sentence, and it should replace "good" with "great," "bad" with "terrible," and anything else you can think of.
-;; sounds like every with a dash of cond
-(defn is-string-number? [s-num]
-  (try
-    (Double/parseDouble s-num)
-    true
-    (catch Exception Ex
-      false)))
+;; sounds like every with a dash of condx
 
 (defn do-great-stuff [the-word]
   (cond (= the-word "good") (str "great ")
         (= the-word "bad") (str "terrible ")
-        (is-string-number?) (str (* 2 (Double/parseDouble the-word)) " ")
+        (helper/is-string-number?) (str (* 2 (Double/parseDouble the-word)) " ")
         :else (str the-word " ")))
 
 (defn exaggerate [the-sent]

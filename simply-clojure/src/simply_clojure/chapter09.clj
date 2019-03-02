@@ -70,6 +70,78 @@
 (defmethod my-appearances :vector [the-map]
   (count (filter #(= (:part the-map) %1) (:whole the-map))))
 
+;; 9.11  Write a procedure unabbrev that takes two sentences as arguments. 
+;; It should return a sentence that's the same as the first sentence, 
+;; except that any numbers in the original sentence should be replaced with words from the second sentence. 
+;; A number 2 in the first sentence should be replaced with the second word of the second sentence, a 6 with the sixth word, and so on.
+
+;; > (unabbrev '(john 1 wayne fred 4) '(bill hank kermit joey))
+;; (JOHN BILL WAYNE FRED JOEY)
+
+;; > (unabbrev '(i 3 4 tell 2) '(do you want to know a secret?))
+;; (I WANT TO TELL YOU)
+
+;; every something-with-second-sen first-sen
+;; use item somehow: (item 4 '(this is a sentence))
+;; he said not to use helper functions, but in 9.8 he did, so I will too
+;; or we will have a nasty lambda
+(defn- unabbrev-work [first-sent second-sent]
+  (let [second-vec (helper/split-string-to-words second-sent)]
+    (map (fn [x]
+           (if (helper/is-string-number? x)
+             (nth second-vec (dec (Double/parseDouble x)) " ")
+             x)) 
+         (helper/split-string-to-words first-sent))))
+
+(defn unabbrev [first-sen second-sen]
+  (clojure.string/join " " (unabbrev-work first-sen second-sen)))
+
+;;  9.12  Write a procedure first-last whose argument will be a sentence. 
+;; It should return a sentence containing only those words in the argument sentence whose first and last letters are the same:
+; > (first-last '(california ohio nebraska alabama alaska massachusetts))
+; (OHIO ALABAMA ALASKA)
+
+(defn first-last [the-sent]
+  (filter #(= (get %1 0) (get %1 (dec (count %1)))) the-sent))
+
+;;  9.13  Write a procedure compose that takes two functions f and g as arguments. 
+;; It should return a new function, the composition of its input functions, which computes f(g(x)) when passed the argument x.
+;> ((compose sqrt abs) -25)
+; 5
+; > (define secondf (compose first bf))
+; > (secondf '(higher order function))
+; ORDER
+;; maybe I am getting the hang of this
+(comment (define (compose first-func second-func )
+  (lambda (the-arg) (first-func (second-func the-arg))))
+)
+;; they say only one arg, so that is what I will do.
+;; I might look at source for comp later
+(defn compose [first-func second-func]
+  (fn [x]
+    (first-func (second-func x ))))
+
+;; I am totally failing on this one.
+;; Maybe you cannot make a function with variable arguments. 
+;; And Clojure does not handle types the same way Scheme does.
+;; 2019-02-26: Skipping for now.
+
+;; 9.14  Write a procedure substitute that takes three arguments, two words and a sentence. 
+;; It should return a version of the sentence, but with every instance of the second word replaced with the first word:
+
+;> (substitute 'maybe 'yeah '(she loves you yeah yeah yeah))
+; (SHE LOVES YOU MAYBE MAYBE MAYBE)
+
+
+(defn- substitute-word [first-word second-word the-sent]
+  (map (fn [x]
+         (if (= x second-word)
+           first-word
+           x))
+       (helper/split-string-to-words the-sent)))
+
+(defn substitute [first-word second-word the-sent]
+  (substitute-word first-word second-word the-sent))
 
 
 
