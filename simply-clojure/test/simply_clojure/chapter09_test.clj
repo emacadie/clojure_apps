@@ -1,7 +1,8 @@
 (ns simply-clojure.chapter09-test
   (:require [clojure.test :as test]
             [simply-clojure.chapter09 :refer :all]
-            [simply-clojure.helper :as helper]))
+            [simply-clojure.helper      :as helper]
+            [clojure.math.numeric-tower :as math-nt]))
 
 (test/deftest test-prepend-every
   (test/testing "Testing prepend-every"
@@ -45,5 +46,37 @@
   (test/testing "Testing first-last"
     (test/is (= ["ohio" "alabama" "alaska"] (first-last ["california" "ohio" "nebraska" "alabama" "alaska" "delaware"])))))
 
+(test/deftest test-compose
+  (test/testing "Testing compose"
+    (let [inc-square (compose inc helper/square)]
+      (test/is (= 17 (inc-square 4))))))
 
+(test/deftest test-substitute
+  (test/testing "Testing substitute"
+    (test/is (= "She loves you yeah yeah yeah" (substitute "yeah" "maybe" "She loves you maybe maybe maybe")))))
+
+(test/deftest test-type-check
+  (test/testing "Testing type-check"
+    (let [safe-square (type-check helper/square number?)]
+      (test/is (= false (safe-square "D")))
+      (test/is (= false (safe-square :4)))
+      (test/is (= 16 (safe-square 4)))
+      (test/is (= 16.0 (safe-square 4.0))))
+    (let [safe-sqrt (type-check math-nt/sqrt number?)]
+      (test/is (= false (safe-sqrt :hello)))
+      (test/is (= 4 (safe-sqrt 16))))))
+
+(test/deftest test-aplize
+  (test/testing "Testing aplize"
+    (let [apl-sqrt (aplize math-nt/sqrt)]
+      (test/is (= 6 (apl-sqrt 36)))
+      (test/is (= '(1 10 5 4) (apl-sqrt '(1 100 25 16))))
+      (test/is (= '(1 10 5 4) (apl-sqrt [1 100 25 16])))
+      (test/is (= '(1 10 5 4) (apl-sqrt #{1 100 25 16}))))))
+
+
+(test/deftest test-my-keep
+  (test/testing "testing my-keep"
+    (test/is (= '(2 4 6) (my-keep even? '(1 2 3 4 5 6 7))))
+    (test/is (= '(2 4 6) (my-keep even? [1 2 3 4 5 6 7])))))
 

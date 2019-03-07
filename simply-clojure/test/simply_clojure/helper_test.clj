@@ -18,9 +18,7 @@
     (test/is (= true (vowel? "A")))
     (test/is (= true (vowel? "a")))
     (test/is (= false (vowel? "B")))
-    (test/is (= false (vowel? "b")))
-)
-)
+    (test/is (= false (vowel? "b")))))
 
 (test/deftest test-butfirst-string
   (test/testing "Testing a string 'this is a sentence'"
@@ -59,6 +57,17 @@
   (test/testing "Testing second-string"
     (test/is (= "do" (second-string "Let's do some Clojure")))
     (test/is (= "thisisalongword" (second-string "thisisalongword")))
-    (test/is (= "AM" (second-string "8 AM")))
-))
+    (test/is (= "AM" (second-string "8 AM")))))
+
+(test/deftest test-is-string-number
+  (test/testing "Testing is-string-number?"
+    (test/is (= true (is-string-number? "3")))
+    (test/is (= true (is-string-number? "-3")))
+    (test/is (= true (is-string-number? "3.0")))
+    (test/is (= true (is-string-number? "-3.09887")))
+    (test/is (= false (is-string-number? "3A")))
+    (test/is (= false (is-string-number? "H")))
+)
+
+)
 

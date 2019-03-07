@@ -1,6 +1,5 @@
 (ns simply-clojure.helper
-  (:require [clojure.string :as str])
-)
+  (:require [clojure.string :as str]))
 
 (defn queue
   ([] (clojure.lang.PersistentQueue/EMPTY))

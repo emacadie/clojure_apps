@@ -112,14 +112,12 @@
 ; > (secondf '(higher order function))
 ; ORDER
 ;; maybe I am getting the hang of this
-(comment (define (compose first-func second-func )
-  (lambda (the-arg) (first-func (second-func the-arg))))
-)
+
 ;; they say only one arg, so that is what I will do.
 ;; I might look at source for comp later
 (defn compose [first-func second-func]
   (fn [x]
-    (first-func (second-func x ))))
+    (first-func (second-func x))))
 
 ;; I am totally failing on this one.
 ;; Maybe you cannot make a function with variable arguments. 
@@ -132,7 +130,6 @@
 ;> (substitute 'maybe 'yeah '(she loves you yeah yeah yeah))
 ; (SHE LOVES YOU MAYBE MAYBE MAYBE)
 
-
 (defn- substitute-word [first-word second-word the-sent]
   (map (fn [x]
          (if (= x second-word)
@@ -141,7 +138,63 @@
        (helper/split-string-to-words the-sent)))
 
 (defn substitute [first-word second-word the-sent]
-  (substitute-word first-word second-word the-sent))
+  (str/join " " (substitute-word first-word second-word the-sent)))
 
+;; 9.15 Many functions are applicable only to arguments in a certain domain and result in error messages if given arguments outside that domain. 
+;; For example, sqrt may require a nonnegative argument in a version of Scheme that doesn't include complex numbers. 
+;; (In any version of Scheme, sqrt will complain if its argument isn't a number at all!) 
+;; Once a program gets an error message, it's impossible for that program to continue the computation.
+
+; Write a procedure type-check that takes as arguments a one-argument procedure f and a one-argument predicate procedure pred. 
+;; Type-check should return a one-argument procedure that first applies pred to its argument 
+; if that result is true, the procedure should return the value computed by applying f to the argument; 
+; if pred returns false, the new procedure should also return #f:
+; > (define safe-sqrt (type-check sqrt number?))
+; > (safe-sqrt 16)
+; 4
+; > (safe-sqrt 'sarsaparilla)
+; #F
+;; only works with one arg functions
+(defn type-check [the-func the-pred]
+  (fn [the-arg]
+    (if (the-pred the-arg)
+      (the-func the-arg)
+      false)))
+
+;;  9.16  In the language APL, most arithmetic functions can be applied either to a number, 
+; with the usual result, or to a vector—the APL name for a sentence of numbers—in which case 
+; the result is a new vector in which each element is the result of applying the function to the corresponding element of the argument. 
+; For example, the function sqrt applied to 16 returns 4 as in Scheme, 
+; but sqrt can also be applied to a sentence such as (16 49) and it returns (4 7).
+
+; Write a procedure aplize that takes as its argument a one-argument procedure whose domain is numbers or words. 
+; It should return an APLized procedure that also accepts sentences:
+
+; > (define apl-sqrt (aplize sqrt))
+; > (apl-sqrt 36)
+; 6
+; > (apl-sqrt '(1 100 25 16))
+; (1 10 5 4)
+
+(defn aplize [the-func]
+  (fn [the-arg]
+    (if (coll? the-arg)
+      (map the-func the-arg)
+      (the-func the-arg))))
+
+;; 9.17  Write keep in terms of every and accumulate. 
+
+(defn my-conj [the-coll x]
+  (if (nil? x)
+    the-coll
+    (conj the-coll x)))
+
+(defn my-keep [the-pred the-coll]
+  (reverse 
+   (reduce my-conj 
+           (map (fn [x]
+                  (when (the-pred x)
+                    x))
+                the-coll))))
 
 
