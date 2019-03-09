@@ -74,7 +74,7 @@
 (defn do-great-stuff [the-word]
   (cond (= the-word "good") (str "great ")
         (= the-word "bad") (str "terrible ")
-        (helper/is-string-number?) (str (* 2 (Double/parseDouble the-word)) " ")
+        (helper/is-string-number? the-word) (str (* 2 (Double/parseDouble the-word)) " ")
         :else (str the-word " ")))
 
 (defn exaggerate [the-sent]
@@ -124,20 +124,9 @@
 ;; and returns the real phone number, in this case 7672676. 
 ;; You will need to write a helper procedure that uses an 8-way cond expression to translate a single letter into a digit.
 ;; instead of calling lower-case a lot, I guess I could put this in a let block
-(defn phone-letter [letter]
-  (let [lletter (str/lower-case letter)]
-      (cond (contains? #{"a" "b" "c"} lletter) 2
-            (contains? #{"d" "e" "f"} lletter) 3
-            (contains? #{"g" "h" "i"} lletter) 4
-            (contains? #{"j" "k" "l"} lletter) 5
-            (contains? #{"m" "n" "o"} lletter) 6
-            (contains? #{"p" "q" "r" "s"} lletter) 7
-            (contains? #{"t" "u" "v"} lletter) 8
-            (contains? #{"w" "x" "y" "z"} lletter) 9
-            :else 0)))
 
 (defn phone-unspell [the-word]
-  (map phone-letter (helper/split-word-to-letters the-word)))
+  (map helper/phone-letter (helper/split-word-to-letters the-word)))
 
 ;; 8.14  Write the procedure subword that takes three arguments: a word, a starting position number, and an ending position number. 
 ;; It should return the subword containing only the letters between the specified positions:

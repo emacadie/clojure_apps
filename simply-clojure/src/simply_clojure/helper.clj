@@ -53,6 +53,9 @@
     (catch Exception Ex
       false)))
 
+(defn remove-ending-space-from-string [str-work]
+  (subs str-work 0 (dec (.length str-work))))
+
 (defn number-tween-inclusive [number lower upper]
   (and (>= number lower) (<= number upper)))
 
@@ -62,6 +65,18 @@
 
 (defn split-string-to-words [the-word]
   (str/split the-word #" "))
+
+(defn phone-letter [letter]
+  (let [lletter (str/lower-case letter)]
+      (cond (contains? #{"a" "b" "c"} lletter) 2
+            (contains? #{"d" "e" "f"} lletter) 3
+            (contains? #{"g" "h" "i"} lletter) 4
+            (contains? #{"j" "k" "l"} lletter) 5
+            (contains? #{"m" "n" "o"} lletter) 6
+            (contains? #{"p" "q" "r" "s"} lletter) 7
+            (contains? #{"t" "u" "v"} lletter) 8
+            (contains? #{"w" "x" "y" "z"} lletter) 9
+            :else 0)))
 
 ;; from http://clojure-doc.org/articles/language/functions.html
 ;; Is this in any library? It seems pretty useful.
