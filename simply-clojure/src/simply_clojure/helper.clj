@@ -1,5 +1,5 @@
 (ns simply-clojure.helper
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as string]))
 
 (defn queue
   ([] (clojure.lang.PersistentQueue/EMPTY))
@@ -13,7 +13,7 @@
   (reverse (pop (reverse my-queue))))
 
 (defn string-is-word [the-string]
-  (if (nil? (str/index-of the-string " "))
+  (if (nil? (string/index-of the-string " "))
     true
     false))
 
@@ -25,27 +25,24 @@
 (defn butfirst-string [the-string]
   (if (string-is-word the-string)
     (subs the-string 1)
-    (subs the-string (inc (str/index-of the-string " ")))))
-
-;; I call butfirst on butfirst a few times
-(def butfirst-two-string (comp butfirst-string butfirst-string))
+    (subs the-string (inc (string/index-of the-string " ")))))
 
 (defn first-string [the-string]
   (if (string-is-word the-string)
     (subs the-string 0 1)
-    (subs the-string 0 (str/index-of the-string " "))))
+    (subs the-string 0 (string/index-of the-string " "))))
 
 (defn last-string [the-string]
   (if (string-is-word the-string)
-    (first-string (str/reverse the-string))
-    (str/reverse (first-string (str/reverse the-string)))))
+    (first-string (string/reverse the-string))
+    (string/reverse (first-string (string/reverse the-string)))))
 
 (defn butlast-string [the-string]
-  (str/reverse (butfirst-string (str/reverse the-string))))
+  (string/reverse (butfirst-string (string/reverse the-string))))
 
 (defn second-string [the-string]
   (cond (not (string? the-string)) the-string 
-        (string-is-word the-string) (first-string (butfirst-string the-string))
+        (string-is-word the-string) the-string
         (string-is-word (butfirst-string the-string)) (butfirst-string the-string)
         :else (first-string (butfirst-string the-string))))
 
@@ -57,20 +54,36 @@
       false)))
 
 (defn remove-ending-space-from-string [str-work]
-  (subs str-work 0 (dec (.length str-work))))
+  (if (string/ends-with? str-work " ")
+    (subs str-work 0 (dec (.length str-work)))
+    str-work))
+
+(defn safe-subs
+  ([the-str begin]
+   (if (> begin (.length the-str))
+     ""
+     (subs the-str begin)))
+  ([the-str begin end]
+   (cond (> begin (.length the-str)) ""
+         (> end (.length the-str)) the-str
+         :else (subs the-str begin end)
+)
+)
+  
+)
 
 (defn number-tween-inclusive [number lower upper]
   (and (>= number lower) (<= number upper)))
 
 ;; that slick string splitter from https://clojuredocs.org/clojure.string/split
 (defn split-word-to-letters [the-word]
-  (str/split the-word #""))
+  (string/split the-word #""))
 
 (defn split-string-to-words [the-word]
-  (str/split the-word #" "))
+  (string/split the-word #" "))
 
 (defn phone-letter [letter]
-  (let [lletter (str/lower-case letter)]
+  (let [lletter (string/lower-case letter)]
       (cond (contains? #{"a" "b" "c"} lletter) 2
             (contains? #{"d" "e" "f"} lletter) 3
             (contains? #{"g" "h" "i"} lletter) 4
