@@ -27,6 +27,9 @@
     (subs the-string 1)
     (subs the-string (inc (str/index-of the-string " ")))))
 
+;; I call butfirst on butfirst a few times
+(def butfirst-two-string (comp butfirst-string butfirst-string))
+
 (defn first-string [the-string]
   (if (string-is-word the-string)
     (subs the-string 0 1)
@@ -42,7 +45,7 @@
 
 (defn second-string [the-string]
   (cond (not (string? the-string)) the-string 
-        (string-is-word the-string) the-string
+        (string-is-word the-string) (first-string (butfirst-string the-string))
         (string-is-word (butfirst-string the-string)) (butfirst-string the-string)
         :else (first-string (butfirst-string the-string))))
 

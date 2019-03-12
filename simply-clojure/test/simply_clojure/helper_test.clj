@@ -26,6 +26,13 @@
   (test/testing "Testing string 'thisisalongword'"
     (test/is (= "hisisalongword" (butfirst-string "thisisalongword")))))
 
+(test/deftest test-butfirst-two-string
+  (test/testing "Testing butfirst-two-string"
+    (test/is (= "my test string" (butfirst-two-string "This is my test string")))
+    (test/is (= "is" (butfirst-two-string "This")))
+)
+)
+
 (test/deftest test-first-string
   (test/testing "Testing first with string 'test with a sentence'"
     (test/is (= "test" (first-string "test with a sentence"))))
@@ -56,7 +63,7 @@
 (test/deftest test-second-string
   (test/testing "Testing second-string"
     (test/is (= "do" (second-string "Let's do some Clojure")))
-    (test/is (= "thisisalongword" (second-string "thisisalongword")))
+    (test/is (= "h" (second-string "thisisalongword")))
     (test/is (= "AM" (second-string "8 AM")))))
 
 (test/deftest test-is-string-number
@@ -66,8 +73,6 @@
     (test/is (= true (is-string-number? "3.0")))
     (test/is (= true (is-string-number? "-3.09887")))
     (test/is (= false (is-string-number? "3A")))
-    (test/is (= false (is-string-number? "H")))
-)
-
-)
+    (test/is (= false (is-string-number? :3)))
+    (test/is (= false (is-string-number? "H")))))
 

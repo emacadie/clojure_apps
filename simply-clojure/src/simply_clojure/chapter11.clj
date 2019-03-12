@@ -1,7 +1,6 @@
 (ns simply-clojure.chapter11
-  (:require [clojure.string :as string]
-            [simply-clojure.helper :as helper]
-))
+  (:require [clojure.string        :as string]
+            [simply-clojure.helper :as helper]))
 
 ;;  11.2  [8.12][4] When you teach a class, people will get distracted if you say "um" too many times. 
 ;; Write a count-ums that counts the number of times "um" appears in a sentence:
@@ -87,7 +86,9 @@
     (cond (= 0 num-work) (helper/remove-ending-space-from-string str-work) 
           :else (recur (dec num-work) (str str-work the-word " ")))))
 
-
-
-
+(defn copies-recur-last [number the-word]
+  (loop [num-work number
+         str-work ""]
+    (cond (not (= 0 num-work)) (recur (dec num-work) (str str-work the-word " ")) 
+          :else (helper/remove-ending-space-from-string str-work))))
 

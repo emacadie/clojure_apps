@@ -1,10 +1,7 @@
 (ns simply-clojure.chapter11-test
   (:require [clojure.test :as test]
             [simply-clojure.chapter11 :refer :all]
-            [simply-clojure.helper      :as helper]
-            ; [clojure.math.numeric-tower :as math-nt]
-            )
-)
+            [simply-clojure.helper      :as helper]))
 
 (test/deftest test-count-ums
   (test/testing "Testing count-ums"
@@ -34,7 +31,9 @@
 
 (test/deftest test-copies
   (test/testing "Testing copies"
-    (test/is (= "SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM" (copies 8 "SPAM")))
-)
-)
+    (test/is (= "SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM" (copies 8 "SPAM")))))
+
+(test/deftest test-copies-recur-last
+  (test/testing "Testing copies-recur-last"
+    (test/is (= "SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM" (copies-recur-last 8 "SPAM")))))
 
