@@ -68,6 +68,11 @@
     (test/is (= false (is-string-number? "3A")))
     (test/is (= false (is-string-number? "H")))))
 
+(test/deftest test-butfirst-two-string
+  (test/testing "Testing butfirst-two-string"
+    (test/is (= "my test string" (butfirst-two-string "This is my test string")))
+    (test/is (= "is" (butfirst-two-string "This")))))
+
 (test/deftest test-safe-subs
   (test/testing "Testing safe-subs"
     (test/is (= "lojure" (safe-subs "Clojure" 1)))

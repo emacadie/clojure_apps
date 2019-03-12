@@ -46,6 +46,9 @@
         (string-is-word (butfirst-string the-string)) (butfirst-string the-string)
         :else (first-string (butfirst-string the-string))))
 
+;; I call butfirst on butfirst a few times
+(def butfirst-two-string (comp butfirst-string butfirst-string))
+
 (defn is-string-number? [s-num]
   (try
     (Double/parseDouble s-num)
