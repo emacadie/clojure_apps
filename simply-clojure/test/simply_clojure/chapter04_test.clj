@@ -33,7 +33,5 @@
   (test/testing "Testing tip"
     ; (test/is (= 3.02 (tip 19.98)))
     (test/is (= 4.77 (tip 29.23)))
-    (test/is (= 1.46 (tip 7.54)))
-)
-)
+    (test/is (= 1.46 (tip 7.54)))))
 

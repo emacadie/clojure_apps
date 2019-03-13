@@ -1,10 +1,7 @@
 (ns simply-clojure.chapter09-bridge-test
   (:require [clojure.test :as test]
             [simply-clojure.chapter09-bridge :refer :all]
-            [simply-clojure.helper      :as helper]
-            ; [clojure.math.numeric-tower :as math-nt]
-            )
-)
+            [simply-clojure.helper      :as helper]))
 
 (test/deftest test-card-val
   (test/testing "Testing card-val"
@@ -46,6 +43,4 @@
   (test/testing "Testing bridge-val"
     (test/is (= 14 (bridge-val '(:sa :s10 :s7 :s6 :s2 :hq :hj :h9 :ck :c4 :dk :d9 :d3))))
     (test/is (= 8 (bridge-val '(:h3 :d7 :sk :s3 :c10 :dq :d8 :s9 :s4 :d10 :c7 :d4 :s2))))))
-
-
 
