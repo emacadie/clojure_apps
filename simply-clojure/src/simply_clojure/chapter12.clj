@@ -115,8 +115,10 @@
 (defn arabic [the-nums]
   (cond (string/blank? the-nums) ""
         (= 1 (count the-nums)) (roman-value the-nums)
-        (first-less-than-second the-nums) (+ (subtract-first-from-second the-nums) (arabic (helper/butfirst-two-string the-nums)))
-        (not (first-less-than-second the-nums)) (+ (first-roman-value the-nums) (arabic (helper/butfirst-string the-nums)))))
+        (first-less-than-second the-nums) (+ (subtract-first-from-second the-nums) 
+                                             (arabic (helper/butfirst-two-string the-nums)))
+        (not (first-less-than-second the-nums)) (+ (first-roman-value the-nums) 
+                                                   (arabic (helper/butfirst-string the-nums)))))
 
 ;; In order to go through the string with loop-recur AND have an output,
 ;; I would need two data-structures
@@ -174,9 +176,11 @@
         (>= time DAY)     DAY
         (>= time HOUR)    HOUR
         (>= time MINUTE)  MINUTE
-        :else :SECONDS))
+        ;:else :SECONDS
+))
 
 (defn describe-time12 [time]
+  
   (cond (not (number? time)) time
         (= time 0) (str time " SECONDS")
         (not (pos? time)) time
@@ -187,6 +191,20 @@
                    (describe-time12 (- time 
                                        (* (get-time-floor time) 
                                           (get-time-multiplier time)))))))
+
+
+(defn describe-time12-r [time]
+  (loop [time-work time
+         outp ""]
+    (cond (or (not (number? time-work)) (neg? time-work)) time-work
+        (= time-work 0) (str outp time-work " SECONDS")
+        (= time-work 1) (str outp time-work " SECOND")
+        (< time-work MINUTE)  (str outp time-work " SECONDS")
+        :else (recur (- time-work (* (get-time-floor time-work) (get-time-multiplier time-work)))
+                     (str outp 
+                          (get-time-floor time-work) 
+                          (get-time-measure time-work))))))
+
 
 ;; Most of what follows is from Simply Scheme repo:
 ;; I did not do tail recursion. But then again, the authors did not mention tail-recursion.

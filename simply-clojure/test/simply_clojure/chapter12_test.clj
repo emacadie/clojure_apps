@@ -42,4 +42,10 @@
     (test/is (= "1 CENTURY 57 YEARS 20 WEEKS 6 DAYS 8 HOURS 54 MINUTES 1 SECOND" (describe-time12 4967189641)))
     (test/is (= "1 CENTURY 57 YEARS 20 WEEKS 6 DAYS 8 HOURS 54 MINUTES 0 SECONDS" (describe-time12 4967189640)))))
 
+(test/deftest test-describe-time12-r
+  (test/testing "Testing describe-time12-r"
+    (test/is (= "6 HOURS 10 MINUTES 22 SECONDS" (describe-time12-r 22222)))
+    (test/is (= "1 CENTURY 57 YEARS 20 WEEKS 6 DAYS 8 HOURS 54 MINUTES 1 SECOND" (describe-time12-r 4967189641)))
+    (test/is (= "1 CENTURY 57 YEARS 20 WEEKS 6 DAYS 8 HOURS 54 MINUTES 0 SECONDS" (describe-time12-r 4967189640)))))
+
 
