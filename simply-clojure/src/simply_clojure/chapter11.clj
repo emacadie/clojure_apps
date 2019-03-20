@@ -25,6 +25,7 @@
 (defn if-count-ums [sentence]
   (loop [sent-work sentence
          um-count 0]
+    
     (if (string/blank? sent-work)
       um-count
       (recur (helper/butfirst-string sent-work)
@@ -46,6 +47,7 @@
       (recur (helper/butfirst-string sent-work) 
              (calc-ums-for-recur sent-work um-count)))))
 
+
 ;; 11.3  [8.13] Write a procedure phone-unspell that takes a spelled version of a phone number, 
 ;; such as POPCORN, and returns the real phone number, in this case 7672676. 
 ;; You will need a helper procedure that translates a single letter into a digit:
@@ -55,9 +57,9 @@
   (loop [word-work word
          nums-work []]
     (cond (= 1 (count word-work)) (conj nums-work (helper/phone-letter word-work))
-          :else (recur (helper/butfirst-string word-work) 
+          :else (recur (helper/butfirst-word word-work) 
                        (conj nums-work 
-                             (helper/phone-letter (helper/first-string word-work)))))))
+                             (helper/phone-letter (helper/first-word word-work)))))))
 
 ;;  11.5  Write a procedure initials that takes a sentence as its argument and returns a sentence of the first letters in each of the sentence's words:
 ; > (initials '(if i needed someone))
@@ -68,8 +70,9 @@
   (loop [sent-work the-sent
          init-hold ""]
     (cond (string/blank? sent-work) init-hold
+          (helper/string-is-word sent-work) (str init-hold (helper/first-word sent-work))
           :else (recur (helper/butfirst-string sent-work) 
-                       (str init-hold (helper/first-string (helper/first-string sent-work)))))))
+                       (str init-hold (helper/first-word (helper/first-string sent-work)))))))
 
 ;;  11.6  Write a procedure countdown that works like this:
 (defn countdown [number]

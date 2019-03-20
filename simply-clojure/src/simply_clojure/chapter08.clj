@@ -10,7 +10,7 @@
 ;; and returns a sentence of just those Beatles (John, Paul, George, and Ringo) that satisfy the predicate. 
 ;; so this sounds like filter/keep
 (defn ends-vowel? [word]
-  (helper/vowel? (helper/last-string word)))
+  (helper/vowel? (helper/last-word word)))
 
 (defn even-count? [word]
   (even? (count word)))
@@ -102,11 +102,11 @@
 (def letter-grade-map {:a 4, :b 3, :c 2, :d 1})
 
 (defn base-grade [grade]
-  ((keyword (str/lower-case (helper/first-string grade))) letter-grade-map 0))
+  ((keyword (str/lower-case (helper/first-word grade))) letter-grade-map 0))
 
 (defn modify-grade [grade]
-  (cond (= (helper/last-string grade) "+") 0.33
-        (= (helper/last-string grade) "-") -0.33
+  (cond (= (helper/last-word grade) "+") 0.33
+        (= (helper/last-word grade) "-") -0.33
         :else 0))
 
 (defn convert-grade-to-num [grade]
@@ -141,8 +141,8 @@
       the-input)))
 ;; This is substr, the hard way
 (defn subword [word start fin]
-  (str (func-n-times helper/butfirst-string 
-                     (func-n-times helper/butlast-string 
+  (str (func-n-times helper/butfirst-word 
+                     (func-n-times helper/butlast-word 
                                    word 
                                    (- (count word) fin)) 
                      (dec start))))

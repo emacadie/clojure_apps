@@ -100,8 +100,8 @@
     0))
 
 
-(def first-roman-value  (comp roman-value helper/first-string))
-(def second-roman-value (comp roman-value helper/first-string helper/butfirst-string))
+(def first-roman-value  (comp roman-value helper/first-word))
+(def second-roman-value (comp roman-value helper/first-word helper/butfirst-word))
 
 (defn first-less-than-second [nums]
   (cond (= (count nums) 1) false
@@ -116,9 +116,9 @@
   (cond (string/blank? the-nums) ""
         (= 1 (count the-nums)) (roman-value the-nums)
         (first-less-than-second the-nums) (+ (subtract-first-from-second the-nums) 
-                                             (arabic (helper/butfirst-two-string the-nums)))
+                                             (arabic (helper/butfirst-two-word the-nums)))
         (not (first-less-than-second the-nums)) (+ (first-roman-value the-nums) 
-                                                   (arabic (helper/butfirst-string the-nums)))))
+                                                   (arabic (helper/butfirst-word the-nums)))))
 
 ;; In order to go through the string with loop-recur AND have an output,
 ;; I would need two data-structures
@@ -128,9 +128,9 @@
          output-work 0]
     (cond (and (string/blank? nums-string) (= output-work 0)) 0
           (string/blank? nums-string) output-work
-          (first-less-than-second nums-string) (recur (helper/butfirst-two-string nums-string)
+          (first-less-than-second nums-string) (recur (helper/butfirst-two-word nums-string)
                                                       (+ (subtract-first-from-second nums-string) output-work)) 
-          (not (first-less-than-second nums-string))(recur (helper/butfirst-string nums-string)
+          (not (first-less-than-second nums-string))(recur (helper/butfirst-word nums-string)
                                                            (+ (first-roman-value nums-string) output-work)))))
 
 ;;  12.13  Write a new version of the describe-time procedure from Exercise . Instead of returning a decimal number, it should behave like this:

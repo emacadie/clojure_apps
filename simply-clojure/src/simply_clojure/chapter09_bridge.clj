@@ -12,7 +12,7 @@
 
 (defn card-val [card]
   (let [card-string (card-symbol-to-str card)
-        last-card-char (helper/last-string card-string)]
+        last-card-char (helper/last-word card-string)]
     (case last-card-char
       "a" 4
       "k" 3
@@ -28,7 +28,7 @@
 ; Write a procedure count-suit that takes a suit and a hand as arguments and returns the number of cards in the hand with the given suit.
 (defn count-suit [suit card-list]
   (count (filter #(= suit %1)
-                 (map #(helper/first-string (card-symbol-to-str %1))
+                 (map #(helper/first-word (card-symbol-to-str %1))
                       card-list))))
 
 ;; Write a procedure suit-counts that takes a hand as its argument and returns a sentence containing the number of spades, 

@@ -3,6 +3,7 @@
             [simply-clojure.chapter14 :refer :all]
             [simply-clojure.helper      :as helper]))
 
+(comment
 (test/deftest test-square-sentr
   (test/testing "Testing square-sentr"
     (test/is (= [4 9 16] (vec (square-sentr [2 3 4]))))
@@ -30,7 +31,14 @@
 (test/deftest test-doubles-r
   (test/testing "Testing doubles-r"
     (test/is (= "sssspp" (doubles-r "Mississippi" "")))
-    (test/is (= "ookkee" (doubles-r "bookkeeper" "")))))
+    (test/is (= "ookkee" (doubles-r "bookkeeper" ""))))))
+
+(test/deftest test-remove-once
+  (test/testing "Testing remove-once"
+    (test/is (= "good good morning" (helper/remove-starting-space-from-string (remove-once "morning" "good morning good morning"))))
+    (test/is (= "good morning good morning" (helper/remove-starting-space-from-string (remove-once "mourning" "good morning good morning"))))
+    (test/is (= "morning good morning" (helper/remove-starting-space-from-string (remove-once "good" "good morning good morning"))))))
+
 
 
 

@@ -1,8 +1,6 @@
 (ns simply-clojure.chapter14
   (:require [clojure.string :as string]
-            [simply-clojure.helper :as helper]
-            ; [simply-clojure.chapter08 :as ch08]
-))
+            [simply-clojure.helper :as helper]))
 
 ; a procedure to square every number in a sentence of numbers
 (defn- square-sentr-work [sent outp]
@@ -67,8 +65,8 @@
   (loop [wdw wd
          outw outp]
     (cond (empty? wdw) outw
-        (helper/vowel? (helper/first-string wdw)) (recur (helper/butfirst-string wdw) (str outw (helper/first-string wdw))) 
-        :else (recur (helper/butfirst-string wdw) (str outw)))))
+        (helper/vowel? (helper/first-word wdw)) (recur (helper/butfirst-word wdw) (str outw (helper/first-word wdw))) 
+        :else (recur (helper/butfirst-word wdw) (str outw)))))
 
 (defn doubles-r [wd outp]
   (loop [wdw wd
@@ -82,5 +80,54 @@
                     (helper/first-string (helper/butfirst-string wdw)))) 
         :else (recur (helper/butfirst-string wdw) outw))))
 
+;; 14.1  
+;; > (remove-once 'morning '(good morning good morning))
+;; (GOOD GOOD MORNING)
+;; (It's okay if your solution removes the other MORNING instead, as long as it removes only one of them.) 
+;; This is sort of like "keep." The result has one less, so it's not "every", and there is more than one, so it's not "accumulate".
+(defn remove-once [bad-word sent]
+  (loop [sent-work sent
+         outp ""]
+    (cond (empty? sent-work) outp
+          (= bad-word (helper/first-string sent-work)) (str outp " " (helper/butfirst-string sent-work))
+          :else (recur (helper/butfirst-string sent-work) (str outp " " (helper/first-string sent-work))))))
+
+;;  14.2  
+;; > (up 'town)
+; (T TO TOW TOWN)
+;; This is kind of like every.
+(defn upr [the-word]
+  (loop [wordout the-word
+         outp ""]
+    (cond (empty? the-word) outp
+          (= (count outp) 0) (recur (helper/butfirst-string the-word) (subs the-word 1))
+          :else (recur (helper/butfirst-string the-word) 
+                       (str outp " " (str (helper/last-string outp) (helper/first-string the-word)))))))
+
+; 14.3  
+; > (remdup '(ob la di ob la da))              ;; remove duplicates
+; (OB LA DI DA)
+; (It's okay if your procedure returns (DI OB LA DA) instead, as long as it removes all but one instance of each duplicated word.)
+;; This is like "keep".
+(comment
+(define (remove-dup-r sent outp)
+  (display-all "calling up-r with sent: " sent ", and outp: " outp)
+  (cond ((empty? sent) outp)
+        ((> (appearances (last sent) sent) 1) (remove-dup-r (butlast sent) outp))
+        (else (remove-dup-r (butlast sent) (sentence (last sent) outp)))))
+)
+
+;; I could use my own appearances-string function
+;; But this section is about recursion, so why not use a recursive function?
+
+
+(defn (remove-dups [the-sent])
+  (loop [sent-work the-sent
+         outp ""]
+    (cond (empty? sent-work) outp
+          
+)
+)
+)
 
 

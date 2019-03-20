@@ -4,8 +4,13 @@
 
 ;; 5.14 Write a procedure third that selects the third letter of a word (or the third word of a sentence).
 ;; or use item
+
+
+
 (defn third [x]
-  (helper/first-string (helper/butfirst-string (helper/butfirst-string x))))
+  (if (helper/string-is-word x)
+    (helper/first-word (helper/butfirst-word (helper/butfirst-word x)))
+    (helper/first-string (helper/butfirst-string (helper/butfirst-string x)))))
 
 ;; 5.15 Write a procedure first-two that takes a word as its argument, 
 ;; returning a two-letter word containing the first two letters of the argument.
@@ -14,9 +19,9 @@
 
 ;; This is intended for words. It does not check if they are words or sentences.
 (defn first-two [the-word]
-  (str (helper/first-string the-word) 
-       (helper/first-string 
-        (helper/butfirst-string the-word))))
+  (str (helper/first-word the-word) 
+       (helper/first-word 
+        (helper/butfirst-word the-word))))
 
 ;; 5.16 Write a procedure two-first that takes two words as arguments, 
 ;; returning a two-letter word containing the first letters of the two arguments.
@@ -27,11 +32,11 @@
 ;; > (two-first-sent '(brian epstein))
 ;; BE
 (defn two-first [word1 word2]
-  (str (helper/first-string word1) (helper/first-string word2)))
+  (str (helper/first-word word1) (helper/first-word word2)))
 
 (defn two-first-sent [the-sent]
-  (str (helper/first-string (helper/first-string the-sent))
-       (helper/first-string (subs the-sent (inc (clojure.string/index-of the-sent " "))))))
+  (str (helper/first-word (helper/first-string the-sent))
+       (helper/first-word (subs the-sent (inc (clojure.string/index-of the-sent " "))))))
 
 ;; 5.17 Write a procedure knight that takes a person's name as its argument and returns the name with "Sir" in front of it.
 ;; > (knight '(david wessel))

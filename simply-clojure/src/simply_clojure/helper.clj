@@ -22,23 +22,41 @@
         (contains? #{"A", "E", "I", "O", "U", "a", "e", "i", "o", "u"} the-string) true
         :else false))
 
-(defn butfirst-string [the-string]
+(defn butfirst-word [the-string]
   (if (string-is-word the-string)
     (subs the-string 1)
+    the-string))
+
+(defn butfirst-string [the-string]
+  (if (string-is-word the-string)
+    ""
     (subs the-string (inc (string/index-of the-string " ")))))
 
 (defn first-string [the-string]
   (if (string-is-word the-string)
-    (subs the-string 0 1)
+    the-string
     (subs the-string 0 (string/index-of the-string " "))))
+
+(defn first-word [the-string]
+  (if (string-is-word the-string)
+    (subs the-string 0 1)
+    the-string))
 
 (defn last-string [the-string]
   (if (string-is-word the-string)
-    (first-string (string/reverse the-string))
+    the-string
     (string/reverse (first-string (string/reverse the-string)))))
+
+(defn last-word [the-string]
+  (if (string-is-word the-string)
+    (first-word (string/reverse the-string))
+    the-string))
 
 (defn butlast-string [the-string]
   (string/reverse (butfirst-string (string/reverse the-string))))
+
+(defn butlast-word [the-string]
+  (string/reverse (butfirst-word (string/reverse the-string))))
 
 (defn second-string [the-string]
   (cond (not (string? the-string)) the-string 
@@ -48,6 +66,8 @@
 
 ;; I call butfirst on butfirst a few times
 (def butfirst-two-string (comp butfirst-string butfirst-string))
+
+(def butfirst-two-word (comp butfirst-word butfirst-word))
 
 (defn is-string-number? [s-num]
   (try
@@ -61,6 +81,11 @@
     (subs str-work 0 (dec (.length str-work)))
     str-work))
 
+(defn remove-starting-space-from-string [str-work]
+  (if (string/starts-with? str-work " ")
+    (subs str-work 1 (.length str-work))
+    str-work))
+
 (defn safe-subs
   ([the-str begin]
    (if (> begin (.length the-str))
@@ -69,11 +94,7 @@
   ([the-str begin end]
    (cond (> begin (.length the-str)) ""
          (> end (.length the-str)) the-str
-         :else (subs the-str begin end)
-)
-)
-  
-)
+         :else (subs the-str begin end))))
 
 (defn number-tween-inclusive [number lower upper]
   (and (>= number lower) (<= number upper)))

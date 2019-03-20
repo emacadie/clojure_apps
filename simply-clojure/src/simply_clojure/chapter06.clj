@@ -71,14 +71,14 @@
 ;; Then teach it about words that end in x (box). What other special cases can you find?
 ;; load vowel? from above
 (defn plural-y [word]
-  (cond (helper/vowel? (helper/last-string (helper/butlast-string word))) (str word "s")
-        :else (str (helper/butlast-string word) "ies")))
+  (cond (helper/vowel? (helper/last-word (helper/butlast-word word))) (str word "s")
+        :else (str (helper/butlast-word word) "ies")))
 
 (defn plural [word]
   (cond (not (string? word)) word
         (not (helper/string-is-word word)) word
-        (= (helper/last-string word) "y") (plural-y word)
-        (= (helper/last-string word) "x") (str word "es")
+        (= (helper/last-word word) "y") (plural-y word)
+        (= (helper/last-word word) "x") (str word "es")
         :else (str word "s")))
 
 ;; 6.9  Sometimes you must choose the singular or the plural of a word: 1 book but 2 books.
