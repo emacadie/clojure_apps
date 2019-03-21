@@ -109,25 +109,54 @@
 ; (OB LA DI DA)
 ; (It's okay if your procedure returns (DI OB LA DA) instead, as long as it removes all but one instance of each duplicated word.)
 ;; This is like "keep".
-(comment
-(define (remove-dup-r sent outp)
-  (display-all "calling up-r with sent: " sent ", and outp: " outp)
-  (cond ((empty? sent) outp)
-        ((> (appearances (last sent) sent) 1) (remove-dup-r (butlast sent) outp))
-        (else (remove-dup-r (butlast sent) (sentence (last sent) outp)))))
-)
 
 ;; I could use my own appearances-string function
 ;; But this section is about recursion, so why not use a recursive function?
+(defn word-appearances [the-word the-sent]
+  (loop [sent-work the-sent
+         word-count 0]
+    (cond (empty? sent-work) word-count
+          (= the-word (helper/first-string sent-work)) (recur (helper/butfirst-string sent-work) (inc word-count)) 
+          :else (recur (helper/butfirst-string sent-work) word-count))))
 
-
-(defn (remove-dups [the-sent])
+(defn remove-dups [the-sent]
   (loop [sent-work the-sent
          outp ""]
     (cond (empty? sent-work) outp
-          
-)
-)
+          (> 1 (word-appearances (helper/last-string sent-work) sent-work)) (recur (helper/butlast-string sent-work) outp)
+          :else (recur (helper/butlast-string sent-work) (str (helper/last-string sent-work) " " outp)))))
+
+;;  14.4  
+;; > (odds '(i lost my little girl))
+;; (I MY GIRL)
+;; This is like "keep" again
+;; This needs a helper
+(defn odds-r  [the-sent]
+  (loop [sent-work the-sent
+         outp ""
+         counter 1]
+    (cond (empty? sent-work) outp
+          (odd? counter) (recur (helper/butfirst-string sent-work) (str outp " " (helper/first-string sent-work)) (inc counter))
+          :else (recur (helper/butfirst-string sent-work) outp (inc counter)))))
+
+;;  14.5  [8.7] Write a procedure letter-count that takes a sentence as its argument and returns the total number of letters in the sentence:
+;; This one is accumulate.
+;; When calling, set outp to 0
+;; Or make your own helper.
+(defn letter-count-r [the-sent]
+  (loop [sent-work (helper/split-string-to-words the-sent)
+         outp 0]
+    (cond (empty? sent-work) outp
+          :else (recur (rest sent-work) (+ outp (count (first sent-work)))))))
+
+;; 14.6  Write member?.
+;; This looks like accumulate
+(comment
+(define (member-r-helper the-word the-sent outp)
+  (display-all "calling member-r-helper with the-word: " the-word ", the-sent: " the-sent ", outp: " outp)
+  (cond ((empty? the-sent) outp)
+        ((equal? the-word (first the-sent)) (member-r-helper the-word '() #t))
+        (else (member-r-helper the-word (butfirst the-sent) #f))))
 )
 
 

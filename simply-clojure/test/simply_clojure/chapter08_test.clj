@@ -21,7 +21,7 @@
                  "the amazing Paul" 
                  "the amazing George" 
                  "the amazing Ringo"] (transform-beatles amazify)))
-    (test/is (= ["ohn" "aul" "eorge" "ingo"] (transform-beatles helper/butfirst-string)))))
+    (test/is (= ["ohn" "aul" "eorge" "ingo"] (transform-beatles helper/butfirst-word)))))
 
 (test/deftest test-transform-beatles-set
   (test/testing "Testing transform-beatles-set"
@@ -29,7 +29,7 @@
                   "the amazing John" 
                   "the amazing Paul" 
                   "the amazing Ringo") (transform-beatles-set amazify)))
-    (test/is (= '("eorge" "ohn" "aul" "ingo") (transform-beatles-set helper/butfirst-string)))))
+    (test/is (= '("eorge" "ohn" "aul" "ingo") (transform-beatles-set helper/butfirst-word)))))
 
 (test/deftest test-words
   (test/testing "Testing words"

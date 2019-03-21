@@ -1,7 +1,7 @@
 (ns simply-clojure.chapter14-test
   (:require [clojure.test :as test]
             [simply-clojure.chapter14 :refer :all]
-            [simply-clojure.helper      :as helper]))
+            [simply-clojure.helper    :as helper]))
 
 (comment
 (test/deftest test-square-sentr
@@ -38,6 +38,20 @@
     (test/is (= "good good morning" (helper/remove-starting-space-from-string (remove-once "morning" "good morning good morning"))))
     (test/is (= "good morning good morning" (helper/remove-starting-space-from-string (remove-once "mourning" "good morning good morning"))))
     (test/is (= "morning good morning" (helper/remove-starting-space-from-string (remove-once "good" "good morning good morning"))))))
+
+(test/deftest test-remove-dups
+  (test/testing "Testing remove-dups"
+    (test/is (= "ob la di la da") (remove-dups "ob la di da"))
+    (test/is (= "good morning good morning") (remove-dups "good morning"))))
+
+(test/deftest test-odds
+  (test/testing "Testing odds"
+    (test/is (= "i my girl") (odds-r "i lost my little girl"))
+    (test/is (= "this not drill and") (odds-r "this is not a drill boys and girls"))))
+
+(test/deftest test-letter-count-r
+  (test/testing "Testing letter-count-r"
+    (test/is (= 11 (letter-count-r "fixing a hole")))))
 
 
 

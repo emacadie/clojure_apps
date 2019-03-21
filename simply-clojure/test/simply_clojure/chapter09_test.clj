@@ -12,7 +12,7 @@
 (test/deftest test-sentence-version
   (test/testing "Test sentence-version"
     (test/is (= '(64 4 16 36) ((sentence-version helper/square) [8 2 4 6])))
-    (test/is (= '("i" "i" "f") ((sentence-version helper/first-string) (helper/split-string-to-words "if i fell"))))))
+    (test/is (= '("i" "i" "f") ((sentence-version helper/first-word) (helper/split-string-to-words "if i fell"))))))
 
 (test/deftest test-letterwords
   (test/testing "Test letterwords"
