@@ -69,6 +69,7 @@
 
 (def butfirst-two-word (comp butfirst-word butfirst-word))
 
+;; see if this exists somewhere
 (defn is-string-number? [s-num]
   (try
     (Double/parseDouble s-num)
@@ -85,6 +86,8 @@
   (if (string/starts-with? str-work " ")
     (subs str-work 1 (.length str-work))
     str-work))
+
+(def remove-surrounding-spaces-from-string (comp remove-starting-space-from-string remove-ending-space-from-string))
 
 (defn safe-subs
   ([the-str begin]

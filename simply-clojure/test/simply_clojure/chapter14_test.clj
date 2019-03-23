@@ -53,6 +53,33 @@
   (test/testing "Testing letter-count-r"
     (test/is (= 11 (letter-count-r "fixing a hole")))))
 
+(test/deftest test-member-r
+  (test/testing "Testing member-r"
+    (test/is (= true (member-r "what" "ask not what your country can do for you")))
+    (test/is (= false (member-r "when" "ask not what your country can do for you")))))
+
+(test/deftest test-differences
+  (test/testing "Testing differences"
+    (test/is (= [19 -14 78 -81 6] (differences [4 23 9 87 6 12])))
+    (test/is (= [19 -14 78 -81 6] (differences '(4 23 9 87 6 12))))))
+
+(test/deftest test-print-n-times
+  (test/testing "Testing print-n-times"
+    (test/is (= "hello hello hello" (print-n-times 3 "hello")))
+    (test/is (= "moon moon moon moon" (print-n-times 4 "moon")))
+    (test/is (= "moon moon moon moon" (print-n-times 4.0 "moon")))))
+
+(test/deftest test-expand-r
+  (test/testing "Testing expand-r"
+    ; (test/is (= "calling calling calling calling birds french french french hens" (expand-r "4 calling birds 3 french hens")))
+    ; (test/is (= "the samurai samurai samurai samurai samurai samurai samurai" (expand-r "the 7 samurai")))
+    ))
+
+(test/deftest test-location
+  (test/testing "Testing location"
+    (test/is (= 4 (location "me" "you never give me your money")))
+    (test/is (= 0 (location "me" "you never give them your money")))))
+
 
 
 

@@ -151,12 +151,73 @@
 
 ;; 14.6  Write member?.
 ;; This looks like accumulate
-(comment
-(define (member-r-helper the-word the-sent outp)
-  (display-all "calling member-r-helper with the-word: " the-word ", the-sent: " the-sent ", outp: " outp)
-  (cond ((empty? the-sent) outp)
-        ((equal? the-word (first the-sent)) (member-r-helper the-word '() #t))
-        (else (member-r-helper the-word (butfirst the-sent) #f))))
-)
+;; only works for strings
+(defn member-r [the-word the-sent]
+  (loop [sent-work the-sent
+         found? false]
+    (cond (empty? sent-work) found?
+          (= the-word (helper/first-string sent-work)) true
+          :else (recur (helper/butfirst-string sent-work) found?))))
 
+;; 14.7  Write differences, which takes a sentence of numbers as its argument 
+;; and returns a sentence containing the differences between adjacent elements. 
+;; (The length of the returned sentence is one less than that of the argument.)
+;; So we do not go all the way through.
+;; > (differences '(4 23 9 87 6 12))
+;; (19 -14 78 -81 6)
+;; Sort of like every
+;; works on a vector of numbers
+(defn differences [nums]
+  (loop [num-work (vec nums) 
+         outp []]
+    (cond (= (count num-work) 1) outp
+          :else (recur (rest num-work) (conj outp (- (second num-work) (first num-work)))))))
+
+;; 14.8  Write expand, which takes a sentence as its argument. 
+;; It returns a sentence similar to the argument, 
+;; except that if a number appears in the argument, 
+;; then the return value contains that many copies of the following word:
+;; > (expand '(4 calling birds 3 french hens))
+;; (CALLING CALLING CALLING CALLING BIRDS FRENCH FRENCH FRENCH HENS)
+;; > (expand '(the 7 samurai))
+;; (THE SAMURAI SAMURAI SAMURAI SAMURAI SAMURAI SAMURAI SAMURAI)
+;; I will have to make a helper function, that can also be recursive.
+;; But this looks like every.
+
+(defn print-n-times [num the-string]
+  (loop [outp []
+         count (int num)]
+    (cond (= count 0) (clojure.string/join " " outp)
+          :else (recur (conj outp the-string) (dec count)))))
+
+(defn expand-r [the-sent]
+  (println "using the not before the else")
+  (loop [sent-work the-sent
+         outp ""]
+    (println "In loop with sent-work: ", sent-work, ", outp: " outp)
+    (cond (empty? sent-work) outp
+          (not (helper/is-string-number? (helper/first-string sent-work))) (recur (helper/butfirst-string sent-work) 
+                                                                                  (str outp (helper/first-string sent-work) " "))
+          :else  (recur (helper/butfirst-two-string sent-work) 
+                        (str outp
+                             (print-n-times (Double/parseDouble (helper/first-string sent-work)) 
+                                            (helper/second-string sent-work))
+                             " ")))))
+
+;; 14.9  Write a procedure called location that takes two arguments, a word and a sentence. 
+;; It should return a number indicating where in the sentence that word can be found. 
+;; If the word isn't in the sentence, return #f. 
+;; If the word appears more than once, return the location of the first appearance.
+;; > (location 'me '(you never give me your money))
+;; 4
+;; Shouldn't it return 0 if the word is not found? I don't like the idea that it returns a number OR a boolean.
+;; That kind of goes against his advice in chapter 12.
+;; Sort of like accumulate, but like member? you do not have to go all the way through.
+
+(defn location [word sent]
+  (loop [sent-work sent
+         counter 1]
+    (cond (empty? sent-work) 0 
+          (= word (helper/first-string sent-work)) counter
+          :else (recur (helper/butfirst-string sent-work) (inc counter)))))
 

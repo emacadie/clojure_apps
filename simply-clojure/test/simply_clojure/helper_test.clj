@@ -64,10 +64,10 @@
 
 (test/deftest test-number-tween-inclusive
   (test/testing "Test number-tween-inclusive"
-    (test/is (= true (number-tween-inclusive 14 12 15)))
-    (test/is (= true (number-tween-inclusive 14 13 15)))
-    (test/is (= true (number-tween-inclusive 14 14 15)))
-    (test/is (= true (number-tween-inclusive 14 13 14)))
+    (test/is (= true  (number-tween-inclusive 14 12 15)))
+    (test/is (= true  (number-tween-inclusive 14 13 15)))
+    (test/is (= true  (number-tween-inclusive 14 14 15)))
+    (test/is (= true  (number-tween-inclusive 14 13 14)))
     (test/is (= false (number-tween-inclusive 14 15 17)))
     (test/is (= false (number-tween-inclusive 18 15 17)))))
 
@@ -79,10 +79,10 @@
 
 (test/deftest test-is-string-number
   (test/testing "Testing is-string-number?"
-    (test/is (= true (is-string-number? "3")))
-    (test/is (= true (is-string-number? "-3")))
-    (test/is (= true (is-string-number? "3.0")))
-    (test/is (= true (is-string-number? "-3.09887")))
+    (test/is (= true  (is-string-number? "3")))
+    (test/is (= true  (is-string-number? "-3")))
+    (test/is (= true  (is-string-number? "3.0")))
+    (test/is (= true  (is-string-number? "-3.09887")))
     (test/is (= false (is-string-number? "3A")))
     (test/is (= false (is-string-number? "H")))))
 
@@ -95,6 +95,22 @@
   (test/testing "Testing butfirst-two-word"
     (test/is (= "This is my test string" (butfirst-two-word "This is my test string")))
     (test/is (= "is" (butfirst-two-word "This")))))
+
+(test/deftest test-remove-ending-space-from-string
+  (test/testing "Testing remove-ending-space-from-string"
+    (test/is (= "hello" (remove-ending-space-from-string "hello ")))
+    ; string with two spaces at the end
+    (test/is (= "hello " (remove-ending-space-from-string "hello  ")))
+    (test/is (= " hello" (remove-ending-space-from-string " hello")))))
+
+(test/deftest test-remove-starting-space-from-string
+  (test/testing "Testing remove-starting-space-from-string"
+    (test/is (= "hello" (remove-starting-space-from-string " hello")))
+    ; string with two spaces 
+    (test/is (= " hello" (remove-starting-space-from-string "  hello")))
+    (test/is (= "hello " (remove-starting-space-from-string "hello ")))))
+
+
 
 (test/deftest test-safe-subs
   (test/testing "Testing safe-subs"
