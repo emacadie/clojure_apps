@@ -1,17 +1,16 @@
-(ns simply-clojure.chapter14
+(ns simply-clojure.chapter14-vector
   (:require [clojure.string :as string]
             [simply-clojure.helper :as helper]))
 
+;; some of the stuff in chapter 14, but with vectors instead of strings
+
 ; a procedure to square every number in a sentence of numbers
-(defn- square-sentr-work [sent outp]
+(defn square-sent-v [sent]
   (loop [sent-work sent
-         outp-work outp]
-    (cond (empty? sent-work) outp-work
-          (not (number? (first sent-work))) (recur (rest sent-work) outp-work)
-          :else (recur (rest sent-work) (conj outp-work (helper/square (first sent-work)))))))
-;; line 13
-(defn square-sentr [sent]
-  (square-sentr-work sent []))
+         outp []]
+    (cond (empty? sent-work) (helper/join-with-spaces outp)
+          (not (number? (first sent-work))) (recur (rest sent-work) outp)
+          :else (recur (rest sent-work) (conj outp (helper/square (first sent-work)))))))
 
 (defn pigl [wd]
   (if (helper/vowel? (helper/first-string wd))
@@ -19,44 +18,36 @@
       (pigl (str (helper/butfirst-string wd) (helper/first-string wd)))))
 
 ;; tail recursive
-(defn- pigl-sentr-work [sent outp]
-  (loop [sent-work sent
-         out-work outp]
-    (cond (helper/string-is-word sent-work) (str out-work " " (pigl sent-work))
+(defn- pigl-sentv-work [sent]
+  (loop [sent-work (helper/split-string-to-words sent)
+         outp []]
+    (cond (helper/string-is-word sent-work) (helper/join-with-spaces (flatten outp (pigl sent-work)) )
           :else (recur (helper/butfirst-string sent-work) 
-                       (str out-work 
-                            " " 
-                            (pigl (helper/first-string sent-work)))))))
+                       (conj outp (pigl (helper/first-string sent-work)))))))
 
-(defn pigl-sentr [sent]
+(defn pigl-sentv [sent]
   (if (string/blank? sent)
     sent
-    (pigl-sentr-work sent "")))
+    (pigl-sentv-work sent)))
 
-(defn- disjoint-pairsr2 [wd outp]
-  (loop [word-work wd
-         out-work outp]
-    (cond (empty? word-work) out-work 
+(defn disjoint-pairsr-v [wd]
+  (loop [word-work (helper/split-word-to-letters wd)
+         out-work []]
+    (cond (empty? word-work) (flatten out-work) 
 	    (= (count word-work) 1) (str out-work, " ", word-work)
         :else (recur (helper/butfirst-string (helper/butfirst-string word-work))
-                     (str out-work (str " "
+                     (conj out-work (str " "
                                         (helper/first-string word-work) 
                                         (helper/first-string (helper/butfirst-string word-work))))))))
 
-;; I am covering some cases with the calling function
-;; Perhaps my logic is not tight enough
-(defn disjoint-pairs [word]
-  ; remove beginning space by calling subs
-  (helper/safe-subs (disjoint-pairsr2 word "") 1))
-
 ;; Every: one base case, one recursive case
 ;; Keep: one base case, two (or more?) recursive cases
-(defn keep-three-letter-words-r 
-  ([sent] (helper/safe-subs (keep-three-letter-words-r sent "") 1))
+(defn keep-three-letter-words-v
+  ([sent] (helper/safe-subs (keep-three-letter-words-v sent []) 1))
   ([sent outp]
   (loop [sent-work (helper/split-string-to-words sent) 
-         outw outp]
-    (cond (empty? sent-work) outw
+         outw []]
+    (cond (empty? sent-work) (helper/join-with-spaces outw)
           (= (count (first sent-work)) 3) (recur (rest sent-work) (str outw " " (first sent-work)))
           :else (recur (rest sent-work) outw)))))
 
@@ -86,19 +77,26 @@
 ;; (It's okay if your solution removes the other MORNING instead, as long as it removes only one of them.) 
 ;; This is sort of like "keep." The result has one less, so it's not "every", and there is more than one, so it's not "accumulate".
 (defn remove-once [bad-word sent]
-  (loop [sent-work sent
-         outp ""]
-    (cond (empty? sent-work) outp
-          (= bad-word (helper/first-string sent-work)) (str outp " " (helper/butfirst-string sent-work))
-          :else (recur (helper/butfirst-string sent-work) (str outp " " (helper/first-string sent-work))))))
+  (loop [sent-work (helper/split-string-to-words sent)
+         outp []]
+    (cond (empty? sent-work) (helper/join-with-spaces (flatten outp)) 
+          (= bad-word (first sent-work)) (helper/join-with-spaces (flatten (conj outp (helper/rest-vec sent-work))))
+          :else (recur (helper/rest-vec sent-work) (conj outp (first sent-work))))))
 
-
+;; with vectors!
+(defn remove-once-v [bad-word sent]
+  (loop [sent-work (helper/split-string-to-words sent) 
+         outp []]
+    (cond (empty? sent-work) (string/join " " (flatten outp)) 
+          (= bad-word (first sent-work)) (string/join " " (flatten (conj outp (helper/rest-vec sent-work))))
+          :else (recur (helper/rest-vec sent-work) (conj outp (first sent-work))))))
 
 
 ;;  14.2  
 ;; > (up 'town)
 ; (T TO TOW TOWN)
 ;; This is kind of like every.
+;; no need to use vectors for letters, probably more trouble than it is worth
 (defn upr [the-word]
   (loop [wordout the-word
          outp ""]
@@ -118,29 +116,33 @@
 (defn word-appearances [the-word the-sent]
   (loop [sent-work the-sent
          word-count 0]
-    (cond (empty? sent-work) word-count
-          (= the-word (helper/first-string sent-work)) (recur (helper/butfirst-string sent-work) (inc word-count)) 
-          :else (recur (helper/butfirst-string sent-work) word-count))))
+    (cond (empty? sent-work) word-count 
+          (= the-word (first sent-work)) (recur (rest sent-work) (inc word-count)) 
+          :else (recur (rest sent-work) word-count))))
 
-(defn remove-dups [the-sent]
-  (loop [sent-work the-sent
-         outp ""]
-    (cond (empty? sent-work) (helper/remove-ending-space-from-string outp) 
-          (> (word-appearances (helper/last-string sent-work) sent-work) 1) (recur (helper/butlast-string sent-work) outp)
-          :else (recur (helper/butlast-string sent-work) (str (helper/last-string sent-work) " " outp)))))
+(defn butlast-vec [the-vec]
+  (subvec the-vec 0 (dec (count the-vec)))
+)
+;; come back to this; it does not look like it should pass but it does
+(defn remove-dups-v [the-sent]
+  (loop [sent-work (helper/split-string-to-words the-sent) 
+         outp []]
+    (cond (empty? sent-work) (helper/join-with-spaces (reverse (flatten outp))) 
+          (> (word-appearances (last sent-work) sent-work) 1 ) (recur (butlast-vec sent-work) outp)
+          :else (recur (butlast-vec sent-work) (conj outp (last sent-work))))))
 
 ;;  14.4  
 ;; > (odds '(i lost my little girl))
 ;; (I MY GIRL)
 ;; This is like "keep" again
 ;; This needs a helper
-(defn odds-r  [the-sent]
-  (loop [sent-work the-sent
-         outp ""
+(defn odds-v  [the-sent]
+  (loop [sent-work (helper/split-string-to-words the-sent) 
+         outp []
          counter 1]
-    (cond (empty? sent-work) (helper/remove-starting-space-from-string outp)
-          (odd? counter) (recur (helper/butfirst-string sent-work) (str outp " " (helper/first-string sent-work)) (inc counter))
-          :else (recur (helper/butfirst-string sent-work) outp (inc counter)))))
+    (cond (empty? sent-work) (helper/join-with-spaces (flatten outp)) 
+          (odd? counter) (recur (rest sent-work) (conj outp (first sent-work)) (inc counter))
+          :else (recur (rest sent-work) outp (inc counter)))))
 
 ;;  14.5  [8.7] Write a procedure letter-count that takes a sentence as its argument and returns the total number of letters in the sentence:
 ;; This one is accumulate.
@@ -155,12 +157,12 @@
 ;; 14.6  Write member?.
 ;; This looks like accumulate
 ;; only works for strings
-(defn member-r [the-word the-sent]
-  (loop [sent-work the-sent
+(defn member-v [the-word the-sent]
+  (loop [sent-work (helper/split-string-to-words the-sent) 
          found? false]
     (cond (empty? sent-work) found?
-          (= the-word (helper/first-string sent-work)) true
-          :else (recur (helper/butfirst-string sent-work) found?))))
+          (= the-word (first sent-work)) true
+          :else (recur (rest sent-work) found?))))
 
 ;; 14.7  Write differences, which takes a sentence of numbers as its argument 
 ;; and returns a sentence containing the differences between adjacent elements. 
@@ -190,23 +192,18 @@
 (defn print-n-times [num the-string]
   (loop [outp []
          count (int num)]
-    (cond (= count 0) (clojure.string/join " " outp)
+    (cond (= count 0) outp
           :else (recur (conj outp the-string) (dec count)))))
 
-(defn expand-r [the-sent]
-  ; (println "using the not before the else")
-  (loop [sent-work the-sent
-         outp ""]
-    ; (println "In loop with sent-work: ", sent-work, ", outp: " outp)
-    (cond (empty? sent-work) outp
-          (not (helper/is-string-number? (helper/first-string sent-work))) (recur (helper/butfirst-string sent-work) 
-                                                                                  (str outp (helper/first-string sent-work) " "))
-          :else  (recur (helper/butfirst-two-string sent-work) 
-                        (str outp
-                             (print-n-times (Double/parseDouble (helper/first-string sent-work)) 
-                                            (helper/second-string sent-work))
-                             " ")))))
-
+(defn expand-v [the-sent]
+  (loop [sent-work (helper/split-string-to-words the-sent) 
+         outp []]
+    (cond (empty? sent-work) (helper/join-with-spaces (flatten outp)) 
+          (not (helper/is-string-number? (first sent-work))) (recur (rest sent-work) (conj outp (first sent-work)))
+          :else  (recur (helper/rest-vec (rest sent-work)) 
+                        (conj outp
+                             (print-n-times (Double/parseDouble (first sent-work))  
+                                            (second sent-work)))))))
 
 ;; 14.9  Write a procedure called location that takes two arguments, a word and a sentence. 
 ;; It should return a number indicating where in the sentence that word can be found. 
@@ -218,12 +215,12 @@
 ;; That kind of goes against his advice in chapter 12.
 ;; Sort of like accumulate, but like member? you do not have to go all the way through.
 
-(defn location [word sent]
-  (loop [sent-work sent
+(defn location-v [word sent]
+  (loop [sent-work (helper/split-string-to-words sent) 
          counter 1]
     (cond (empty? sent-work) 0 
-          (= word (helper/first-string sent-work)) counter
-          :else (recur (helper/butfirst-string sent-work) (inc counter)))))
+          (= word (first sent-work)) counter
+          :else (recur (rest sent-work) (inc counter)))))
 
 ;; 14.10  Write the procedure count-adjacent-duplicates that takes a sentence as an argument 
 ;; and returns the number of words in the sentence that are immediately followed by the same word:
@@ -233,7 +230,7 @@
 ;; 2
 ;; I think this is like accumulate
 ;; (count-adjacent-dups-r '(y a b b a d a b b a d o o) 0)
-(defn count-adjacent-dups [sent]
+(defn count-adjacent-dups-v [sent]
   (loop [sent-work (helper/split-string-to-words sent) 
          counter 0]
     (cond (= (count sent-work) 1) counter
@@ -249,43 +246,60 @@
 ;; This is like keep
 ;; (remove-adj-dups-r '(y a b b a d a b b a d o o) '())
 ;; (remove-adj-dups-r '(yeah yeah yeah) '())
-(comment
-(define (remove-adj-dups-r the-sent outp)
-  (display-all "calling remove-adj-dups-r with the-sent: " the-sent ", outp: " outp)
-  (cond ((equal? (count the-sent) 0) outp)
-        ((and (equal? (count the-sent) 1) (equal? (first the-sent) (last outp))) outp)
-        ((equal? (first the-sent) (second the-sent)) (remove-adj-dups-r (butfirst (butfirst the-sent)) (sentence outp (first the-sent))))
-        (else (remove-adj-dups-r (butfirst the-sent) (sentence outp (first the-sent))))))
-)
 ;; their strings have no commas, so why not just do it all in vectors?
-(defn remove-adjacent-dups [the-sent]
+(defn remove-adjacent-dups-v [the-sent]
   (loop [sent-work (helper/split-string-to-words the-sent) 
          outp []]
-    (cond (= 0 (count sent-work)) (clojure.string/join " " outp) 
-          (and (= (count sent-work) 1) (= (first sent-work) (last outp))) (clojure.string/join " " outp) 
-          (= (first sent-work) (second sent-work)) (recur (vec (rest (rest sent-work))) (conj outp (first sent-work)))
-          :else (recur (vec (rest sent-work)) (conj outp (first sent-work))))))
+    (cond (= 0 (count sent-work)) (helper/join-with-spaces outp) 
+          (and (= (count sent-work) 1) (= (first sent-work) (last outp))) (helper/join-with-spaces outp) 
+          (= (first sent-work) (second sent-work)) (recur (helper/rest-vec (rest sent-work)) (conj outp (first sent-work)))
+          :else (recur (helper/rest-vec sent-work) (conj outp (first sent-work))))))
 
-;; 14.13  What does the pigl procedure from Chapter 11 do if you invoke it with a word like "frzzmlpt" that has no vowels? 
-;; It goes in an infinite loop
-;; Fix it so that it returns "frzzmlptay."
-; (define (pigl wd)
-;   (if (member? (first wd) 'aeiou)
-;       (word wd 'ay)
-;      (pigl (word (bf wd) (first wd)))))
+;; 14.12  Write a procedure progressive-squares? that takes a sentence of numbers as its argument. 
+;; It should return #t if each number (other than the first) is the square of the number before it:
+;; This is accumulate
+(defn progressive-squares? [nums]
+  (loop [num-work nums
+         outp false]
+    (cond (or (= (count num-work) 0) (= (count num-work) 1)) outp
+          (= (helper/square (first num-work)) (second num-work)) (recur (rest num-work) true)
+          :else false)))
 
-(defn all-consonants? [word]
-  (if (zero? (count (filter helper/vowel? (helper/split-word-to-letters word))))
-    true
-    false))
+;; 14.14  Write a predicate same-shape? that takes two sentences as arguments. 
+;; It should return #t if two conditions are met: 
+;; The two sentences must have the same number of words, 
+;; and each word of the first sentence must have the same number of letters as the word in the corresponding position in the second sentence.
+;; not tail-recursive
 
-(defn pigl-r [word]
-  (loop [word-work word
-         outp ""]
-        (cond (all-consonants? word-work) (str word-work "ay")
-        (helper/vowel? (helper/first-word word-work)) (str word-work outp "ay")
-        :else (recur (helper/butfirst-word word-work) (str outp (helper/first-word word-work))))))
+(defn same-shape? [first-sent second-sent]
+  (loop [first-work (helper/split-string-to-words first-sent)
+         second-work (helper/split-string-to-words second-sent)
+         outp false]
+    (cond (not (= (count first-work) (count second-work))) false
+          (and (empty? first-work) (empty? second-work)) outp
+          (= (count (first first-work)) (count (first second-work))) (recur (rest first-work) (rest second-work) true)
+          :else false)))
 
-
+;; 14.15  Write merge, a procedure that takes two sentences of numbers as arguments. 
+;; Each sentence must consist of numbers in increasing order. 
+;; Merge should return a single sentence containing all of the numbers, in order. 
+;; (We'll use this in the next chapter as part of a sorting algorithm.)
+;; > (merge '(4 7 18 40 99) '(3 6 9 12 24 36 50))
+;; (3 4 6 7 9 12 18 24 36 40 50 99)
+;; I will just assume that all of the numbers are already sorted
+;; And that there are no numbers in both lists
+;; Two into one: accumulate
+;; (merge-r '(4 7 18 40 99) '(3 6 9 12 24 36 50) '())
+;; not tail recursive, lots of conditions
+(defn merge-v [nums-a nums-b]
+  (loop [first-nums nums-a
+         second-nums nums-b
+         outp []]
+    (cond (and (empty? first-nums) (empty? second-nums)) (vec outp)
+          (empty? first-nums) (vec (flatten (conj outp second-nums)))
+          (empty? second-nums) (vec (flatten (conj outp first-nums)))
+          (< (first first-nums) (first second-nums)) (recur (rest first-nums) second-nums (conj outp (first first-nums)))
+          (< (first second-nums) (first first-nums)) (recur first-nums (rest second-nums) (conj outp (first second-nums)))
+          :else outp)))
 
 

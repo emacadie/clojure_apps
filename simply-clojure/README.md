@@ -5,8 +5,10 @@
 ## Usage
 
 FIXME
+```clojure
 (require '[clojure.tools.namespace.repl :as repl])
 (repl/refresh)
+```
 ## License
 
 Copyright © 2019 FIXME

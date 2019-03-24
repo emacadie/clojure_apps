@@ -41,13 +41,13 @@
 
 (test/deftest test-remove-dups
   (test/testing "Testing remove-dups"
-    (test/is (= "ob la di la da") (remove-dups "ob la di da"))
-    (test/is (= "good morning good morning") (remove-dups "good morning"))))
+    (test/is (= "ob la di da" (remove-dups "ob la di ob la da")))
+    (test/is (= "good morning" (remove-dups "good morning good morning")))))
 
 (test/deftest test-odds
   (test/testing "Testing odds"
-    (test/is (= "i my girl") (odds-r "i lost my little girl"))
-    (test/is (= "this not drill and") (odds-r "this is not a drill boys and girls"))))
+    (test/is (= "i my girl" (odds-r "i lost my little girl")) )
+    (test/is (= "this not drill and" (odds-r "this is not a drill boys and girls")))))
 
 (test/deftest test-letter-count-r
   (test/testing "Testing letter-count-r"
@@ -80,6 +80,22 @@
     (test/is (= 4 (location "me" "you never give me your money")))
     (test/is (= 0 (location "me" "you never give them your money")))))
 
+(test/deftest test-count-adjacent-dups
+  (test/testing "Testing count-adjacent-dups"
+    (test/is (= 3 (count-adjacent-dups "y a b b a d a b b a d o o")))
+    (test/is (= 2 (count-adjacent-dups "yeah yeah yeah")))
+    (test/is (= 0 (count-adjacent-dups "this string has no dups")))))
+
+(test/deftest test-remove-adjacent-dups
+  (test/testing "Testing remove-adjacent-dups"
+    (test/is (= "y a b a d a b a d o" (remove-adjacent-dups "y a b b a d a b b a d o o")))
+    (test/is (= "yeah" (remove-adjacent-dups "yeah yeah yeah")))))
+
+(test/deftest test-pigl-r
+  (test/testing "Testing pigl-r"
+    (test/is (= "frzzmlptay" (pigl-r "frzzmlpt")))
+    (test/is (= "operpray" (pigl-r "proper")))))
 
 
+ 
 

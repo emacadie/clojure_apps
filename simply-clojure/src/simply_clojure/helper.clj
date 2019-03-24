@@ -106,20 +106,25 @@
 (defn split-word-to-letters [the-word]
   (string/split the-word #""))
 
-(defn split-string-to-words [the-word]
-  (string/split the-word #" "))
+(defn split-string-to-words [the-sent]
+  (string/split the-sent #" "))
+
+(defn join-with-spaces [the-str]
+  (string/join " " the-str))
 
 (defn phone-letter [letter]
   (let [lletter (string/lower-case letter)]
-      (cond (contains? #{"a" "b" "c"} lletter) 2
-            (contains? #{"d" "e" "f"} lletter) 3
-            (contains? #{"g" "h" "i"} lletter) 4
-            (contains? #{"j" "k" "l"} lletter) 5
-            (contains? #{"m" "n" "o"} lletter) 6
+      (cond (contains? #{"a" "b" "c"}     lletter) 2
+            (contains? #{"d" "e" "f"}     lletter) 3
+            (contains? #{"g" "h" "i"}     lletter) 4
+            (contains? #{"j" "k" "l"}     lletter) 5
+            (contains? #{"m" "n" "o"}     lletter) 6
             (contains? #{"p" "q" "r" "s"} lletter) 7
-            (contains? #{"t" "u" "v"} lletter) 8
+            (contains? #{"t" "u" "v"}     lletter) 8
             (contains? #{"w" "x" "y" "z"} lletter) 9
             :else 0)))
+
+(def rest-vec (comp vec rest))
 
 ;; from http://clojure-doc.org/articles/language/functions.html
 ;; Is this in any library? It seems pretty useful.
