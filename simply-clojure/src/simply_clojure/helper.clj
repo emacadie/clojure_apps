@@ -112,6 +112,9 @@
 (defn join-with-spaces [the-str]
   (string/join " " the-str))
 
+(defn butlast-vec [the-vec]
+  (subvec the-vec 0 (dec (count the-vec))))
+
 (defn phone-letter [letter]
   (let [lletter (string/lower-case letter)]
       (cond (contains? #{"a" "b" "c"}     lletter) 2

@@ -120,16 +120,14 @@
           (= the-word (first sent-work)) (recur (rest sent-work) (inc word-count)) 
           :else (recur (rest sent-work) word-count))))
 
-(defn butlast-vec [the-vec]
-  (subvec the-vec 0 (dec (count the-vec)))
-)
+
 ;; come back to this; it does not look like it should pass but it does
 (defn remove-dups-v [the-sent]
   (loop [sent-work (helper/split-string-to-words the-sent) 
          outp []]
     (cond (empty? sent-work) (helper/join-with-spaces (reverse (flatten outp))) 
-          (> (word-appearances (last sent-work) sent-work) 1 ) (recur (butlast-vec sent-work) outp)
-          :else (recur (butlast-vec sent-work) (conj outp (last sent-work))))))
+          (> (word-appearances (last sent-work) sent-work) 1 ) (recur (helper/butlast-vec sent-work) outp)
+          :else (recur (helper/butlast-vec sent-work) (conj outp (last sent-work))))))
 
 ;;  14.4  
 ;; > (odds '(i lost my little girl))
