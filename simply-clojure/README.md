@@ -8,6 +8,8 @@ FIXME
 ```clojure
 (require '[clojure.tools.namespace.repl :as repl])
 (repl/refresh)
+(require '[simply-clojure.helper])
+(require '[simply-clojure.chapter14-numbers])
 ```
 ## License
 

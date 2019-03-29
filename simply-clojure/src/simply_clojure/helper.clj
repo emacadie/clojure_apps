@@ -77,6 +77,20 @@
     (catch Exception Ex
       false)))
 
+(defn string-to-double [s-num]
+  (if is-string-number? s-num
+      (try
+        (Double/parseDouble s-num)
+        (catch Exception Ex))))
+
+(defn string-to-int [s-num]
+  (if (is-string-number? s-num)
+      (do
+        (try
+          (Integer/parseInt s-num)
+          (catch Exception Ex)))
+      0))
+
 (defn remove-ending-space-from-string [str-work]
   (if (string/ends-with? str-work " ")
     (subs str-work 0 (dec (.length str-work)))

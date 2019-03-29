@@ -4,38 +4,6 @@
 
 (comment
 ; "item" in Simply Scheme starts counting a list at "1", not "0" like C
-(define number-table '(one two three four five six seven eight nine zero))
-
-(define power-1-table '(ten twenty thirty forty fifty sixty seventy eighty ninety))
-
-(define (get-new-teen-table n)
-  (cond [(empty? n) 'ten]
-        [(equal? (first n) 'one) 'eleven]
-        [(equal? (first n) 'two) 'twelve]
-        [(equal? (first n) 'three) 'thirteen]
-        [else (word (first n) 'teen)]))
-
-(define (num-name2-work num-work output depth)
-  (cond [(empty? num-work) output]        ;; skip ending zero
-        [(zero? (last num-work)) (num-name2-work (butlast num-work) 
-                                                 output 
-                                                 (+ 1 depth))]
-        [(equal? depth 1) (num-name2-work (butlast num-work) 
-                                          (sentence (item (last num-work) number-table)) 
-                                          (+ 1 depth))]
-        ; new teens
-        [(and (equal? depth 2) (equal? 1 (last num-work))) (num-name2-work (butlast num-work) 
-                                                                           (get-new-teen-table output) 
-                                                                           (+ 1 depth))]
-        [(equal? depth 2) (num-name2-work (butlast num-work) 
-                                          (sentence (item (last num-work) power-1-table)  output) 
-                                          (+ 1 depth))]
-        [(equal? depth 3) (num-name2-work (butlast num-work) 
-                                          (sentence (item (last num-work) number-table) 'hundred output) 
-                                          (+ 1 depth))]))
-
-(define (number-name-2 number)
-  (num-name2-work (last (do-string-break (number->string number) '())) "" 1))
 
 (define (grand-num-name-worker the-num outp group)
   (cond ((empty? the-num) outp)
@@ -49,6 +17,19 @@
 (grand-num-name-worker (do-string-break (number->string raw-num) '()) "" 1)))
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 )
+
+(def number-table ["zero" "one" "two" "three" "four" "five" "six" "seven" "eight" "nine"])
+
+(def power-1-table ["zero" "ten" "twenty" "thirty" "forty" "fifty" "sixty" "seventy" "eighty" "ninety"])
+
+(defn get-new-teen-table [n]
+  (cond (empty? n) "ten"
+        (= n "one") "eleven"
+        (= n "two") "twelve"
+        (= n "three") "thirteen"
+        (= n "five") "fifteen"
+        (= n "eight") "eighteen"
+        :else (str n "teen")))
 
 (defn exponent-helper [num group]
   (cond (empty? num) ""
@@ -85,4 +66,32 @@
     (cond (<= (count num-work) 3) (vec (reverse (conj outp num-work))) ; tupelo can do that for you
           :else (recur (helper/butlast-word (helper/butlast-word (helper/butlast-word num-work)))
                        (conj outp (remove-leading-zeros (str (get-last-3 num-work))))))))
+
+(defn nth-with-string 
+  ([coll str-index]
+   (nth coll (helper/string-to-int str-index) "Not found")) 
+  ([coll str-index default]
+   (nth coll (helper/string-to-int str-index) default)))
+
+(defn num-name2-work [num] ; num-work output depth
+  (loop [num-work (helper/split-word-to-letters (Integer/toString num)) ;; actual nums, but should they be strings?
+         output ""
+         depth 1]
+    (cond (empty? num-work) output        ;; skip ending zero
+        (= "0" (last num-work)) (recur (helper/butlast-vec num-work) output (inc depth))
+        (= depth 1) (recur (helper/butlast-vec num-work) 
+                           (str (nth-with-string number-table (last num-work))) 
+                           (inc depth))
+        ; new teens
+        (and (= depth 2) (= "1" (last num-work))) (recur (helper/butlast-vec num-work) 
+                                                         (get-new-teen-table output) 
+                                                         (inc depth))
+        (= depth 2) (recur (helper/butlast-vec num-work) 
+                             (if (empty? output)
+                               (str (nth-with-string power-1-table (last num-work)) output) 
+                               (str (nth-with-string power-1-table (last num-work)) "-" output))
+                           (inc depth))
+        (= depth 3) (recur (helper/butlast-vec num-work) 
+                           (str (nth-with-string number-table (last num-work)) " hundred " output) 
+                           (inc depth)))))
 
