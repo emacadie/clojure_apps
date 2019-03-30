@@ -14,6 +14,12 @@
     (test/is (= "eighteen"  (get-new-teen-table "eight")))
     (test/is (= "nineteen"  (get-new-teen-table "nine")))))
 
+(test/deftest test-exponent-helper
+  (test/testing "Testing exponent-helper"
+    (test/is (= "five hundred thirteen thousand" (exponent-helper "five hundred thirteen" 2)))
+)
+)
+
 (test/deftest test-remove-leading-zeros
   (test/testing "Testing remove-leading-zeros"
     (test/is (= "100" (remove-leading-zeros "100")))
@@ -34,21 +40,20 @@
     (test/is (= ["123" "456" "789"] (break-string-to-threes "123456789")))
     (test/is (= ["45"]              (break-string-to-threes "45")))))
 
-(test/deftest test-nth-with-string 
-  (test/testing "Testing nth-with-string"
-    (test/is (= "hello" (nth-with-string ["jjj" "hello"] "1")))
-    (test/is (= "jjj" (nth-with-string ["jjj" "hello"] "0")))
-))
+(test/deftest test-nth-string-index 
+  (test/testing "Testing nth-string-index"
+    (test/is (= "hello" (nth-string-index ["jjj" "hello"] "1")))
+    (test/is (= "jjj" (nth-string-index ["jjj" "hello"] "0")))))
 
 (test/deftest test-num-name2-work
   (test/testing "Testing num-name2-work"
-    (test/is (= "two hundred twenty-one" (num-name2-work 221)))
-    (test/is (= "two hundred twenty" (num-name2-work 220)))
-    (test/is (= "twenty-one" (num-name2-work 21)))
-    (test/is (= "twenty" (num-name2-work 20)))
-    (test/is (= "eighteen" (num-name2-work 18)))
-    (test/is (= "two hundred eighteen" (num-name2-work 218)))
-    (test/is (= "eight" (num-name2-work 8)))))
+    (test/is (= "two hundred twenty-one" (num-name2-work "221")))
+    (test/is (= "two hundred twenty" (num-name2-work "220")))
+    (test/is (= "twenty-one" (num-name2-work "21")))
+    (test/is (= "twenty" (num-name2-work "20")))
+    (test/is (= "eighteen" (num-name2-work "18")))
+    (test/is (= "two hundred eighteen" (num-name2-work "218")))
+    (test/is (= "eight" (num-name2-work "8")))))
 
 
 
