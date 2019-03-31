@@ -111,6 +111,7 @@
   ([the-str begin end]
    (cond (> begin (.length the-str)) ""
          (> end (.length the-str)) the-str
+         (neg? begin) (subs the-str 0 end) 
          :else (subs the-str begin end))))
 
 (defn number-tween-inclusive [number lower upper]

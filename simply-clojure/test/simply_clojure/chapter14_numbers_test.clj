@@ -16,9 +16,7 @@
 
 (test/deftest test-exponent-helper
   (test/testing "Testing exponent-helper"
-    (test/is (= "five hundred thirteen thousand" (exponent-helper "five hundred thirteen" 2)))
-)
-)
+    (test/is (= "five hundred thirteen thousand" (exponent-helper "five hundred thirteen" 2)))))
 
 (test/deftest test-remove-leading-zeros
   (test/testing "Testing remove-leading-zeros"
@@ -30,7 +28,10 @@
 (test/deftest test-get-last-3
   (test/testing "Testing get-last-3"
     (test/is (= "345" (get-last-3 "12345")))
-    (test/is (= "45"  (get-last-3 "45")))))
+    (test/is (= "345" (get-last-3 "2345")))
+    (test/is (= "345" (get-last-3 "345")))
+    (test/is (= "45"  (get-last-3 "45")))
+    (test/is (= "5"   (get-last-3 "5")))))
 
 (test/deftest test-break-string-to-threes
   (test/testing "Testing break-string-to-threes"
@@ -55,5 +56,15 @@
     (test/is (= "two hundred eighteen" (num-name2-work "218")))
     (test/is (= "eight" (num-name2-work "8")))))
 
+(test/deftest test-grand-num-name-worker
+  (test/testing "Testing grand-num-name-worker"
+    (test/is (= "one million three hundred thirty-three" (grand-num-name-worker 1000333)))
+    (test/is (= "one million one hundred twenty-three thousand three hundred thirty-three" (grand-num-name-worker 1123333)))
+    (test/is (= "one million four hundred twenty-eight thousand four hundred twenty-five" (grand-num-name-worker 1428425)))
+    (test/is (= "one million five hundred twenty-nine" (grand-num-name-worker 1000529)))
+    (test/is (= "five million five hundred thirteen thousand three hundred forty-five" (grand-num-name-worker 5513345)))
+    (test/is (= "one thousand five hundred twenty-nine" (grand-num-name-worker 1529)))
+    (test/is (= "five hundred twenty-nine" (grand-num-name-worker 529)))
+    (test/is (= "twenty-nine" (grand-num-name-worker 29)))))
 
 

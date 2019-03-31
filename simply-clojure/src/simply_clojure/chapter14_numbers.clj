@@ -2,8 +2,6 @@
   (:require [clojure.string :as string]
             [simply-clojure.helper :as helper]))
 
-
-
 (def number-table ["" "one" "two" "three" "four" "five" "six" "seven" "eight" "nine"])
 
 (def power-1-table ["zero" "ten" "twenty" "thirty" "forty" "fifty" "sixty" "seventy" "eighty" "ninety"])
@@ -39,18 +37,14 @@
           (= "0" (helper/first-word num-work)) (recur (helper/butfirst-word num-work) outp)
           :else num-work)))
 
-(defn get-last-3 [the-num]
-  (if (< (count the-num) 3)
-    the-num
-    (str (helper/last-word (helper/butlast-word (helper/butlast-word the-num)))
-        (helper/last-word (helper/butlast-word the-num))
-        (helper/last-word the-num))))
+(defn get-last-3 [num-str]
+  (helper/safe-subs num-str (- (.length num-str) 3) (.length num-str)))
 
-(defn break-string-to-threes [num-string] ; num-list
+(defn break-string-to-threes [num-string] 
   (loop [num-work num-string
          outp []]
-    (cond (<= (count num-work) 3) (vec (reverse (conj outp num-work))) ; tupelo can do that for you
-          :else (recur (helper/butlast-word (helper/butlast-word (helper/butlast-word num-work)))
+    (cond (<= (count num-work) 3) (vec (reverse (conj outp num-work))) ; tupelo can do that for you, or concat, I think
+          :else (recur (helper/safe-subs num-work 0 (- (.length num-work) 3))
                        (conj outp (remove-leading-zeros (str (get-last-3 num-work))))))))
 
 (defn nth-string-index 
@@ -59,13 +53,11 @@
   ([coll str-index default]
    (nth coll (helper/string-to-int str-index) default)))
 
-(defn num-name2-work [num] ; num-work output depth
-  (println "in num-name2-work with num: " num)
-  (loop [; num-work (helper/split-word-to-letters (Integer/toString num)) ;; actual nums, but should they be strings?
-         num-work (helper/split-word-to-letters num)
+(defn num-name2-work [num] 
+  (loop [num-work (helper/split-word-to-letters num)
          output ""
          depth 1]
-    (cond (empty? num-work) output        ;; skip ending zero
+    (cond (empty? num-work) output
         (= "0" (last num-work)) (recur (helper/butlast-vec num-work) output (inc depth))
         (= depth 1) (recur (helper/butlast-vec num-work) 
                            (str (nth-string-index number-table (last num-work))) 
@@ -83,29 +75,14 @@
                            (str (nth-string-index number-table (last num-work)) " hundred " output) 
                            (inc depth)))))
 
-(comment
-; "item" in Simply Scheme starts counting a list at "1", not "0" like C
-
-(define (grand-num-name-caller raw-num)
-  (keep (lambda (x) (not (empty? x)))
-(grand-num-name-worker (do-string-break (number->string raw-num) '()) "" 1)))
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-)
-
-(defn grand-num-name-worker [the-num]; the-num outp group
+(defn grand-num-name-worker [the-num]
   (loop [num-work (break-string-to-threes (Integer/toString the-num))
-         outp ""
-         group 1
-         ]
-    (println "In loop for grand-num-name-worker: num-work: ", num-work, ", outp: ", outp, ", group: " group)
-    (cond (empty? num-work) outp
-          :else (do
-                  (println "In else in grand-num-name-worker")
-                  (recur (helper/butlast-vec num-work)
-                         (str  (exponent-helper (num-name2-work (last num-work)) 
-                                                group) 
-                               outp) 
-                         (inc group))))
-)
-  )
+         outp []
+         group 1]
+    (cond (empty? num-work) (helper/join-with-spaces (filter #(not (empty? %1)) (flatten outp)))
+          :else (recur (helper/butlast-vec num-work)
+                         (concat (vector (exponent-helper (num-name2-work (last num-work)) 
+                                                          group)) 
+                                 outp) 
+                         (inc group)))))
 
