@@ -11,6 +11,13 @@ FIXME
 (require '[simply-clojure.helper])
 (require '[simply-clojure.chapter14-numbers])
 ```
+
+Link to numeric tower: https://github.com/clojure/math.numeric-tower  
+
+lein test simply-clojure.chapter15-test
+
+lein test :only simply-clojure.chapter15-test/test-to-binary
+
 ## License
 
 Copyright © 2019 FIXME
