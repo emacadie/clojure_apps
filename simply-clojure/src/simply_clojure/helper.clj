@@ -142,6 +142,7 @@
             (contains? #{"w" "x" "y" "z"} lletter) 9
             :else 0)))
 
+;; I admit, it's more typing than (vec (rest stuff)), but it's descriptive.
 (def rest-vec (comp vec rest))
 
 ;; from http://clojure-doc.org/articles/language/functions.html
@@ -152,7 +153,5 @@
   {:pre [(not (nil? d)) (not (nil? precision))]}
   (let [factor (Math/pow 10 precision)]
     (/ (Math/floor (* d factor)) factor)))
-
-
 
 
