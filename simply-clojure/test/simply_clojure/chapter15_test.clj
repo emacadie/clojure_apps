@@ -39,6 +39,15 @@
                   "ip" "ipp" "ippi" "p" "pp" "ppi" "p" "pi" "i")
                 (sub-whole-word-r "mississippi")))))
 
+(test/deftest test-substring?
+  (test/testing "Testing substring?"
+    (test/is (= true  (substring? "ssip" "mississippi")))
+    (test/is (= false (substring? "misip" "mississippi")))))
 
-
+(test/deftest test-unscramble
+  (test/testing "Testing unscramble"
+    (test/is (= "this is the dog that worried the cat that killed the rat" (unscramble "this is the rat the cat the dog worried killed")))
+    (test/is (= "this is the girl that saw the boy that owned the dog that chased the cat that bit the rat" 
+                (unscramble "this is the rat the cat the dog the boy the girl saw owned chased bit")))
+    (test/is (= "this is the gladiator that killed the roach" (unscramble "this is the roach the gladiator killed")))))
 

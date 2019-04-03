@@ -87,6 +87,43 @@
                        (conj outp 
                              (substrings-r (string/join (helper/rest-vec the-word))))))))
 
+;; 15.4 Write a predicate procedure substring? that takes two words as arguments and returns #t if and only if the first word is a substring of the second. 
+;; (See Exercise 15.3 for the definition of a substring.)
+;; Be careful about cases in which you encounter a "false start," like this:
+;; > (substring? 'ssip 'mississippi)
+; #T
+;; and also about subsets that don't appear as consecutive letters in the second word:
+;; > (substring? 'misip 'mississippi)
+(defn substring? [sub the-string]
+ (contains? (set (sub-whole-word-r the-string)) sub))
 
+;; 15.6  Let's say a gladiator kills a roach. 
+;; If we want to talk about the roach, we say "the roach the gladiator killed." 
+;; But if we want to talk about the gladiator, we say "the gladiator that killed the roach."
+
+;; People are pretty good at understanding even rather long sentences as long as they're straightforward: 
+;; "This is the farmer who kept the cock that waked the priest that married the man that kissed the maiden
+;; that milked the cow that tossed the dog that worried the cat that killed the rat that ate the malt 
+;; that lay in the house that Jack built." 
+;; But even a short nested sentence is confusing: 
+;; "This is the rat the cat the dog worried killed." 
+;; Which rat was that?
+;; Write a procedure unscramble that takes a nested sentence as argument and returns a straightforward sentence about the same cast of characters:
+;; You may assume that the argument has exactly the structure of these examples, 
+;; with no special cases like "that lay in the house" or "that Jack built."
+
+;; only works for those weird types of sentences
+;; this is the noun3 the noun2 the noun1 verb1 verb2
+; A lot of calls to "vec" and "vector". 
+;; Vectors are the barbeque sauce of Clojure. Don't know what to do? Make it a vector.
+(defn unscramble[arg-sent]
+  (let [sent-vec (helper/split-string-to-words arg-sent)
+        first-two (subvec sent-vec 0 2)]
+    (loop [the-sent (subvec sent-vec 2 (count sent-vec)) 
+           outp []]
+      (cond (empty? the-sent) (helper/join-with-spaces (flatten (vector first-two outp))) 
+            (= (count the-sent) 2) (recur "" (concat (vector the-sent outp)))
+            :else (recur (concat (helper/butlast-vec (helper/rest-vec (helper/rest-vec the-sent))))
+                         (concat (vector "that" (last the-sent) (first the-sent) (first (helper/rest-vec the-sent)) outp)))))))
 
 
