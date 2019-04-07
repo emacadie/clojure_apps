@@ -35,9 +35,9 @@
   (loop [num-work the-num
          outp []]
     (cond (= num-work 0) outp
-        (= num-work 2) (concat 1 outp)
+        (= num-work 2) (into (vector 1) outp) 
         :else (recur (- num-work (math-nt/expt 2 (closest-power-of-2 num-work 0))) 
-                     (concat (vector (+ (closest-power-of-2 num-work 0) 1)) outp)))))
+                     (into (vector (+ (closest-power-of-2 num-work 0) 1)) outp)))))
 
 (defn to-binary-r [the-num]
   (loop [power-list (get-all-powers-of-2 the-num)
@@ -45,8 +45,8 @@
          outp []]
     ; (println "In loop of to-binary-r, with power-list: ", power-list, ", counter: " counter, ", outp: " outp)
     (cond (empty? power-list) outp
-          (= (first power-list) counter) (recur (rest power-list) (inc counter) (vec (concat [1] outp)))
-          :else (recur power-list (inc counter) (vec (concat [0] outp))))))
+          (= (first power-list) counter) (recur (rest power-list) (inc counter) (into [1] outp))
+          :else (recur power-list (inc counter) (into [0] outp)))))
 
 ;; 15.2  A "palindrome" is a sentence that reads the same backward as forward.
 ;; Write a predicate palindrome? that takes a sentence as argument and decides whether it is a palindrome.
@@ -122,8 +122,8 @@
     (loop [the-sent (subvec sent-vec 2 (count sent-vec)) 
            outp []]
       (cond (empty? the-sent) (helper/join-with-spaces (flatten (vector first-two outp))) 
-            (= (count the-sent) 2) (recur "" (concat (vector the-sent outp)))
+            (= (count the-sent) 2) (recur "" (into (vector the-sent) outp)) 
             :else (recur (concat (helper/butlast-vec (helper/rest-vec (helper/rest-vec the-sent))))
-                         (concat (vector "that" (last the-sent) (first the-sent) (first (helper/rest-vec the-sent)) outp)))))))
+                         (vector "that" (last the-sent) (first the-sent) (first (helper/rest-vec the-sent)) outp))))))
 
 

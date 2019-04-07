@@ -43,7 +43,7 @@
 (defn break-string-to-threes [num-string] 
   (loop [num-work num-string
          outp []]
-    (cond (<= (count num-work) 3) (vec (reverse (conj outp num-work))) ; tupelo can do that for you, or concat, I think
+    (cond (<= (count num-work) 3) (vec (reverse (conj outp num-work))) ; tupelo can do that for you, or concat, I think 
           :else (recur (helper/safe-subs num-work 0 (- (.length num-work) 3))
                        (conj outp (remove-leading-zeros (str (get-last-3 num-work))))))))
 
@@ -81,8 +81,15 @@
          group 1]
     (cond (empty? num-work) (helper/join-with-spaces (filter #(not (empty? %1)) (flatten outp)))
           :else (recur (helper/butlast-vec num-work)
-                         (concat (vector (exponent-helper (num-name2-work (last num-work)) 
-                                                          group)) 
-                                 outp) 
-                         (inc group)))))
+                       (into (vector (exponent-helper (num-name2-work (last num-work)) 
+                                                      group)) 
+                             outp)                         
+                       (inc group)))))
+(comment
+;                    I was doing this:
+                    (concat (vector (exponent-helper (num-name2-work (last num-work)) 
+                                                           group)) 
+                                  outp)
+;                    But Stuart Sierra says to avoid concat
+)
 

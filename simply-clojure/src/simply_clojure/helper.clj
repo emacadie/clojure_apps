@@ -154,4 +154,18 @@
   (let [factor (Math/pow 10 precision)]
     (/ (Math/floor (* d factor)) factor)))
 
+; based heavily on https://stackoverflow.com/questions/29929325/how-to-split-a-number-in-clojure
+(defn digits 
+  "Returns a vector or list of the digits"
+  ([n type-symbol]
+   (cond (= type-symbol :vector) (vec (digits n))
+         (= type-symbol :vec) (vec (digits n))
+         :else (digits n)))
+  ([n]
+   (loop [result (list), n n]
+     (if (pos? n)
+       (recur (conj result (rem n 10))
+              (quot n 10))
+       result))))
+
 
