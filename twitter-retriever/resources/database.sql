@@ -63,3 +63,29 @@ create table twitter_auth (
 );
 CREATE INDEX twitter_auth_twitter_user_name ON twitter_auth ( twitter_user_name );
 
+-- changes made per https://wiki.postgresql.org/wiki/Don%27t_Do_This
+-- linked from https://news.ycombinator.com/item?id=19817531
+alter table processed_tweet alter created_at        type timestamptz using created_at        at time zone 'CDT';
+alter table processed_tweet alter record_created_at type timestamptz using record_created_at at time zone 'CDT';
+alter table processed_tweet alter batch_time        type timestamptz using batch_time        at time zone 'CDT';
+alter table processed_tweet alter created_at        set default now(); 
+alter table processed_tweet alter record_created_at set default now();
+alter table processed_tweet alter batch_time        set default now(); 
+
+alter table twitter_auth alter record_created_at type timestamptz using record_created_at at time zone 'CDT';
+alter table twitter_auth alter record_created_at set default now();
+
+ 
+alter table twitter_tweet alter created_at        type timestamptz using created_at        at time zone 'CDT';
+alter table twitter_tweet alter record_created_at type timestamptz using record_created_at at time zone 'CDT';
+alter table twitter_tweet alter batch_time        type timestamptz using batch_time        at time zone 'CDT';
+alter table twitter_tweet alter created_at        set default now();
+alter table twitter_tweet alter record_created_at set default now();
+alter table twitter_tweet alter batch_time        set default now();
+
+
+alter table twitter_user alter created_at        type timestamptz using created_at        at time zone 'CDT'
+alter table twitter_user alter record_created_at type timestamptz using record_created_at at time zone 'CDT';
+alter table twitter_user alter created_at        set default now();
+alter table twitter_user alter record_created_at set default now();
+
