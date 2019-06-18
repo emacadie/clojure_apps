@@ -154,6 +154,11 @@
     (cond (nil-or-empty? list-a) counter 
           :else (recur (rest list-a) (inc counter)))))
 
+;; From https://github.com/buntine/Simply-Scheme-Exercises/blob/master/17-lists/17-10.scm
+(defn length-reduce [lst]
+  (reduce +
+          (map (fn [x] 1) lst)))
+
 ;; 17.11  Write before-in-list?, which takes a list and two elements of the list. 
 ;; It should return #t if the second argument appears in the list argument before the third argument:
 ; > (before-in-list? '(back in the ussr) 'in 'ussr) returns #T
@@ -166,6 +171,105 @@
         (> (my-length (new-member item-a list-a))
            (my-length (new-member item-b list-a))) true
         :else false))
+
+;; 17.12  Write a procedure called flatten that takes as its argument a list, possibly including sublists, 
+; but whose ultimate building blocks are words (not Booleans or procedures). 
+; It should return a sentence containing all the words of the list, in the order in which they appear in the original:
+; so I based it on their functions (see 17.13), but I had to add an arg
+; and it's not tail recursive
+; > (flatten2 '(((a b) c (d e)) (f g) ((((h))) (i j) k)) '())
+; (A B C D E F G H I J K)
+; (flatten2 '(((the man) in ((the) moon)) ate (the) potstickers) '())
+; (flatten2 '(the man (in ((the) moon)) ate (the) potstickers) '())
+; these tests are failing, I will come back to them later
+(defn flatten2 [lst outp]
+  (println "-- calling flatten2 with lst: ", lst ", and outp: " outp)
+  (cond (nil-or-empty? lst) outp
+        (nil? (first lst)) outp
+        (not (list? (first lst))) 
+        (do
+          (println "(first lst) is: ", (first lst), ", and outp is: ", outp)
+          (flatten2 (rest lst) 
+                    ; (multi-sentence-reduce outp (first lst))
+                    (my-append outp (first lst))
+)
+          )
+        :else (do
+                (println "in the else")
+                (multi-sentence-reduce (flatten2 (first lst) outp) 
+                                     (flatten2 (rest lst) '()))
+                )))
+
+; buntine and sanjeevs used reduce, looking very similar to what is in 17.13 (I did 17.13 first)
+; I should have seen that, given that the directions mention words and I saw that the cond-based function from 17.13 was the basis for flatten
+;; Yo dawg, I heard you like reduce, so call a function that uses reduce in your call to reduce in your recursive function
+(defn flatten-reduce [lst]
+  (cond (not (list? lst)) lst
+        :else
+         (reduce multi-sentence-reduce
+                 (map flatten-reduce lst))))
+
+(defn deep-count [lst]
+  ; (println "calling deep-count with lst: ", lst)
+  (cond (nil? lst) 0
+        (nil? (first lst)) 0
+        (not (list? (first lst)))
+        (do
+          (println "first lst: ", (first lst), ", it's a ", (class (first lst)))
+          (+ 1 (deep-count (rest lst)))
+          )
+        
+        :else (+ (deep-count (first lst))
+                 (deep-count (rest lst)))))
+
+;; 17.14  Write a procedure branch that takes as arguments a list of numbers and a nested list structure. 
+; It should be the list-of-lists equivalent of item, like this:
+; > (branch '(3) '((a b) (c d) (e f) (g h)))
+; (E F)
+; > (branch '(3 2) '((a b) (c d) (e f) (g h)))
+; F
+; > (branch '(2 3 1 2) '((a b) ((c d) (e f) ((g h) (i j)) k) (l m)))
+; H
+; In the last example above, the second element of the list is
+; ((C D) (E F) ((G H) (I J)) K)
+; The third element of that smaller list is ((G H) (I J)); the first element of that is (G H); and the second element of that is just H. 
+(defn branch [num-list-a nested-list-a]
+  (loop [num-list num-list-a
+         nested-list nested-list-a]
+    (cond (nil-or-empty? num-list)  nested-list
+          :else (recur (rest num-list) 
+                       (my-list-ref nested-list 
+                                    (- (first num-list) 1))))))
+
+; 17.16  Write a predicate valid-infix? that takes a list as argument 
+; and returns #t if and only if the list is a legitimate infix arithmetic expression 
+; (alternating operands and operators, with parentheses—that is, sublists—allowed for grouping).
+;> (valid-infix? '(4 + 3 * (5 - 2)))
+;#T
+;> (valid-infix? '(4 + 3 * (5 2)))
+;#F
+; you could flatten and then just do a count: if odd, it's good (since you would need a number after the last operator)
+; But right now flatten is not working
+(comment
+(define (valid-infix-easy? op-list) 
+  (cond (odd? (count (flatten-reduce op-list))) true
+        :else false))
+
+;; But what if some joker makes it out of order? Operators on one side, operands on the other
+(define (valid-infix-helper op-list position)
+  (cond (empty? op-list) true
+        (< position 1) (valid-infix-helper op-list 1)
+        (and (odd? position) (not (number? (car op-list)))) false
+        (and (even? position) (number? (car op-list))) false
+        :else (valid-infix-helper (cdr op-list) (+ 1 position))))
+
+(define (valid-infix? op-list)
+  (cond (even? (count (flatten-reduce op-list))) false
+        :else (valid-infix-helper (flatten-reduce op-list) 1)))
+
+)
+
+
 
 
 (defn greet [name & rest-n]

@@ -124,11 +124,50 @@
     (test/is (= 3 (count '(a (b) (c d '(f g h) e)))  (my-length '(a (b) (c d '(f g h) e)))))
     (test/is (= 0 (count '()) (my-length '())))))
 
+(test/deftest test-length-reduce
+  (test/testing "Testing length-reduce"
+    (test/is (= 3 (count '(a b c)) (length-reduce '(a b c)))) 
+    (test/is (= 3 (count '(a (b) (c d e)))  (length-reduce '(a (b) (c d e)))))
+    (test/is (= 3 (count '(a (b) (c d '(f g h) e)))  (length-reduce '(a (b) (c d '(f g h) e)))))
+    (test/is (= 0 (count '()) (length-reduce '())))))
+
 (test/deftest test-before-in-list?
   (test/testing "Testing before-in-list"
     (test/is (= true (before-in-list? '(back in the ussr) 'in 'ussr)))
     (test/is (= false (before-in-list? '(back in the ussr) 'the 'back)))
     (test/is (= false (before-in-list? '(back in the ussr) 'in 'usa)))))
 
+(test/deftest test-flatten2
+  (test/testing "Testing flatten2"
+    (test/is (= '(a b c d e f g h i j k) 
+                (flatten2 '(((a b) c (d e)) (f g) ((((h))) (i j) k)) '()) ))
+    (test/is (= '(the man in the moon ate the potstickers) 
+                (flatten2 '(((the man) in ((the) moon)) ate (the) potstickers) '()) ))
+    (test/is (= '(the man in the moon ate the potstickers) 
+                             (flatten2 '(the man (in ((the) moon)) ate (the) potstickers) '())))))
+
+(test/deftest test-flatten-reduce
+  (test/testing "Testing flatten-reduce"
+    (test/is (= '(a b c d e f g h i j k) 
+                (flatten-reduce '(((a b) c (d e)) (f g) ((((h))) (i j) k)) )))
+    (test/is (= '(the man in the moon ate the potstickers) 
+                (flatten-reduce '(((the man) in ((the) moon)) ate (the) potstickers) )))
+    (test/is (= '(the man in the moon ate the potstickers) 
+                             (flatten-reduce '(the man (in ((the) moon)) ate (the) potstickers))))))
+
+(test/deftest test-deep-count
+  (test/testing "Testing deep-count"
+    (test/is (= 11 (deep-count '(((a b) c (d e)) (f g) ((((h))) (i j) k)))))
+    (test/is (= 8 (deep-count '(((the man) in ((the) moon)) ate (the) potstickers))))
+    (test/is (= 8 (deep-count '(the man (in ((the) moon)) ate (the) potstickers))))))
+
+(test/deftest test-branch
+  (test/testing "Testing branch"
+    (test/is (= '(e f) (branch '(3) '((a b) (c d) (e f) (g h))) ) )
+    (test/is (= 'f (branch '(3 2) '((a b) (c d) (e f) (g h)))) )
+    (test/is (= 'h (branch '(2 3 1 2) '((a b) ((c d) (e f) ((g h) (i j)) k) (l m)))))
+    (test/is (= 'h (branch '(2 3 1 2) '((a b) ((c d) (e f) ((g h z) (i j)) k) (l m)))))))
+
+ 
 
 
