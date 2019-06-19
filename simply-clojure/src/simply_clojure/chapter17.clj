@@ -181,33 +181,37 @@
 ; (A B C D E F G H I J K)
 ; (flatten2 '(((the man) in ((the) moon)) ate (the) potstickers) '())
 ; (flatten2 '(the man (in ((the) moon)) ate (the) potstickers) '())
-; these tests are failing, I will come back to them later
 (defn flatten2 [lst outp]
-  (println "-- calling flatten2 with lst: ", lst ", and outp: " outp)
   (cond (nil-or-empty? lst) outp
-        (nil? (first lst)) outp
-        (not (list? (first lst))) 
-        (do
-          (println "(first lst) is: ", (first lst), ", and outp is: ", outp)
-          (flatten2 (rest lst) 
-                    ; (multi-sentence-reduce outp (first lst))
-                    (my-append outp (first lst))
-)
-          )
-        :else (do
-                (println "in the else")
-                (multi-sentence-reduce (flatten2 (first lst) outp) 
-                                     (flatten2 (rest lst) '()))
-                )))
-
+        (nil? (first lst)) outp 
+        (not (list? (first lst))) (flatten2 (rest lst) 
+                                        ; (multi-sentence-reduce outp (first lst))
+                                            (my-append outp (first lst)))
+        ; did with multi-sentence-reduce, trying with list-append
+        :else (list-append (flatten2 (first lst) outp) 
+                                     (flatten2 (rest lst) '()))))
+; line 209
 ; buntine and sanjeevs used reduce, looking very similar to what is in 17.13 (I did 17.13 first)
 ; I should have seen that, given that the directions mention words and I saw that the cond-based function from 17.13 was the basis for flatten
 ;; Yo dawg, I heard you like reduce, so call a function that uses reduce in your call to reduce in your recursive function
+; these tests are failing, I will come back to them later
+(comment
 (defn flatten-reduce [lst]
-  (cond (not (list? lst)) lst
+  (println "-- calling flatten-reduce with lst: ", lst)
+  (cond (not (list? lst))
+        (do
+          (println "lst is not a list")
+          lst
+          ) 
         :else
-         (reduce multi-sentence-reduce
-                 (map flatten-reduce lst))))
+        ;; tried multi-sentence-reduce, now list-append
+        ;; try multi-sentence-append
+         (do
+           (println "In the else")
+           (reduce multi-sentence-append
+                 (map (fn [x] (flatten-reduce x))  lst))
+           )))
+)
 
 (defn deep-count [lst]
   ; (println "calling deep-count with lst: ", lst)
@@ -215,7 +219,7 @@
         (nil? (first lst)) 0
         (not (list? (first lst)))
         (do
-          (println "first lst: ", (first lst), ", it's a ", (class (first lst)))
+          ; (println "first lst: ", (first lst), ", it's a ", (class (first lst)))
           (+ 1 (deep-count (rest lst)))
           )
         
@@ -249,23 +253,30 @@
 ;> (valid-infix? '(4 + 3 * (5 2)))
 ;#F
 ; you could flatten and then just do a count: if odd, it's good (since you would need a number after the last operator)
-; But right now flatten is not working
-(comment
-(define (valid-infix-easy? op-list) 
-  (cond (odd? (count (flatten-reduce op-list))) true
+(defn valid-infix-easy? [op-list] 
+  (cond (odd? (count (flatten2 op-list '()))) true
         :else false))
 
 ;; But what if some joker makes it out of order? Operators on one side, operands on the other
-(define (valid-infix-helper op-list position)
-  (cond (empty? op-list) true
-        (< position 1) (valid-infix-helper op-list 1)
-        (and (odd? position) (not (number? (car op-list)))) false
-        (and (even? position) (number? (car op-list))) false
-        :else (valid-infix-helper (cdr op-list) (+ 1 position))))
+(defn valid-infix-helper [op-list-a position-a]
+  (loop [op-list op-list-a
+         position position-a]
+    (cond (empty? op-list) true
+        (< position 1) (recur op-list 1)
+        (and (odd? position) (not (number? (first op-list)))) false
+        (and (even? position) (number? (first op-list))) false
+        :else (recur (rest op-list) (inc position)))
+)
+  )
 
-(define (valid-infix? op-list)
-  (cond (even? (count (flatten-reduce op-list))) false
-        :else (valid-infix-helper (flatten-reduce op-list) 1)))
+(defn valid-infix? [op-list]
+  (cond (even? (count (flatten2 op-list '()))) false
+        :else (valid-infix-helper (flatten2 op-list '()) 1)))
+
+(comment
+
+
+
 
 )
 

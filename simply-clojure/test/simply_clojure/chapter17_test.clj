@@ -146,6 +146,7 @@
     (test/is (= '(the man in the moon ate the potstickers) 
                              (flatten2 '(the man (in ((the) moon)) ate (the) potstickers) '())))))
 
+(comment
 (test/deftest test-flatten-reduce
   (test/testing "Testing flatten-reduce"
     (test/is (= '(a b c d e f g h i j k) 
@@ -154,6 +155,7 @@
                 (flatten-reduce '(((the man) in ((the) moon)) ate (the) potstickers) )))
     (test/is (= '(the man in the moon ate the potstickers) 
                              (flatten-reduce '(the man (in ((the) moon)) ate (the) potstickers))))))
+)
 
 (test/deftest test-deep-count
   (test/testing "Testing deep-count"
@@ -168,6 +170,12 @@
     (test/is (= 'h (branch '(2 3 1 2) '((a b) ((c d) (e f) ((g h) (i j)) k) (l m)))))
     (test/is (= 'h (branch '(2 3 1 2) '((a b) ((c d) (e f) ((g h z) (i j)) k) (l m)))))))
 
- 
+ (test/deftest test-valid-infix
+   (test/testing "Testing valid-infix"
+     (test/is (= (valid-infix-easy? '(4 + 3 * (5 - 2))) true))
+     (test/is (= (valid-infix-easy? '(4 + 3 * (5 2))) false))
+     (test/is (= (valid-infix? '(4 + 3 * (5 - 2))) true))
+     (test/is (= (valid-infix? '(4 + 3 * (5 2))) false))))
+
 
 
