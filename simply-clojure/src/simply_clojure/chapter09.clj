@@ -70,6 +70,8 @@
 (defmethod my-appearances :vector [the-map]
   (count (filter #(= (:part the-map) %1) (:whole the-map))))
 
+
+
 ;; 9.11  Write a procedure unabbrev that takes two sentences as arguments. 
 ;; It should return a sentence that's the same as the first sentence, 
 ;; except that any numbers in the original sentence should be replaced with words from the second sentence. 
