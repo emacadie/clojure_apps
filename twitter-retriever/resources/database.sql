@@ -89,3 +89,20 @@ alter table twitter_user alter record_created_at type timestamptz using record_c
 alter table twitter_user alter created_at        set default now();
 alter table twitter_user alter record_created_at set default now();
 
+-- added 2019-09-10
+ALTER TABLE twitter_user  ALTER COLUMN lang
+SET DEFAULT 'en';
+
+create or replace function check_twitter_user_lang() returns trigger as $body$
+    begin
+        IF new.lang is null THEN
+            new.lang = 'en';
+        END IF;
+        return new;
+     end;
+$body$ language plpgsql;
+
+create trigger check_twitter_user_lang_trig_001
+    BEFORE INSERT OR UPDATE on twitter_user
+    for each row execute procedure check_twitter_user_lang();
+

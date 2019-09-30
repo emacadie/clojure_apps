@@ -19,27 +19,38 @@
       
       (rdbms/call-insert-user (:body user-map))
       
-      (loop [the-map-body (get-tweet-map-body my-oauth-creds (conj param-map {:max_id max-id}))]
+      (loop [the-map-body (get-tweet-map-body my-oauth-creds 
+                                              (conj param-map {:max_id max-id}))]
         (when (> (count the-map-body) 0)
           (do
             (doseq [seq-body the-map-body]
               (do
-                (rdbms/call-insert-tweet seq-body, batch-time)
-                (rdbms/call-insert-processed-tweet seq-body (process/create-processed-string seq-body user-name) batch-time)))
+                (rdbms/call-insert-tweet seq-body batch-time)
+                (rdbms/call-insert-processed-tweet seq-body 
+                                                   (process/create-processed-string seq-body 
+                                                                                    user-name) 
+                                                   batch-time)))
             
             (def next-max-id (:min (rdbms/get-min-tweet-id {:screen_name user-name})))
-            (recur (get-tweet-map-body my-oauth-creds (conj param-map {:max_id (dec next-max-id)}))))))))
+            (recur (get-tweet-map-body my-oauth-creds 
+                                       (conj param-map {:max_id (dec next-max-id)}))))))))
 
 (defn insert-more-tweets [user-name my-oauth-creds batch-time]
   (let [param-map {:screen-name user-name, :count 200, :include_rts false, :tweet_mode "extended"}
         starting-tweet-id (:max (rdbms/get-max-tweet-id {:screen_name user-name}))]
-      (loop [the-map-body (get-tweet-map-body my-oauth-creds (conj param-map {:since_id starting-tweet-id}))]
+      (loop [the-map-body (get-tweet-map-body my-oauth-creds 
+                                              (conj param-map {:since_id starting-tweet-id}))]
         (when (> (count the-map-body) 0)
           (do
             (doseq [seq-body the-map-body]
               (do
-                (rdbms/call-insert-tweet seq-body, batch-time)
-                (rdbms/call-insert-processed-tweet seq-body (process/create-processed-string seq-body user-name) batch-time)))                 
-            (recur (get-tweet-map-body my-oauth-creds (conj param-map {:since_id starting-tweet-id, :max_id (dec (apply min (map :id the-map-body)))})))))))) 
+                (rdbms/call-insert-tweet seq-body batch-time)
+                (rdbms/call-insert-processed-tweet seq-body 
+                                                   (process/create-processed-string seq-body 
+                                                                                    user-name) 
+                                                   batch-time)))                 
+            (recur (get-tweet-map-body my-oauth-creds (conj param-map 
+                                                            {:since_id starting-tweet-id 
+                                                             :max_id (dec (apply min (map :id the-map-body)))})))))))) 
 ;; line 83, 59, 52
 

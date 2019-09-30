@@ -5,7 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/tools.cli "0.3.5"]
-                 [twitter-api "1.8.0"]
+                 ; [twitter-api "1.8.0"]
+                 [twitter-api "1.8.1"]
                  [clojurewerkz/propertied "1.3.0"]
                  [org.postgresql/postgresql "42.2.4"]
                  [conman   "0.8.2"]
@@ -15,7 +16,7 @@
                  [clj-http "3.8.0"]
                  ]
    :plugins [; [lein-autoreload "0.1.1"]
-             [lein-environ "1.1.0"]
+             [lein-environ "1.1.0" :hooks false ]
              ]
   ; directories use underscores, namespaces use hyphens
   ; :main ^:skip-aot twitter-retriever.core
