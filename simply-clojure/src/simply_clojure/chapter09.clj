@@ -60,8 +60,7 @@
 
 (defmulti my-appearances (fn [the-map] (:type the-map)))
 
-(defmethod my-appearances :sentence
-  [the-map]
+(defmethod my-appearances :sentence [the-map]
   (count (filter #(= (:part the-map) %1) (helper/split-string-to-words (:whole the-map)))))
 
 (defmethod my-appearances :word [the-map]
@@ -71,6 +70,14 @@
   (count (filter #(= (:part the-map) %1) (:whole the-map))))
 
 
+; (defmulti more-appearances ())
+
+(defmulti types (fn [x y] [(class x) (class y)]))
+(defmethod types [java.lang.String java.lang.String]
+  [x y]
+  (str "Two strings: " x " and " y))
+
+(types "String 1" "String 2")
 
 ;; 9.11  Write a procedure unabbrev that takes two sentences as arguments. 
 ;; It should return a sentence that's the same as the first sentence, 

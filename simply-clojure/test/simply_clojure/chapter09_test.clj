@@ -37,6 +37,8 @@
     (test/is (= 2 (my-appearances {:type :sentence :part "hello" :whole "hello goodbye hello again goodbye again nothing again" })))
     (test/is (= 3 (my-appearances {:type :vector :part 2 :whole [1 2 3 2 4 2 5]})))))
 
+
+
 (test/deftest test-unabbrev
   (test/testing "Testing unabbrev"
     (test/is (= "John Bill Wayne Fred Joey" (unabbrev "John 1 Wayne Fred 4" "Bill Hank Kermit Joey")))
