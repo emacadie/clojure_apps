@@ -1,0 +1,88 @@
+Code: Works better in emacs e-shell than bash
+~/tmp/clojure/programming.clojure/code
+Or you could still call CIDER from the source
+
+"for" is "list comprehension:
+https://en.wikipedia.org/wiki/List_comprehension
+"A list comprehension is a syntactic construct available in some programming languages for creating a list based on existing lists. It follows the form of the mathematical set-builder notation (set comprehension) as distinct from the use of map and filter functions. "
+map: output same size as input
+filter: output ranges from empty to same size as input (less than or equal to)
+According to https://clojuredocs.org/clojure.core/for, output of for could be empty, less than, equal to or greater than input
+Talks about STM; interesting. I thought Clojure people were not using STM much, yet here is a Cognitect guy talking about them
+
+At repl in "clojure" command, control-D kills REPL
+To load file into REPL, use (load-file "file-name") with a relative path from directory where you started REPL
+Note: to start emacs shell: M-x shell
+
+Working w/atoms:
+user=> (def visitors (atom #{}))
+#'user/visitors
+user=> (swap! visitors conj "Stu")
+#{"Stu"}
+user=> (deref visitors)
+#{"Stu"}
+user=> @visitors
+#{"Stu"}
+user=> 
+(defn hello
+  "Writes hello messate to *out*. Calls you by username.
+  Knows if you have been here before"
+  [username]
+  (swap! visitors conj username)
+  (str "hello, " username))
+upto page 36
+
+Quote from book:
+"You can reason about a function with direct local knowledge. Reasoning about state requires a full understanding of history."
+So true.
+They recommend using atoms for dealing w/state.
+
+page 39 has a nice table explaining conventions for parameter names:
+Parameter | Usage | Parameter Usage | Parameter Usage
+a         | A Java array
+expr      | An expression
+r         | A ref
+agt       | An agent
+f         | A function
+v         | A vector
+coll      | A collection
+idx       | An index
+val       | A value
+
+It would be great to put that on the Clojure website. (Maybe it is, but I did not see it on the docs page, where it would make the most sense.)
+
+Up to page 42
+
+In Clojure, there are no statements, only expressions that can be nested in mostly arbitrary ways.
+
+As Venkat puts it: 
+Statements perform actions, expressions perform computations.
+http://blog.agiledeveloper.com/2015/08/functional-programming-favors.html?view=sidebar
+
+(/ 22 7) gives 22/7, the ratio type
+They suggest doing this: (/ 22.0 7)
+You can also do (/ 22 7.0)
+Or (/ (double 22) 7)
+
+For arbitrary-precision floating-point math, append M to a number to use BigDecimal
+Use N to create a BigInt
+
+Symbols: function names, Java classes, namespaces
+
+Collections: lists, vectors, sets, maps
+can hold any type of data
+vectors: sequential, indexed collections [1 2 3]
+Lists: sequential, stored as linked lists: use the quote mark, Luke '(1 2 3)
+Sets: Unorderd collections with no duplicates: #{ 1 2 3}
+May print in different order by default (there are functions to create sorted lists)
+Maps: key/value pairs: {:lisp "McCarthy", :clojure "Hickey", :scheme "Steele"}
+By default unordered
+Commas optional for readability in Clojure
+"keyword" is a string w/a colon on front
+:foo
+Not what a "keyword" is on other languages. Like a "symbol" in Ruby (and "symbol" means something else in Clojure).
+Talks about using records
+up to page 47
+
+
+

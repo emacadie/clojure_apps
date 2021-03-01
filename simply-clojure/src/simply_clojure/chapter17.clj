@@ -36,7 +36,7 @@
 ;; Maybe there is and it just escapes me now. I will look later.
 ;; I suppose I could make aliases or something.
 (defn my-max-reduce [number & rest-nums]
-   (reduce max2 0 (conj rest-nums number)))
+   (reduce max2 (conj rest-nums number)))
 
 ;; 17.6  Implement append using car, cdr, and cons. 
 ;; (Note: The built-in append can take any number of arguments. 
@@ -63,8 +63,8 @@
     (cond (nil-or-empty? list-b) list-a
           (nil-or-empty? list-a) (recur (first list-b) (rest list-b)) 
           (and (= (count list-b) 1 ) (seq? (first list-b)) (empty? (first list-b))) list-a
-          :else  (recur (my-append list-a (first list-b)) (rest list-b)))))
-
+          :else (recur (my-append list-a (first list-b)) (rest list-b)) )))
+; (recur (my-append list-a (first list-b)) (rest list-b))
 ; try by converting to vectors and back
 (defn my-vec-append [first-list second-list]
   (loop [list-a first-list
