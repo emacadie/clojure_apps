@@ -168,3 +168,30 @@ Do this:
 export DATABASE_URL="postgres://localhost:5433/twit_retrieve_dev_db?user=twit_getter&password=this-is-twitter"
 export DB_DRIVER=org.postgresql.Driver
 
+2021-04-05_00:16:50
+How I run it in my script:
+lein run -m twitter-retriever.work --user=$i --oauth=EMacAdie 
+
+A few more queries:
+with p_count as (
+    select p.user_id_str as user_str_id, count( p.user_id_str ) as count_user from processed_tweet p group by p.user_id_str
+) select p_c.user_str_id, p_c.count_user, u.user_id_str, u.screen_name
+from p_count p_c
+join twitter_user u on u.user_id_str = p_c.user_str_id
+-- order by u.screen_name
+order by p_c.count_user
+;
+
+select batch_time, count( batch_time ) from processed_tweet
+where user_id_str = '18856867'
+group by batch_time
+;
+
+with user_name as (
+    select user_id_str as id_from_user from twitter_user where screen_name = 'EMacAdie'
+) select p.batch_time, count( p.batch_time ) 
+from processed_tweet p
+join user_name on user_name.id_from_user = p.user_id_str
+group by batch_time -- timestamp with time zone
+;
+

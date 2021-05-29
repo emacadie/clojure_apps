@@ -69,4 +69,20 @@ select t.batch_time, count( t.batch_time ) from twitter_tweet t where t.user_id 
 group by t.batch_time
 order by t.batch_time;
 
+2021-04-04_11:15:10
+updating twitter_user.user_id from 2338518696 to 1361273764143652864
+I guess it changed. Will they all change?
+update processed_tweet set user
+set user_id = 1361273764143652864
+where user_id = 
+2338518696
+;
+update twitter_user set user_id = 1361273764143652864
+where user_id = 
+2338518696
+;
+
+OR: 
+update twitter_user set screen_name = 'clojuregeek_old' where user_id = 2338518696;
+
 

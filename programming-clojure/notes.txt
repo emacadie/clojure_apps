@@ -84,5 +84,168 @@ Not what a "keyword" is on other languages. Like a "symbol" in Ruby (and "symbol
 Talks about using records
 up to page 47
 
+strings: look at str function
+Can put in escape characters, literal characters, make multi-line strings
+
+Booleans:
+false and nil evaluate to false, everything else evaluates to true
+Empty list is not false in Clojure
+0 is not false
+
+Functions have a prepost-map? that defines pre- and post-conditions that are checked on invocation.
+From ClojureDocs: prepost-map defines a map with optional keys :pre and :post that contain collections of pre or post conditions.
+
+What is the origin of the word "arity"?
+https://en.wikipedia.org/wiki/Arity
+Unary, Binary, Trinary, etc
+You can make a function w/multiple arities. Usually some will just call others.
+One way is to make a version that calls another version.
+Another is to use ampersands:
+(defn some-func [a b & c d]
+   (do-stuff))
+Anonymous functions:
+Usually used in higher-order functions, or for predicates
+Says anonymous functions can take some getting used to.
+
+up to page 56
+
+Destructuring: binding a variable to a part of a collection
+or a few variables to parts of a collection
+Bind first 2 elements in vector w/3 elements:
+(let [[x y] [1 2 3]]
+[x y])
+Bind just the third:
+(let [[_ _ z] [1 2 3]]
+z)
+
+They say to check the guide: https://clojure.org/guides/destructuring
+because destructuring "is a mini-language in itself"
+Like the loop macro in Common Lisp
+
+namespace functions:
+resolve
+in-ns (change or create namespaces)
+They recommend to "use" the clojure.core namespace in the REPL
+For Java, java.lang is included, other namespaces are not.
+"import" is a Clojure function for Java classes only
+From https://8thlight.com/blog/colin-jones/2010/12/05/clojure-libs-and-namespaces-require-use-import-and-ns.html
+(require '[clojure.string :as string])
+or
+(require ['clojure.string :as 'string])
+or
+(require 'clojure.string '[clojure.test :as test])
+They have the same prefix, so we could do this:
+(require '(clojure string test))
+or 
+(require '(clojure [string :as string] test))
+I think I prefer the more explicit way
+In REPL:
+user=> (require '[clojure.string :as str :refer [replace]] )
+WARNING: replace already refers to: #'clojure.core/replace in namespace: user, being replaced by: #'clojure.string/replace
+So be careful w/:refer
+but str/join was still available
+
+https://clojure.org/reference/namespaces
+
+Up to page 63
+
+Metadata: You can get metadata on core Clojure functions:
+(meta #'str)
+(meta #'reduce)
+You can add metadata to your own functions or vars:
+https://clojure.org/guides/weird_characters#_and_metadata
+I cannot find a definitive list of what metadata you can add
+Some are Java type hints:
+https://clojure.org/reference/java_interop#typehints
+Which can reduce execution time
+Here is some metadata from the book:
+Key       | Used For
+:ns       | Namespace
+:name     | Local name 
+:added    | Version this function was added
+:file     | Source file
+:line     | Source line number 
+:column   | Source column number
+:tag      | Expected argument or return type
+:arglists | Parameter info used by doc
+:doc      | Documentation used by doc
+:macro    | True for macros
+
+I think for return types you can skip the ":tag" keyword
+Equivalent:
+(defn ^{:tag String} shout [^{:tag String} s] (clojure.string/upper-case s))
+(defn ^String shout [^String s] (clojure.string/upper-case s))
+Helps with performance, but looks a bit messy
+They say you can do this:
+( defn shout
+([s] (clojure.string/upper-case s))
+{:tag String})
+But does that :tag at the end refer to the arg or the return value?
+I cannot find anything on Clojure site about it
+I do see on https://clojure.org/reference/java_interop#typehints
+For function return values, the type hint can be placed before the arguments vector
+
+up to page 65
+Java interop:
+preferred way:
+make an object: (def p (java.awt.Point. 10 20))
+Call a method: (.x p) ;; or (.-x p)
+(.method instance & args)
+(.field instance)
+(.-field instance)
+(Class/method & args)
+Class/field
+
+importing:
+(import '(java.util Random Locale)
+        '(java.text MessageFormat))
+
+And there is javadoc:
+(javadoc java.net.URL)
+
+Comments:
+; does it, many people use ;; for emphasis
+There is the "comment" function, and the macro #_ (which is new to me)
+
+Flow control:
+"if" I have been over
+"do" lets you call multiple functions in the branches of an "if"
+"do" ignores return values of everything but the last statement
+"loop" is like "let", setting bindings and evaluating expressions
+but you can recur and loop again
+"recur" binds new values to "loop"'s bindings, and the loop is run again
+You can also use "recur" to go to the top of a function
+(defn countdown [result x]
+  (println "Calling countdown w/x: ", x)
+  (if (zero? x)
+    result
+    (recur (conj result x) (dec x))))
+Gives this:
+user=> (countdown [] 5)
+Calling countdown w/x:  5
+Calling countdown w/x:  4
+Calling countdown w/x:  3
+Calling countdown w/x:  2
+Calling countdown w/x:  1
+Calling countdown w/x:  0
+[5 4 3 2 1]
+user=> 
+You can do the same w/"into" and a few other functions (page 72)
+"for" function has tests :while and :when
+also :let
+Look into it
+What has bindings? let, loop, for
+
+up to page 79
+Chapter 3: Sequences
+Sequence: data abstraction
+All Clojure collections
+All Java collections
+Java arrays and strings
+Regular expression matches
+Directory structures
+I/O streams
+XML trees
+
 
 
